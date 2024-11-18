@@ -124,10 +124,11 @@ export const NoticeMain = () => {
       <StyledTable>
         <thead>
           <tr>
-            <StyledTh size={5}>번호</StyledTh>
-            <StyledTh size={50}>제목</StyledTh>
-            <StyledTh size={10}>제목</StyledTh>
-            <StyledTh size={20}>등록일</StyledTh>
+            <StyledTh size={5}>지원일</StyledTh>
+            <StyledTh size={30}>지원내역</StyledTh>
+            <StyledTh size={10}>공고진행상태</StyledTh>
+            <StyledTh size={20}>열람</StyledTh>
+            <StyledTh size={20}>취소/삭제</StyledTh>
           </tr>
         </thead>
         <tbody>
