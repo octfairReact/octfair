@@ -5,7 +5,7 @@ export const Login = {
 export const Notice = {
   getList: "/board/noticeListJson.do",
   getListBody: "/board/noticeListBody.do",
-  getDetail: "/board/noticeDetailJson.do",
+  getDetail: "/board/noticeDetailBody.do",
   // postSave: "/board/noticeSaveBody.do",
   postSave: "/board/noticeSaveFileForm.do",
   //postUpdate: "/board/noticeUpdateJson.do",
