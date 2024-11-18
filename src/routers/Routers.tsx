@@ -4,6 +4,7 @@ import { DashBoard } from "../component/layout/DashBoard/DashBoard";
 import { NotFound } from "../component/common/NotFound/NotFound";
 import { Notice } from "../pages/Notice";
 import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
+import { Post } from "../pages/Post";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -19,6 +20,10 @@ const routers: RouteObject[] = [
           { path: "notice.do/:noticeIdx", element: <NoticeRouter /> },
           //:id 이게 키값이 됨
         ],
+      },
+      {
+        path: "jobs",
+        children: [{ path: "posts.do", element: <Post /> }],
       },
     ],
   },
