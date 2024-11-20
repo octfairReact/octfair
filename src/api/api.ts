@@ -17,4 +17,6 @@ export const Notice = {
 export const History = {
   getList: "/apply/historyJson.do",
   getListBody: "/apply/historyListBody.do",
+  searchList: "/apply/searchHistoryBody.do",
+  postDelete: "/apply/cancleApplyBody.do",
 }
