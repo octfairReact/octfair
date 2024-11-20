@@ -5,6 +5,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../stores/modalState";
 import { NoticeContext } from "../../../../api/provider/NoticeProvider";
+import { ILoginInfo } from "../../../../models/interface/store/userInfo";
+import { loginInfoState } from "../../../../stores/userInfo";
 
 export const NoticeSearch = () => {
   const title = useRef<HTMLInputElement>();
@@ -20,7 +22,8 @@ export const NoticeSearch = () => {
   });
 
   const { setSearchKeyWord } = useContext(NoticeContext);
-
+  const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
+  console.log("유저 타입정보", userInfo.userType);
   // useEffect(() => {
   //   console.log(title, startDate, endDate);
   // }, [title, startDate, endDate]);
@@ -70,7 +73,9 @@ export const NoticeSearch = () => {
         <input type="date" onChange={(e) => setSearchValue({ ...searchValue, searchStDate: e.target.value })}></input>
         <input type="date" onChange={(e) => setSearchValue({ ...searchValue, searchEdDate: e.target.value })}></input>
         <Button onClick={handlerSearch}>검색</Button>
-        <Button onClick={handlerModal}>등록</Button>
+
+        {/* 유저 타입 m일때만 보이게 하기  */}
+        {userInfo.userType === "M" ? <Button onClick={handlerModal}>등록</Button> : null}
       </div>
     </NoticeSearchStyled>
   );

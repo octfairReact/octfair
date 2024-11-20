@@ -9,6 +9,10 @@ export const Notice = {
   // postSave: "/board/noticeSaveBody.do",
   postSave: "/board/noticeSaveFileForm.do",
   //postUpdate: "/board/noticeUpdateJson.do",
-  postDelet: "/board/noticeDeleteJson.do",
+  postDelet: "/board/noticeDeleteBody.do",
   postUpdate: "/board/noticeUpdateFileForm.do",
+};
+
+export const Company = {
+  postSave: "/company/companySaveBody.do",
 };
