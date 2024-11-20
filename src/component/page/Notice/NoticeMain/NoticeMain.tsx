@@ -33,14 +33,10 @@ export const NoticeMain = () => {
   // }, [currentPage]); // currentPage가 변경될 때마다 호출
 
   useEffect(() => {
-    console.log(" 여기는 NoticeMain useEffect search");
-    console.log(search);
     searchNoticeList(currentPage);
   }, [search]);
 
   useEffect(() => {
-    console.log(" 여기는 NoticeMain useEffect ekwyord");
-    console.log(searchKeyWord);
     searchNoticeList();
   }, [searchKeyWord]);
   //변경을 감지하고 유스이펙트 안에 있는 함수를 실행 시켜주는 것이 의존성 배열

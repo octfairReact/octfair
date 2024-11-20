@@ -8,11 +8,11 @@ import { Post } from "../../../../pages/Post";
 import { ManagePost } from "../../../../api/api";
 import { postPostApi } from "../../../../api/postPostApi";
 
-export const PostMain = () => {
+export const PostMain = ({ onIndexChange }) => {
   const { search } = useLocation();
   const navigate = useNavigate();
   const [postList, setPostList] = useState<IPost[]>();
-  const [postCnt, setPostCnt] = useState<number>();
+  const [postCnt, setPostCnt] = useState<number>(0);
   const [postDetail, setPostDetail] = useState<IPost>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [index, setIndex] = useState<number>();
@@ -25,7 +25,6 @@ export const PostMain = () => {
   }, [search]);
 
   useEffect(() => {
-    console.log("update: ", searchKeyWord);
     searchPostList();
   }, [searchKeyWord]);
   //변경을 감지하고 유스이펙트 안에 있는 함수를 실행 시켜주는 것이 의존성 배열
@@ -60,9 +59,7 @@ export const PostMain = () => {
     // searchParam.append("pageSize", "5");
 
     const searchParam = { ...searchKeyWord, currentPage: currentPage.toString(), pageSize: "5" };
-    console.log(searchKeyWord);
     const searchList = await postPostApi<IPostListResponse>(ManagePost.getPostList, searchParam);
-    console.log(searchList);
 
     if (searchList) {
       setPostList(searchList.data.approvalList);
@@ -72,8 +69,8 @@ export const PostMain = () => {
   };
   //const { searchKeyWord } = useContext();
 
-  const handlerDynamicRouter = (postIdx: number) => {
-    navigate(`${postIdx}`);
+  const handlerDetail = (postIdx: number) => {
+    navigate(`/manage-post/managePostDetailBody.do?postIdx=${postIdx}`);
   };
 
   return (
@@ -93,7 +90,12 @@ export const PostMain = () => {
           {postList?.length > 0 ? (
             postList?.map((post) => {
               return (
-                <tr key={post.postIdx} onClick={() => handlerDynamicRouter(post.postIdx)}>
+                <tr
+                  key={post.postIdx}
+                  onClick={() => {
+                    handlerDetail(post.postIdx);
+                  }}
+                >
                   <StyledTd>{post.postIdx}</StyledTd>
                   <StyledTd>{post.title}</StyledTd>
                   <StyledTd>{post.workLocation}</StyledTd>
