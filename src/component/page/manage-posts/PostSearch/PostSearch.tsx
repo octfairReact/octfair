@@ -1,25 +1,18 @@
-import { NoticeSearchStyled } from "./styled";
-import { Button } from "../../../common/Button/Button";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { modalState } from "../../../../stores/modalState";
-import { NoticeContext } from "../../../../api/provider/NoticeProvider";
+import { PostContext } from "../../../../api/provider/PostProvider";
+import { useNavigate } from "react-router-dom";
+import { NoticeSearchStyled } from "../../Notice/NoticeSearch/styled";
+import { Button } from "react-bootstrap";
 
-export const NoticeSearch = () => {
+export const PostSearch = () => {
   const title = useRef<HTMLInputElement>();
-  //React에서 제공하는 훅으로, 컴포넌트에서 값을 참조(reference)할 수 있게
-  // const [startDate, setStartDate] = useState<string>();
-  // //[startDate = 값, setStartDate = 함수]
-  // const [endDate, setEndDate] = useState<string>();
-  const [modal, setModal] = useRecoilState<boolean>(modalState);
   const [searchValue, setSearchValue] = useState<{ searchTitle: string; searchStDate: string; searchEdDate: string }>({
     searchTitle: "",
     searchStDate: "",
     searchEdDate: "",
   });
 
-  const { setSearchKeyWord } = useContext(NoticeContext);
+  const { setSearchKeyWord } = useContext(PostContext);
 
   // useEffect(() => {
   //   console.log(title, startDate, endDate);
@@ -52,13 +45,8 @@ export const NoticeSearch = () => {
   // };
 
   const handlerSearch = () => {
-    console.log("searchValue 여기는 NoticeSerch함수");
     console.log(searchValue);
     setSearchKeyWord(searchValue);
-  };
-
-  const handlerModal = () => {
-    setModal(!modal);
   };
 
   return (
@@ -72,7 +60,7 @@ export const NoticeSearch = () => {
         <input type="date" onChange={(e) => setSearchValue({ ...searchValue, searchStDate: e.target.value })}></input>
         <input type="date" onChange={(e) => setSearchValue({ ...searchValue, searchEdDate: e.target.value })}></input>
         <Button onClick={handlerSearch}>검색</Button>
-        <Button onClick={handlerModal}>등록</Button>
+        <Button>등록</Button>
       </div>
     </NoticeSearchStyled>
   );

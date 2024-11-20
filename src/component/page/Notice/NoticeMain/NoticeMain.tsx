@@ -33,7 +33,6 @@ export const NoticeMain = () => {
   // }, [currentPage]); // currentPage가 변경될 때마다 호출
 
   useEffect(() => {
-    console.log("주소에서 받는 값", search);
     searchNoticeList(currentPage);
   }, [search]);
 
@@ -78,8 +77,8 @@ export const NoticeMain = () => {
 
     const searchParam = { ...searchKeyWord, currentPage: currentPage.toString(), pageSize: "5" };
 
+    console.log(searchParam);
     const searchList = await postNoticeApi<INoitceListResponse>(Notice.getListBody, searchParam);
-
     if (searchList) {
       setNoticeList(searchList.data.notice);
       setNoticeCnt(searchList.data.noticeCnt);
