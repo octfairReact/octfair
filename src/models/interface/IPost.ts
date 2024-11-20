@@ -10,3 +10,8 @@ export interface IPost {
 export interface IPostResponse {
   result: string;
 }
+
+export interface IPostListResponse {
+  approvalPostCnt: number;
+  approvalList: IPost[];
+}

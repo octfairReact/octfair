@@ -17,3 +17,8 @@ export const Posts = {
   getPost: "/jobs/posts.do",
   getScrap: "/jobs/scrap.do",
 };
+
+export const ManagePost = {
+  getPostList: "/manage-post/readPostListBody.do",
+  getManagePostDetail: "/manage-post/managePostDetailBody.do",
+};
