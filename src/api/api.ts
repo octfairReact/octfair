@@ -12,3 +12,10 @@ export const Notice = {
   postDelet: "/board/noticeDeleteJson.do",
   postUpdate: "/board/noticeUpdateFileForm.do",
 };
+
+export const Hire = {
+  getListBody: "/manage-hire/managehireListBody.do",
+  postSave: "/manage-hire/managehireSaveBody.do",
+
+
+};

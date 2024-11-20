@@ -155,7 +155,7 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
 
   const handlerDelete = async () => {
     const param = {
-      noticeSeq,
+      noticeSeq : noticeSeq,
     };
 
     const postDelete = await postNoticeApi<IPostResponse>(Notice.postDelet, param);
@@ -165,7 +165,7 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
     } else {
       console.error("Failed to save notice:", postDelete?.data);
     }
-
+// 프론트 > 컨트롤러 > 서비스 > 서비스 임플 > dao > 맵퍼 > ... 생략 > 컨트롤러에서 리절트 값 확인 후 > 프론트로 > 
     // axios.post("/board/noticeDeleteJson.do", param).then((res: AxiosResponse<IPostResponse>) => {
     //   res.data.result === "success" && onSuccess();
     // });
