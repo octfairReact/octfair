@@ -20,5 +20,5 @@ export const Posts = {
 
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
-  getManagePostDetail: "/manage-post/managePostDetailBody.do",
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };

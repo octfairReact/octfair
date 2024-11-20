@@ -5,6 +5,7 @@ import { NotFound } from "../component/common/NotFound/NotFound";
 import { Notice } from "../pages/Notice";
 import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
 import { Post } from "../pages/Post";
+import { ManagePostPage } from "../pages/ManagePostPage";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -25,6 +26,11 @@ const routers: RouteObject[] = [
       {
         path: "jobs",
         children: [{ path: "posts.do", element: <Post /> }],
+      },
+
+      {
+        path: "manage-post",
+        children: [{ path: "managePostDetailBody.do", element: <ManagePostPage /> }],
       },
     ],
   },
