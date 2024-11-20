@@ -282,7 +282,11 @@ export const CompanyWritePage = () => {
                   <th scope="col">미리보기</th>
                   <td colSpan={3}>
                     <div id="companyWritePreview">
-                      <img src={imageUrl} alt="Preview" style={{ width: "100px", height: "100px" }} />
+                      {imageUrl ? (
+                        <img src={imageUrl} alt="Preview" style={{ width: "100px", height: "100px" }} />
+                      ) : (
+                        <span></span> // 값이 없을 때 표시할 대체 내용
+                      )}
                     </div>
                   </td>
                 </tr>
