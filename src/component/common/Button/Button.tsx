@@ -14,6 +14,8 @@ export interface IButtonProps {
   fontSize?: number;
   style?: React.CSSProperties;
   className?: string;
+  onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const Button: FC<IButtonProps> = ({
@@ -29,6 +31,8 @@ export const Button: FC<IButtonProps> = ({
   paddingright,
   style,
   className,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   return (
     <ButtonContainer>
@@ -44,6 +48,8 @@ export const Button: FC<IButtonProps> = ({
         fontSize={fontSize}
         style={style}
         className={className}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
       >
         {children}
       </ButtonStyled>
