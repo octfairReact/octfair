@@ -16,9 +16,14 @@ export const Notice = {
 export const Posts = {
   getPost: "/jobs/posts.do",
   getScrap: "/jobs/scrap.do",
+  getScrapSave: "/jobs/saveScrapBody.do",
 };
 
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+};
+export const ScrapURL = {
+  getScrapList: "/manage-post/scrapListBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };

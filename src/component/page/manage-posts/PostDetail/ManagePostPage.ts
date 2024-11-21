@@ -143,6 +143,11 @@ export const PostDetailStyled = styled.div`
     background-color: transparent;
     color: #007bff;
     border: 1px solid #007bff;
+    padding: 10px 40px;
+    font-size: 13px;
+    text-align: center;
+    border-radius: 5px;
+    margin-right: 20px;
   }
 
   button.btn-outline-secondary:hover {
@@ -200,5 +205,20 @@ export const PostDetailStyled = styled.div`
     font-size: 13px;
     text-align: center;
     border-radius: 5px;
+  }
+
+  button.btn-close {
+    background-color: transparent;
+    color: #646362;
+    border: 1px solid #646362;
+    padding: 10px 40px;
+    font-size: 13px;
+    text-align: center;
+    border-radius: 5px;
+  }
+
+  button.btn-close:hover {
+    background-color: #b9b7b6;
+    color: white;
   }
 `;

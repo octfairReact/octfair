@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { ManagePost } from "../../../../api/api";
+import { ManagePost, Posts } from "../../../../api/api";
 import { AllDetail, companyDetail, IPostDetail } from "../../../../models/interface/IPost";
 import { postPostApi } from "../../../../api/postPostApi";
 import { PostDetailStyled } from "./ManagePostPage";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
+import { IScrapResponse } from "../../../../models/interface/IScrap";
 
 export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
   const location = useLocation();
@@ -34,6 +35,19 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
     setCDetail(response.data.bizDetail);
     setMDetail(response.data.postDetail);
   };
+  const handlerScrapSave = async () => {
+    const loginIdx = userInfo.loginId;
+    const saveParam = { postIdx, loginIdx };
+
+    const response = await postPostApi<IScrapResponse>(Posts.getScrapSave, saveParam);
+    console.log(response.data);
+    console.log("userInfo : " + userInfo.userType);
+    if (response.data.result == "success") {
+      alert("스크립 저장성공!!");
+    } else {
+      alert("이미 스크랩된 공고입니다.");
+    }
+  };
 
   return (
     <PostDetailStyled>
@@ -46,7 +60,7 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
           <div className="detail-item action-buttons">
             {userInfo.userType === "A" && (
               <>
-                <button type="button" className="btn btn-outline-secondary">
+                <button type="button" className="btn btn-outline-secondary" onClick={handlerScrapSave}>
                   스크랩
                 </button>
                 <button type="button" className="btn btn-warning">

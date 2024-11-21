@@ -71,8 +71,13 @@ export const CompanytDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: comp
           <span className="remaining">남은 기간</span>
           <div className="date-details">
             <div className="date-item">
-              <span>시작일: {data.startDate}</span>
-              <span>마감일: {data.endDate}</span>
+              <span className="date-item">시작일</span>
+              <br />
+              <span className="date-item">마감일</span>
+            </div>
+            <div className="date-item">
+              <span className="date-item">{data.startDate}</span>
+              <span className="date-item">{data.endDate}</span>
             </div>
           </div>
         </div>

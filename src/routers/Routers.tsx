@@ -6,6 +6,7 @@ import { Notice } from "../pages/Notice";
 import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
 import { Post } from "../pages/Post";
 import { ManagePostPage } from "../pages/ManagePostPage";
+import { Scrap } from "../pages/Scrap";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -25,7 +26,10 @@ const routers: RouteObject[] = [
       },
       {
         path: "jobs",
-        children: [{ path: "posts.do", element: <Post /> }],
+        children: [
+          { path: "posts.do", element: <Post /> },
+          { path: "scrap.do", element: <Scrap /> },
+        ],
       },
 
       {

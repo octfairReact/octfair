@@ -10,6 +10,7 @@ import { loginInfoState } from "../../../../stores/userInfo";
 import { JobDetail } from "./JobDetail";
 import { CompanytDetail } from "./CompanytDetail";
 import { ContentBoxPost } from "../../../common/ContentBox/ContentBoxPost";
+import { IScrap } from "../../../../models/interface/IScrap";
 
 export const PostDetail = () => {
   const location = useLocation();
@@ -59,6 +60,18 @@ export const PostDetail = () => {
             </div>
           </li>
         </ul>
+      </div>
+      <div className="date-item">
+        <button type="button" id="updateAppStatusY" name="btn" className="btn btn-outline-secondary" data-status="승인">
+          승인
+        </button>
+        <button type="button" id="updateAppStatusN" name="btn" className="btn btn-outline-secondary" data-status="불허">
+          불허
+        </button>
+
+        <button type="button" id="backToList" name="btn" className="btn btn-close">
+          뒤로 가기
+        </button>
       </div>
     </PostDetailStyled>
   );
