@@ -1,14 +1,14 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { postCompanyApi } from "../../../api/postCompany";
-import { Company } from "../../../api/api";
-import { IPostResponse } from "../../../models/interface/INotice";
+import { postCompanyApi } from "../../../../api/postCompany";
+import { Company } from "../../../../api/api";
+import { IPostResponse } from "../../../../models/interface/INotice";
 import { useRecoilState } from "recoil";
-import { ILoginInfo } from "../../../models/interface/store/userInfo";
-import { loginInfoState } from "../../../stores/userInfo";
-import "../../../css/CompanyCss.css"; // CSS 파일 확장자 명시
+import { ILoginInfo } from "../../../../models/interface/store/userInfo";
+import { loginInfoState } from "../../../../stores/userInfo";
+import "../../../../css/CompanyCss.css"; // CSS 파일 확장자 명시
 
-export const CompanyWritePage = () => {
+export const CompanyUpdatePage = () => {
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [imageUrl, setImageUrl] = useState<string>();
   const [fileData, setFileData] = useState<File>();
@@ -282,10 +282,12 @@ export const CompanyWritePage = () => {
                   <th scope="col">미리보기</th>
                   <td colSpan={3}>
                     <div id="companyWritePreview">
-                      {imageUrl ? (
-                        <img src={imageUrl} alt="Preview" style={{ width: "100px", height: "100px" }} />
-                      ) : (
-                        <span></span> // 값이 없을 때 표시할 대체 내용
+                      {companyInfo.bizLogo && (
+                        <img
+                          // src={}
+                          alt="Preview"
+                          style={{ width: "100px", height: "100px" }}
+                        />
                       )}
                     </div>
                   </td>

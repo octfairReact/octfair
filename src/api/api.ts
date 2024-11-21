@@ -13,6 +13,16 @@ export const Notice = {
   postUpdate: "/board/noticeUpdateFileForm.do",
 };
 
+export const Posts = {
+  getPost: "/jobs/posts.do",
+  getScrap: "/jobs/scrap.do",
+};
+
+export const ManagePost = {
+  getPostList: "/manage-post/readPostListBody.do",
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+};
+
 export const Company = {
   postSave: "/company/companySaveBody.do",
 };
