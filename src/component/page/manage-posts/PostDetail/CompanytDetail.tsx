@@ -7,11 +7,8 @@ import { PostDetailStyled } from "./ManagePostPage";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
-import { JobDetail } from "./JobDetail";
-import { CompanytDetail } from "./CompanytDetail";
-import { ContentBoxPost } from "../../../common/ContentBox/ContentBoxPost";
 
-export const PostDetail = () => {
+export const CompanytDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
   const location = useLocation();
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const { postIdx, bizIdx } = location.state || {};
@@ -32,33 +29,53 @@ export const PostDetail = () => {
   const fetchPostDetail = async () => {
     const param = { postIdx, bizIdx };
     const response = await postPostApi<AllDetail>(apiUrl, param);
+    console.log(response.data);
+    console.log("userInfo : " + userInfo.userType);
     setCDetail(response.data.bizDetail);
     setMDetail(response.data.postDetail);
   };
 
   return (
     <PostDetailStyled>
-      <ContentBoxPost>
-        채용 상세정보
-        {userInfo.loginId && userInfo.loginId === CDetail?.loginId && (
-          <div className="action-buttons">
-            <button className="btn btn-outline-primary">수정 </button>
-            <button className="btn btn-outline-danger">삭제</button>
-          </div>
+      <div className="company-info-content">
+        <div className="align">
+          <img src={Cdata.logicalPath} alt="Company Logo" width="150" height="150" />
+        </div>
+        <h4>기업 정보</h4>
+        <p>
+          <strong>기업명:</strong> {Cdata.bizName}
+        </p>
+        <p>
+          <strong>연락처:</strong> {Cdata.bizContact}
+        </p>
+        <p>
+          <strong>사원수:</strong> {Cdata.bizEmpCount}
+        </p>
+        <p>
+          <strong>주소:</strong> {Cdata.bizAddr}
+        </p>
+        <p>
+          <strong>대표명:</strong> {Cdata.bizCeoName}
+        </p>
+        <div className="align">
+          <a href="#" className="company-info-link">
+            기업정보→
+          </a>
+        </div>
+        {data.fileName && (
+          <p>
+            <strong>첨부파일:</strong> <a href="#">{data.fileName}</a>
+          </p>
         )}
-      </ContentBoxPost>
-      <div id="container">
-        <ul>
-          <li className="contents">
-            <div className="conTitle"></div>
-            <div className="container1">
-              <div className="job-details">{MDetail && CDetail && <JobDetail data={MDetail} Cdata={CDetail} />}</div>
-              <aside className="company-info">
-                {MDetail && CDetail && <CompanytDetail data={MDetail} Cdata={CDetail} />}
-              </aside>
+        <div className="date">
+          <span className="remaining">남은 기간</span>
+          <div className="date-details">
+            <div className="date-item">
+              <span>시작일: {data.startDate}</span>
+              <span>마감일: {data.endDate}</span>
             </div>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
     </PostDetailStyled>
   );

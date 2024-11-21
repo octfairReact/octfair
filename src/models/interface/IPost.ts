@@ -39,15 +39,13 @@ export interface companyDetail {
   bizAddr: string;
   bizContact: string;
   bizCeoName: string;
-
   bizEmpCount: string;
-
   bizLogo: string;
-
   phsycalPath: string;
   logicalPath: string;
   fileSize: number;
   fileExt: string;
+  loginId: string;
 }
 export interface AllDetail {
   bizDetail: companyDetail;

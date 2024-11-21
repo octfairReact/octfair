@@ -179,8 +179,26 @@ export const PostDetailStyled = styled.div`
   }
 
   .action-buttons .btn {
-    padding: 5px 15px;
+    margin: 5px;
     font-size: 13px;
+    border-radius: 5px;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  /* Action buttons */
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .action-buttons .btn {
+    padding: 10px 40px;
+    font-size: 13px;
+    text-align: center;
     border-radius: 5px;
   }
 `;
