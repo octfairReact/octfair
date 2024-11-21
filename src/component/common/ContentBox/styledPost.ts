@@ -53,4 +53,7 @@ export const ContentNamePost = styled.div`
     background-color: #dc3545;
     color: white;
   }
+  .job-details {
+    font-size: 200px;
+  }
 `;

@@ -58,52 +58,66 @@ const JobDetails = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }
   return (
     <PostDetailStyled>
       <div className="job-details-content">
-        <h2>(주){Cdata.bizName}</h2>
-        <h3>{data.title}</h3>
-        <p>
-          <strong>경력:</strong> {data.expRequired}
-        </p>
-        <p>
-          <strong>급여:</strong> 연봉 {data.salary}만원
-        </p>
-        <p>
-          <strong>모집인원:</strong> {data.openings}명
-        </p>
-        <p>
-          <strong>근무지역:</strong> {data.workLocation}
-        </p>
+        <div className="grid-layout">
+          <div className="detail-item">
+            <h2>(주){Cdata.bizName}</h2>
+            <h3>{data.title}</h3>
+          </div>
+          {/* <!-- 스크랩 및 입사지원 버튼 --> */}
 
-        {/* 조건부 렌더링 */}
-        {data.duties && (
-          <div className="detail-item full-width duties">
-            <strong>업무:</strong> <br />
-            &emsp;{data.duties}
+          <div className="detail-item action-buttons">
+            <button type="button" className="btn btn-outline-secondary">
+              스크랩
+            </button>
+            <button type="button" className="btn btn-warning">
+              입사지원
+            </button>
           </div>
-        )}
-        {data.posDescription && (
-          <div className="detail-item full-width duties">
-            <strong>포지션 소개:</strong> <br />
-            &emsp;{data.posDescription}
-          </div>
-        )}
-        {data.prefQualifications && (
-          <div className="detail-item full-width duties">
-            <strong>자격요건:</strong> <br />
-            &emsp;{data.prefQualifications}
-          </div>
-        )}
-        {data.prefQualifications && (
-          <div className="detail-item full-width duties">
-            <strong>우대사항:</strong> <br />
-            &emsp;{data.prefQualifications}
-          </div>
-        )}
-        {data.benefits && (
-          <div className="detail-item full-width duties">
-            <strong>혜택 & 복지:</strong> <br />
-            &emsp;{data.benefits}
-          </div>
-        )}
+          <p>
+            <strong>경력:</strong> {data.expRequired}
+          </p>
+          <p>
+            <strong>급여:</strong> 연봉 {data.salary}만원
+          </p>
+          <p>
+            <strong>모집인원:</strong> {data.openings}명
+          </p>
+          <p>
+            <strong>근무지역:</strong> {data.workLocation}
+          </p>
+
+          {/* 조건부 렌더링 */}
+          {data.duties && (
+            <div className="detail-item full-width duties">
+              <strong>업무</strong> <br />
+              &emsp;{data.duties}
+            </div>
+          )}
+          {data.posDescription && (
+            <div className="detail-item full-width duties">
+              <strong>포지션 소개</strong> <br />
+              &emsp;{data.posDescription}
+            </div>
+          )}
+          {data.prefQualifications && (
+            <div className="detail-item full-width duties">
+              <strong>자격요건</strong> <br />
+              &emsp;{data.prefQualifications}
+            </div>
+          )}
+          {data.prefQualifications && (
+            <div className="detail-item full-width duties">
+              <strong>우대사항</strong> <br />
+              &emsp;{data.prefQualifications}
+            </div>
+          )}
+          {data.benefits && (
+            <div className="detail-item full-width duties">
+              <strong>혜택 & 복지</strong> <br />
+              &emsp;{data.benefits}
+            </div>
+          )}
+        </div>
       </div>
     </PostDetailStyled>
   );
@@ -113,7 +127,9 @@ const CompanyInfo = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail 
   return (
     <PostDetailStyled>
       <div className="company-info-content">
-        <img src={Cdata.logicalPath} alt="Company Logo" width="150" height="150" />
+        <div className="align">
+          <img src={Cdata.logicalPath} alt="Company Logo" width="150" height="150" />
+        </div>
         <h4>기업 정보</h4>
         <p>
           <strong>기업명:</strong> {Cdata.bizName}
@@ -130,9 +146,11 @@ const CompanyInfo = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail 
         <p>
           <strong>대표명:</strong> {Cdata.bizCeoName}
         </p>
-        <a href="#" className="company-info-link">
-          기업정보→
-        </a>
+        <div className="align">
+          <a href="#" className="company-info-link">
+            기업정보→
+          </a>
+        </div>
       </div>
       <p>
         <strong>첨부파일:</strong> <a href="#">{data.fileName}</a>
