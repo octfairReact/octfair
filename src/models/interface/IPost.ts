@@ -21,9 +21,10 @@ export interface IPostDetail extends IPost {
   posDescription: string;
   duties: string;
   reqQualifications: string;
-  preQualifications: string;
+  prefQualifications: string;
   benefits: string;
   postDate: string;
+  startDate: string;
   endDate: string;
   hiringProc: string;
   fileName: string;
@@ -32,6 +33,25 @@ export interface IPostDetail extends IPost {
   logicalPath: string;
   fileSize: number;
   fileExt: string;
+}
+export interface companyDetail {
+  bizName: string;
+  bizAddr: string;
+  bizContact: string;
+  bizCeoName: string;
+
+  bizEmpCount: string;
+
+  bizLogo: string;
+
+  phsycalPath: string;
+  logicalPath: string;
+  fileSize: number;
+  fileExt: string;
+}
+export interface AllDetail {
+  bizDetail: companyDetail;
+  postDetail: IPostDetail;
 }
 
 export interface IPostListResponse {
