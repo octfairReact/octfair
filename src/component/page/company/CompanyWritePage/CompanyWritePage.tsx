@@ -115,9 +115,6 @@ export const CompanyWritePage = () => {
 
   return (
     <div>
-      <p className="conTitle">
-        <span>기업등록</span>
-      </p>
       <form id="companySaveForm" onSubmit={handlerSave}>
         <div id="companyWriteSt" style={{ marginTop: "10px" }}>
           <div id="writeTable">

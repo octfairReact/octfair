@@ -8,9 +8,9 @@ import { Post } from "../pages/Post";
 import { ManagePostPage } from "../pages/ManagePostPage";
 import { MyPage } from "../pages/MyPage";
 import { MyPageWithdraw } from "../pages/MyPageWithdraw";
-import { CompanyWritePage } from "../component/page/company/CompanyWritePage/CompanyWritePage";
-import { CompanyUpdatePage } from "../component/page/company/CompanyUpdatePage/CompanyUpdatePage";
-import { CompanyDetail } from "../component/page/company/CompanyDetail/CompanyDetail";
+import { CompanyDetail } from "../pages/Company/CompanyDetail";
+import { CompanyWrite } from "../pages/Company/CompanyWrite";
+import { CompanyUpdate } from "../pages/Company/CompanyUpdate";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -47,8 +47,8 @@ const routers: RouteObject[] = [
       {
         path: "company",
         children: [
-          { path: "companyWritePage.do", element: <CompanyWritePage /> },
-          { path: "companyUpdatePage.do", element: <CompanyUpdatePage /> },
+          { path: "companyWritePage.do", element: <CompanyWrite /> },
+          { path: "companyUpdatePage.do", element: <CompanyUpdate /> },
           {
             path: "companyDetailPage.do/:postIdx/:bizIdx", // :postIdx와 :bizIdx는 URL 파라미터로 취급됩니다.
             element: <CompanyDetail />,
