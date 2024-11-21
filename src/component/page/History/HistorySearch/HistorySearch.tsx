@@ -4,14 +4,14 @@ import { Button } from '../../../common/Button/Button';
 import { HistoryContext } from '../../../../api/provider/HistoryProvider';
 
 export const HistorySearch = () => {
-  // 상태 변수 설정
   const [filters, setFilters] = useState({
     searchPeriod: 'all',
     viewStatus: 'all',
     sortOrder: 'desc',
     keyword: '',
   });
-  // 검색 관련
+
+  // HistoryContext에서 setSearchKeyWord 가져오기
   const { setSearchKeyWord } = useContext(HistoryContext);
 
   // 필터 값 변경 함수
@@ -27,12 +27,14 @@ export const HistorySearch = () => {
   const handlerSearch = () => {
     console.log('===========검색 이벤트 동작===========');
     console.log('검색 키워드 :', filters);
-    setSearchKeyWord({
+
+    const searchParams = {
       searchTitle: filters.keyword,
       searchPeriod: filters.searchPeriod,
       viewStatus: filters.viewStatus,
       sortOrder: filters.sortOrder,
-    });
+    };
+    setSearchKeyWord(searchParams);
   };
 
   // 초기화 버튼 클릭 시 실행되는 함수

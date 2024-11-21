@@ -8,6 +8,7 @@ export interface IHistory {
     status: string;
     resIdx: number;
     bizName: String;
+    resumeData: string;
 }
 
 export enum Status {
@@ -30,3 +31,9 @@ export interface ISearchKeyword {
     viewStatus?: "열람" | "미열람";
     sortOrder?: string;
   }
+
+export interface IResumeModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    historyData: IHistory;
+}
