@@ -10,6 +10,7 @@ export const Notice = {
   postSave: "/board/noticeSaveFileForm.do",
   //postUpdate: "/board/noticeUpdateJson.do",
   postDelet: "/board/noticeDeleteBody.do",
+  //postUpdate: "/board/noticeUpdateBody.do",
   postUpdate: "/board/noticeUpdateFileForm.do",
 };
 
@@ -19,7 +20,7 @@ export const History = {
   getListBody: "/apply/historyBody.do",
   searchList: "/apply/searchHistoryBody.do",
   postDelete: "/apply/cancleApplyBody.do",
-}
+};
 
 export const Posts = {
   getPost: "/jobs/posts.do",
@@ -28,12 +29,20 @@ export const Posts = {
 
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+  getpostDetail: (postIdx: number, bizIdx: number) =>
+    `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
 export const Company = {
   postSave: "/company/companySaveBody.do",
-  getDetail: (postIdx: number, bizIdx: number) => `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
+  getDetail: (postIdx: number, bizIdx: number) =>
+    `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
   getCompanyInfo: "/company/companyUpdatePageRe.do",
   postUpdate: "/company/companyUpdateBody.do",
+};
+
+export const Resume = {
+  getListBody: "/apply/resumeListBody.do",
+  getDetail: "/apply/resumeDetail.do",
+  resumeDelete: "/apply/resumeDelete.do",
 };
