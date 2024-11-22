@@ -30,8 +30,6 @@ export const ResumeStyled = styled.div`
 
 export const InputBtnGroup = styled.div`
   .jIkZcX {
-    display: flex;
-    justify-content: flex-end;
     text-align: center;
     width: 100px !important;
     font-weight: bold !important;
@@ -51,6 +49,7 @@ export const ResumeDetailBodyHeader = styled.div`
   padding: 5px;
   font-size: 20px;
   border-bottom: 0.5px solid black;
+  font-weight: bold;
 `;
 
 export const ResumeDetailBodyGuide = styled.div`
@@ -63,7 +62,7 @@ export const ResumeDetailBodyGuide = styled.div`
 
 export const ResumeInput = styled.input`
   font-size: 13px;
-  width: 100%;
+  width: 90%;
   border: none;
   padding: 5px;
 `;
@@ -140,5 +139,25 @@ export const AttachDeleteButton = styled.button`
   svg {
     width: 100%;
     height: 100%;
+  }
+`;
+
+export const FileLabel = styled.label`
+  margin-top: 10px;
+  padding: 6px 25px;
+  background-color: #ccc;
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.9);
+  cursor: pointer;
+
+  &:hover {
+    background-color: #45a049;
+    color: white;
+  }
+
+  &:active {
+    background-color: #3e8e41;
+    box-shadow: 0 2px #666;
+    transform: translateY(2px);
   }
 `;

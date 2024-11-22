@@ -27,6 +27,7 @@ const routers: RouteObject[] = [
         children: [
           { path: "resume.do", element: <Resume /> },
           { path: "resume-new.do", element: <ResumeForm /> },
+          { path: "resume-detail/:resIdx", element: <ResumeForm /> },
         ],
       },
     ],

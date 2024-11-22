@@ -14,6 +14,7 @@ export const Notice = {
 };
 
 export const Resume = {
-  getList: "/apply/resume-detail.do",
   getListBody: "/apply/resumeListBody.do",
+  getDetail: "/apply/resumeDetail.do",
+  resumeDelete: "/apply/resumeDelete.do",
 };

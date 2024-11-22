@@ -15,19 +15,16 @@ import {
   AttachDeleteButton,
 } from "../styled";
 import { Button } from "../../../common/Button/Button";
-import { useState } from "react";
-import { loginInfoState } from "../../../../stores/userInfo";
-import { useRecoilState } from "recoil";
-import { ILoginInfo } from "../../../../models/interface/store/userInfo";
+import { useContext, useState } from "react";
 
-export const ResumeNewWrite = () => {
-  const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
-  const [resTitle, setResTitle] = useState("");
-  const [shortIntro, setShortIntro] = useState("");
+export const CareerList = () => {
+  const [showTable, setShowTable] = useState(false);
+  const handlerShowTable = () => {
+    setShowTable(true);
+  };
   const [careers, setCareers] = useState([
     { company: "", startDate: "", endDate: "", dept: "", position: "", reason: "", desc: "" },
   ]);
-
   // 경력 추가 함수
   const handleCareerAdd = () => {
     setCareers([
@@ -36,81 +33,30 @@ export const ResumeNewWrite = () => {
     ]);
   };
 
-  //취소함수
-  const handleCancle = () => {};
-
-  // 저장 함수
-  const handleSave = () => {
-    console.log("이력서 제목:", resTitle);
-    console.log("간단소개글:", shortIntro);
-    console.log("경력:", careers);
+  const handleCancle = () => {
+    setShowTable(false);
   };
+
   return (
     <>
       <StyledTable>
-        <ResumeDetailBodyBasicInfo>
-          <div>
-            <input
-              style={{ fontSize: "30px", marginBottom: "20px", padding: "5px", width: "700px" }}
-              id="restitle"
-              type="text"
-              value={resTitle}
-              placeholder="이력서 제목"
-              onChange={(e) => setResTitle(e.target.value)}
-            />
-          </div>
-          <div>
-            <ResumeInput
-              id="userName"
-              type="text"
-              value={userInfo.userNm}
-              placeholder="이름"
-              readOnly
-            />
-            <ResumeInput id="userEmail" type="text" value="" placeholder="이메일" readOnly />
-            <ResumeInput id="userPhone" type="text" value="" placeholder="연락처" readOnly />
-          </div>
-        </ResumeDetailBodyBasicInfo>
-
-        <ResumeDetailBody>
-          <ResumeDetailBodyHeader>간단소개글</ResumeDetailBodyHeader>
-          <ResumeDetailBodyGuide>
-            <p>
-              • 본인의 업무 경험을 기반으로 핵심역량과 업무 스킬을 간단히 작성해주세요.
-              <br />• 3~5줄로 요약하여 작성하는 것을 추천합니다!
-            </p>
-          </ResumeDetailBodyGuide>
-          <div>
-            <ResumeTextarea
-              id="short_intro"
-              value={shortIntro}
-              placeholder="소개글을 입력해주세요."
-              onChange={(e) => setShortIntro(e.target.value)}
-            />
-          </div>
-        </ResumeDetailBody>
-
-        <ResumeDetailBody>
-          <ResumeDetailBodyHeader>경력</ResumeDetailBodyHeader>
-          <ResumeDetailBodyGuide>
-            <p>
-              • 담당하신 업무 중 우선순위가 높은 업무를 선별하여 최신순으로 작성해주세요. <br />•
-              신입의 경우, 직무와 관련된 대외활동, 인턴, 계약직 경력 등이 있다면 작성해주세요.
-              <br />• 업무 또는 활동 시 담당했던 역할과 과정, 성과에 대해 자세히 작성해주세요.
-              <br />• 현재 재직중이면 퇴사일을 해당월로 입력해주세요.
-            </p>
-          </ResumeDetailBodyGuide>
-          <div>
-            <ResumeButton type="button" onClick={handleCareerAdd}>
-              +추가
-            </ResumeButton>
-            <ul>
+        <div>
+          <ResumeButton type="button" onClick={handlerShowTable}>
+            +추가
+          </ResumeButton>
+          {!showTable && (
+            <p style={{ marginTop: "20px", color: "gray" }}>경력사항을 추가해주세요</p>
+          )}
+          {showTable && (
+            <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
               {careers.map((career, index) => (
-                <li key={index}>
-                  <ResumeTable>
+                <li key={index} style={{ marginBottom: "24px" }}>
+                  <ResumeTable
+                    style={{ width: "100%", border: "1px solid gray", borderCollapse: "collapse" }}
+                  >
                     <tbody>
                       <tr>
-                        <td>
+                        <td style={{ border: "1px solid gray" }}>
                           <ResumeInput
                             id="company"
                             type="text"
@@ -124,9 +70,16 @@ export const ResumeNewWrite = () => {
                             }}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={{
+                            border: "1px solid gray",
+                            whiteSpace: "nowrap",
+                            fontSize: "13px",
+                          }}
+                        >
                           입사일:
                           <ResumeInput
+                            style={{ border: "1px solid gray", width: "60%", marginLeft: "8px" }}
                             id="startDate"
                             type="month"
                             value={career.startDate}
@@ -138,9 +91,16 @@ export const ResumeNewWrite = () => {
                             }}
                           />
                         </td>
-                        <td>
+                        <td
+                          style={{
+                            border: "1px solid gray",
+                            whiteSpace: "nowrap",
+                            fontSize: "13px",
+                          }}
+                        >
                           퇴사일:
                           <ResumeInput
+                            style={{ border: "1px solid gray", width: "60%", marginLeft: "8px" }}
                             id="endDate"
                             type="month"
                             value={career.endDate}
@@ -154,7 +114,7 @@ export const ResumeNewWrite = () => {
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td style={{ border: "1px solid gray" }}>
                           <ResumeInput
                             id="dept"
                             type="text"
@@ -168,7 +128,7 @@ export const ResumeNewWrite = () => {
                             }}
                           />
                         </td>
-                        <td>
+                        <td style={{ border: "1px solid gray" }}>
                           <ResumeInput
                             id="position"
                             type="text"
@@ -182,7 +142,7 @@ export const ResumeNewWrite = () => {
                             }}
                           />
                         </td>
-                        <td>
+                        <td style={{ border: "1px solid gray" }}>
                           <ResumeInput
                             id="reason"
                             type="text"
@@ -198,7 +158,7 @@ export const ResumeNewWrite = () => {
                         </td>
                       </tr>
                       <tr>
-                        <td colSpan={3}>
+                        <td colSpan={3} style={{ border: "1px solid gray" }}>
                           <ResumeTextarea
                             id="crrDesc"
                             value={career.desc}
@@ -214,22 +174,26 @@ export const ResumeNewWrite = () => {
                       </tr>
                     </tbody>
                   </ResumeTable>
-                  <InputBtnGroup>
-                    <Button
-                      style={{
-                        backgroundColor: "gray",
-                      }}
-                      onClick={handleCancle}
+                  <div style={{ textAlign: "center" }}>
+                    <InputBtnGroup
+                      style={{ marginTop: "15px", textAlign: "center", width: "100%" }}
                     >
-                      취소
-                    </Button>
-                    <Button onClick={handleSave}>저장</Button>
-                  </InputBtnGroup>
+                      <Button
+                        style={{
+                          backgroundColor: "gray",
+                        }}
+                        onClick={handleCancle}
+                      >
+                        취소
+                      </Button>
+                      <Button onClick={handleCareerAdd}>저장</Button>
+                    </InputBtnGroup>
+                  </div>
                 </li>
               ))}
             </ul>
-          </div>
-        </ResumeDetailBody>
+          )}
+        </div>
       </StyledTable>
     </>
   );
