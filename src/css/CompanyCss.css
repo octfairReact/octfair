@@ -1,0 +1,22 @@
+/* 버튼처럼 보이도록 스타일링 */
+.logo-label {
+  display: inline-block; /* 버튼처럼 블록 요소로 만들기 */
+  padding: 10px 20px; /* 적당한 여백 */
+  background-color: #3b6bd3; /* 초록색 배경 */
+  color: white; /* 텍스트 색상 */
+  font-size: 12px; /* 글자 크기 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+  border-radius: 5px; /* 둥근 모서리 */
+  cursor: pointer; /* 마우스 커서를 손 모양으로 바꿔서 클릭 가능 표시 */
+  transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+  width: 80px;
+  height: 15px;
+}
+
+.logo-label:hover {
+  background-color: #6158e4; /* 마우스 hover 시 배경색 어두워지기 */
+}
+
+.logo-label:active {
+  background-color: #553fd6; /* 클릭 시 배경색 더 어두워짐 */
+}
