@@ -20,9 +20,30 @@ export const HistoryMain = () => {
     const [index, setIndex] = useState<number>();
 
     useEffect(() => {
-        searchHistoryList(currentPage);
-    }, [currentPage, searchKeyWord]);
+        const fetchData = async () => {
+            await searchHistoryList(1, true); 
+        };
+        setCurrentPage(1);
+        fetchData();
+    }, [searchKeyWord]);
+    
+    useEffect(() => {
+        searchHistoryList(currentPage, true);
+    }, [currentPage]);
 
+    useEffect(() => {
+        const savedPage = localStorage.getItem('currentPage');
+        if (savedPage) {
+            setCurrentPage(parseInt(savedPage));
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('currentPage', currentPage.toString());
+    }, [currentPage]);
+
+    
+    
     // 기본 리스트 출력
     const searchHistoryList = async (currentPage: number, isSearchTriggered = false) => {
         const searchParam = { 
@@ -34,12 +55,9 @@ export const HistoryMain = () => {
             let searchList;
             if (isSearchTriggered) {
                 searchList = await postHistoryApi<IHistoryResponse>(History.searchList, searchParam);
-                console.log("2. 검색 데이터 출력");
             } else {
                 searchList = await postHistoryApi<IHistoryResponse>(History.getListBody, searchParam);
-                console.log("1. 기본 데이터 출력");
             }
-    
             if (searchList) {
                 setHistoryList(searchList.data.history);
                 setHistoryCnt(searchList.data.historyCnt);
@@ -53,8 +71,13 @@ export const HistoryMain = () => {
     const getPagedHistoryList = () => {
         const startIndex = (currentPage - 1) * 5;
         const endIndex = startIndex + 5;
-        return historyList?.slice(startIndex, endIndex);
+    
+        if (historyList.length > 0) {
+            return historyList.slice(startIndex, endIndex);
+        }
+        return [];
     };
+    
 
     // 지원 취소 기능
     const handlerCancel = async (appId: number, postTitle: string) => {

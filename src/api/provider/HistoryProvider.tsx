@@ -2,8 +2,8 @@ import { createContext, FC, useState } from "react";
 
 // 검색 키워드 상태의 타입 정의
 interface SearchKeyWord {
-  searchTitle: string;
-  searchPeriod: string;
+  keyWord: string;
+  startDate: string;
   viewStatus: string;
   sortOrder: string;
 }
@@ -17,8 +17,8 @@ interface Context {
 // 기본값 설정
 const defaultValue: Context = {
   searchKeyWord: {
-    searchTitle: "",
-    searchPeriod: "all",
+    keyWord: "",
+    startDate: "all",
     viewStatus: "all",
     sortOrder: "desc",
   },
@@ -31,8 +31,8 @@ export const HistoryContext = createContext(defaultValue);
 // Provider 컴포넌트
 export const HistoryProvider: FC<{ children: React.ReactNode | React.ReactNode[] }> = ({ children }) => {
   const [searchKeyWord, setSearchKeyWord] = useState<SearchKeyWord>({
-    searchTitle: "",
-    searchPeriod: "all",
+    keyWord: "",
+    startDate: "all",
     viewStatus: "all",
     sortOrder: "desc",
   });

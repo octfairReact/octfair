@@ -28,9 +28,10 @@ export interface IHistoryResponse {
 export interface ISearchKeyword {
     searchTitle?: string;
     searchPeriod?: string;
-    viewStatus?: "열람" | "미열람";
+    viewStatus?: string;
     sortOrder?: string;
-  }
+    isSearchButtonClicked: boolean;
+}
 
 export interface IResumeModalProps {
     isOpen: boolean;

@@ -5,14 +5,47 @@ import { HistoryContext } from '../../../../api/provider/HistoryProvider';
 
 export const HistorySearch = () => {
   const [filters, setFilters] = useState({
-    searchPeriod: 'all',
+    period: 'all',
     viewStatus: 'all',
     sortOrder: 'desc',
-    keyword: '',
+    keyWord: '',
   });
 
   // HistoryContext에서 setSearchKeyWord 가져오기
   const { setSearchKeyWord } = useContext(HistoryContext);
+
+  // 날짜 변환 함수
+  const getDateRange = (period) => {
+    const today = new Date();
+    let startDate = today;
+
+    if (period === 'all') return '2000-01-01';
+
+    switch (period) {
+      case '1week':
+        startDate.setDate(today.getDate() - 7);
+        break;
+      case '1month':
+        startDate.setMonth(today.getMonth() - 1);
+        break;
+      case '2month':
+        startDate.setMonth(today.getMonth() - 2);
+        break;
+      case '3month':
+        startDate.setMonth(today.getMonth() - 3);
+        break;
+      case '6month':
+        startDate.setMonth(today.getMonth() - 6);
+        break;
+      case '1year':
+        startDate.setFullYear(today.getFullYear() - 1);
+        break;
+      default:
+        return '';
+    }
+
+    return startDate.toISOString().split('T')[0]; // 'YYYY-MM-DD' 형식의 날짜 반환
+  };
 
   // 필터 값 변경 함수
   const handleFilterChange = (e) => {
@@ -21,30 +54,40 @@ export const HistorySearch = () => {
       ...prevFilters,
       [name]: value,
     }));
+    console.log(value);
   };
 
   // 검색 버튼 클릭 시 실행되는 함수
   const handlerSearch = () => {
     console.log('===========검색 이벤트 동작===========');
-    console.log('검색 키워드 :', filters);
+    console.log('검색 키워드:', filters);
 
     const searchParams = {
-      searchTitle: filters.keyword,
-      searchPeriod: filters.searchPeriod,
-      viewStatus: filters.viewStatus,
+      keyWord: filters.keyWord,
+      startDate: getDateRange(filters.period),
+      viewStatus: filters.viewStatus === 'all' ? 'all' : filters.viewStatus,
       sortOrder: filters.sortOrder,
     };
+
+    // HistoryContext에 검색 파라미터 전달
     setSearchKeyWord(searchParams);
   };
 
   // 초기화 버튼 클릭 시 실행되는 함수
   const handlerReset = () => {
     setFilters({
-      searchPeriod: 'all',
+      period: 'all',
       viewStatus: 'all',
       sortOrder: 'desc',
-      keyword: '',
+      keyWord: '',
     });
+  };
+
+  // 엔터키 입력 시 검색 실행
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handlerSearch();
+    }
   };
 
   return (
@@ -54,8 +97,8 @@ export const HistorySearch = () => {
         <select
           className="period"
           id="period"
-          name="searchPeriod"
-          value={filters.searchPeriod}
+          name="period"
+          value={filters.period}
           onChange={handleFilterChange}
         >
           <option value="all">조회기간 전체</option>
@@ -95,11 +138,12 @@ export const HistorySearch = () => {
         {/* 키워드 입력 필드 */}
         <input
           type="text"
-          className="keyword"
-          id="keyword"
-          name="keyword"
-          value={filters.keyword}
+          className="keyWord"
+          id="keyWord"
+          name="keyWord"
+          value={filters.keyWord}
           onChange={handleFilterChange}
+          onKeyDown={handleKeyDown}
           placeholder="키워드 입력"
         />
 

@@ -15,8 +15,8 @@ export const Notice = {
 
 // 김호관 : 입자시원-지원이력
 export const History = {
-  getList: "/apply/historyJson.do",
-  getListBody: "/apply/historyListBody.do",
+  // getList: "/apply/historyJson.do",
+  getListBody: "/apply/historyBody.do",
   searchList: "/apply/searchHistoryBody.do",
   postDelete: "/apply/cancleApplyBody.do",
 }
