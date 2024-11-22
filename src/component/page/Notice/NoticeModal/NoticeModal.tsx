@@ -172,22 +172,36 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
   };
 
   const handlerFile = (e: ChangeEvent<HTMLInputElement>) => {
-    const fileInfo = e.target.files;
+    const fileInfo = e.target.files; // input에서 선택한 파일 정보 가져오기
+
     console.log("파일 인포", fileInfo);
     if (fileInfo?.length > 0) {
-      const fileInfoSplit = fileInfo[0].name.split(".");
-      const fileExtension = fileInfoSplit[1].toLowerCase();
+      // 파일이 선택되었으면
+      const fileInfoSplit = fileInfo[0].name.split("."); // 파일 이름을 점(.)으로 분리하여 확장자 추출
+      const fileExtension = fileInfoSplit[1].toLowerCase(); // 확장자 소문자로 변환
+
+      const file = fileInfo[0]; // 첫 번째 파일
+
+      console.log(file.name); // 파일 이름 (예: "example.jpg")
+      console.log(file.size); // 파일 크기 (바이트 단위)
+      console.log(file.type); // MIME 타입 (예: "image/jpeg" 또는 "image/png")
 
       if (fileExtension === "jpg" || fileExtension === "gif" || fileExtension === "png") {
-        setImageUrl(URL.createObjectURL(fileInfo[0]));
-
-        console.log("미리보기", URL.createObjectURL(fileInfo[0]));
+        if (file.size <= 10 * 1024 * 1024) {
+          // 10MB 이하로 제한
+          setImageUrl(URL.createObjectURL(fileInfo[0])); // 이미지 미리보기 URL 생성
+          console.log("미리보기", URL.createObjectURL(fileInfo[0]));
+        } else {
+          // 파일이 너무 크면 처리
+          alert("파일이 너무 큽니다. 10MB 이하로 업로드해 주세요.");
+          setImageUrl(""); // 이미지 미리보기 URL 초기화
+        }
       } else {
-        setImageUrl("");
-        // 정해진 확장자외 다른 파일이 들어오면 파일네임 스트링값만 나오게
+        setImageUrl(""); // 다른 확장자일 경우 미리보기 URL 초기화
+        alert("이미지 파일만 업로드 가능합니다.");
       }
 
-      setFileData(fileInfo[0]);
+      setFileData(fileInfo[0]); // 선택된 파일을 상태에 저장
     }
   };
 
@@ -273,8 +287,10 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
           )}
         </div>
         <div className={"button-container"}>
-          <button onClick={noticeSeq ? handlerUpdateFile : handlerSaveFile}>{noticeSeq ? "수정" : "저장"}</button>
-          {noticeSeq && <button onClick={handlerDelete}>삭제</button>}
+          {userInfo.userType === "M" && (
+            <button onClick={noticeSeq ? handlerUpdateFile : handlerSaveFile}>{noticeSeq ? "수정" : "저장"}</button>
+          )}
+          {userInfo.userType === "M" && noticeSeq && <button onClick={handlerDelete}>삭제</button>}
           <button onClick={handlerModal}>나가기</button>
         </div>
       </div>
