@@ -26,4 +26,6 @@ export const ManagePost = {
 export const Company = {
   postSave: "/company/companySaveBody.do",
   getDetail: (postIdx: number, bizIdx: number) => `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
+  getCompanyInfo: "/company/companyUpdatePageRe.do",
+  postUpdate: "/company/companyUpdateBody.do",
 };

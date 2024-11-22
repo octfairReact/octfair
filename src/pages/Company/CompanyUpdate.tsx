@@ -4,7 +4,7 @@ import { CompanyUpdatePage } from "../../component/page/company/CompanyUpdatePag
 export const CompanyUpdate = () => {
   return (
     <>
-      <ContentBoxPost>기업수정</ContentBoxPost>
+      <ContentBoxPost>기업 수정 및 삭제</ContentBoxPost>
       <CompanyUpdatePage />
     </>
   );

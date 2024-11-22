@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { postCompanyApi } from "../../../../api/postCompany";
 import { Company } from "../../../../api/api";
 import { ICompanResponse, ICompanyDetail } from "../../../../models/interface/ICompany";
 import { CompanyDetailStyled } from "./styled";
+import { ILoginInfo } from "../../../../models/interface/store/userInfo";
+import { loginInfoState } from "../../../../stores/userInfo";
+import { useRecoilState } from "recoil";
 
 export const CompanyDetailPage = () => {
   const { postIdx, bizIdx } = useParams();
   const [postDetail, setPostDetail] = useState<ICompanyDetail | null>(null);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (postIdx && bizIdx) {
@@ -34,6 +39,19 @@ export const CompanyDetailPage = () => {
       }
     } catch (error) {
       console.error("회사 상세 조회 실패", error);
+    }
+  };
+
+  console.log("방문객 유저타입 확인", userInfo.userType);
+
+  const goToManageHire = () => {
+    const userType = userInfo.userType;
+
+    if (userType === "B") {
+      navigate(`/react/manage-hire/managehireDetail.do/${postIdx}/${bizIdx}`);
+    } else if (userType === "M" || userType === "A") {
+      navigate(`/react/manage-post/${postIdx}/${bizIdx}`);
+    } else {
     }
   };
 
@@ -166,7 +184,7 @@ export const CompanyDetailPage = () => {
         </div>
       </CompanyDetailStyled>
       <div className="btn_area" style={{ textAlign: "right", marginTop: "10px" }}>
-        <span>기업 지원공고 확인하기</span>
+        <button onClick={goToManageHire}>기업 지원공고 확인하기</button>
       </div>
     </div>
   );
