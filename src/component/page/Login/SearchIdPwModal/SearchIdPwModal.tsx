@@ -32,6 +32,8 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
     let title  = searchIdPwModal === "id" ? "아이디 찾기" : (searchIdPwModal === "pw" ? "비밀번호 찾기" : "비밀번호 변경");
     let input1 = searchIdPwModal === "id" ? "이름" : (searchIdPwModal === "pw" ? "아이디" : "변경할 비밀번호");
     let input2 = searchIdPwModal === "id" ? "이메일" : (searchIdPwModal === "pw" ? "이메일" : "비밀번호 재입력");
+    let input1_type = searchIdPwModal === "id" ? "text" : (searchIdPwModal === "pw" ? "text" : "password");
+    let input2_type = searchIdPwModal === "id" ? "email" : (searchIdPwModal === "pw" ? "email" : "password");
 
     // Enter키를 누를시 완료버튼 효과를 작동
     const completeEnterHandler = (event) => {
@@ -42,6 +44,8 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
     // 완료버튼 누를시 작동
     const completeHandler = () => {
         let isProblem = false;
+
+        // 빈값검사
         if (!inputs.inputA || !inputs.inputB) {
             alert("빈칸을 채워주세요!")
             isProblem = true;
@@ -100,7 +104,7 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
             // navigate()가 아니라 axios인 이유는 navigate식 URL쿼리전송은 React페이지 내의 전송일때고, 서버로의 URL쿼리 전송은 axios
             axios.post(serverApiAddress + queryString)
             .then((res) => {
-                if (res.data.result === "SUCCESS") {
+                if (res.data.result.toUpperCase() === "SUCCESS") {
                     if (searchIdPwModal === "id") {
                         alert("찾으시는 아이디는 " + res.data.id + "입니다.");
                         onClose();
@@ -130,7 +134,7 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
                             <tr>
                                 <TableHeaderCell>{input1} <RequiredMark>*</RequiredMark></TableHeaderCell>
                                 <TableDataCell colSpan={2}>
-                                    <InputField type="text" id="registerId" placeholder={`가입하신 ${input1}을 입력해주세요`} value={inputs.inputA}
+                                    <InputField type={input1_type} id="id" placeholder={`가입하신 ${input1}을 입력해주세요`} value={inputs.inputA}
                                         onChange={(e) => { setInputs((prev) => ({ ...prev, inputA: e.target.value })); }}>
                                     </InputField>
                                 </TableDataCell>
@@ -138,7 +142,7 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
                             <tr>
                                 <TableHeaderCell>{input2} <RequiredMark>*</RequiredMark></TableHeaderCell>
                                 <TableDataCell colSpan={3}>
-                                    <InputField type="email" id="registerPwd" placeholder={`가입하신 ${input2}을 입력해주세요`} value={inputs.inputB}
+                                    <InputField type={input2_type} id="pwd" placeholder={`가입하신 ${input2}을 입력해주세요`} value={inputs.inputB}
                                         onChange={(e) => { setInputs((prev) => ({ ...prev, inputB: e.target.value })); }}>
                                     </InputField>
                                 </TableDataCell>

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import {
     ModalOverlay,
-    SignupModalStyled,
+    ModalStyled,
     SignupTable,
     TableCaption,
     TableHeaderCell,
@@ -72,6 +72,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
     // 1. 빈값검사 -> 2. 중복검사(아이디중복체크) -> 3. 양식검사(이메일형식/비밀번호형식 등) -> 4. 데이터전송
     const completeRegisterHandler = async () => {
         let isProblem:boolean = false;
+        
         // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
         // return문 내 HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
         Object.entries(signupInput).some(([key, value]) => { // 입력창이 12개나 되어서 반복문처리, signupInput이 배열은 아니어서 forEach()/map()대신 Object.entries()
@@ -91,7 +92,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
             isProblem = true;
         }
         
-        // 3. 양식검사: pwd/emial 입력창에 대하여 지켜야할 정규식패턴 검사
+        // 3. 양식검사: pwd/email 입력창에 대하여 지켜야할 정규식패턴 검사
         const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
         const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         const phoneRules = /^[0-9]([-]?[0-9])*$/;
@@ -131,7 +132,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
             // navigate()가 아니라 axios인 이유는 navigate식 URL쿼리전송은 React페이지 내의 전송일때고, 서버로의 URL쿼리 전송은 axios
             axios.get(`/register.do${queryString}`)
             .then((res) => {
-                if (res.data.result === "SUCCESS") {
+                if (res.data.result.toUpperCase() === "SUCCESS") {
                     alert("회원가입이 완료되었습니다!");
                     onClose();
                 } else {
@@ -139,7 +140,6 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
                 }
             })
         }
-
     };
 
     // Spring컨트롤러의 파라미터가 @RequestBody(JSON)이 아닌 UserInfoModel(URL-encoded레거시코드)라서, Spring에서 파라미터를 바꿔주든가 React에서 qs.stringify를 하면됨
@@ -164,6 +164,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
         else             return false;
     }
 
+    // 우편번호검색API 창을 띄워주고, 검색된 값을 회원가입 정보입력창에 넣어준다.
     const postcodeSearchHandler = useCallback(() => { // useCallback은 해당함수의 반복호출마다 랜더링되지 않고 최초때부터 재사용 되게 랜더링한다는 뜻
         const script = document.createElement("script");
         script.src = "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
@@ -193,7 +194,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
     return (
         <>
             <ModalOverlay>
-                <SignupModalStyled>
+                <ModalStyled>
                     <SignupTable onKeyDown={completeEnterHandler}>
                         <TableCaption>회원가입</TableCaption>
                         <tbody>
@@ -309,7 +310,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
                         <Button onClick={completeRegisterHandler}>회원가입 완료</Button>
                         <Button onClick={onClose} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
                     </div>
-                </SignupModalStyled>
+                </ModalStyled>
             </ModalOverlay>
         </>
     );

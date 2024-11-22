@@ -18,3 +18,15 @@ export const searchIdPwModalState = atom<string>({
     key: 'searchIdPwModalState',
     default: "close",
 })
+
+// 비번수정 모달창에 쓰는 모달창state
+export const passwordModalState = atom<boolean>({
+    key: 'passwordModalState',
+    default: false,
+})
+
+// 회원탈퇴 모달창에 쓰는 모달창state
+export const withdrawModalState = atom<boolean>({
+    key: 'withdrawModalState',
+    default: false,
+})

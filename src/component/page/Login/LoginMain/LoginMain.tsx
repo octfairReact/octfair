@@ -3,12 +3,12 @@ import { ClickableLabel, LoginStyled, SearchIdPwContainer } from './styled';
 import axios from 'axios';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import { loginInfoState } from '../../../stores/userInfo';
-import { ILoginInfo } from '../../../models/interface/store/userInfo';
-import logo_img from '../../../assets/logo_img.png';
-import { signupModalState, searchIdPwModalState } from '../../../stores/modalState';
-import { SignupModal } from "./SignupModal/SignupModal";
-import { SearchIdPwModal } from './SearchIdPwModal/SearchIdPwModal';
+import { loginInfoState } from '../../../../stores/userInfo';
+import { ILoginInfo } from '../../../../models/interface/store/userInfo';
+import logo_img from '../../../../assets/logo_img.png';
+import { signupModalState, searchIdPwModalState } from '../../../../stores/modalState';
+import { SignupModal } from "../SignupModal/SignupModal";
+import { SearchIdPwModal } from '../SearchIdPwModal/SearchIdPwModal';
 
 export interface IAccount {
     lgn_Id: string;
@@ -44,6 +44,12 @@ export const LoginMain = () => {
         });
     };
 
+    // Enter키를 누를시 로그인 완료버튼 효과를 작동
+    const completeEnterHandler = (event) => {
+        if (event.key === "Enter")
+            loginHandler();
+    }
+
     // 회원가입 버튼 클릭시 회원가입 모달창 팝업
     const open_SignupModal_Handler = () => {
         if (signupModal === false)
@@ -72,13 +78,15 @@ export const LoginMain = () => {
 
     // 모달 외부 클릭시 모달창닫기 수행
     const click_OutOf_Modal_Handler = (event) => {
-        if (event.target === event.currentTarget)
+        // if (event.target !== event.currentTarget)
             close_Modal_Handler();
+        console.log(event.target)
+        console.log(event.currentTarget)
     }
 
     return (
         <>
-            <LoginStyled onClick={click_OutOf_Modal_Handler}>
+            <LoginStyled onKeyDown={completeEnterHandler}>
                 <div className="login-container">
                     <div>
                         <div className="login-text">
