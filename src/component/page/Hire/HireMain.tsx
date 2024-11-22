@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 
 
+
 export const HireMain = () => {
     const [hireCnt, setHireCnt] = useState<number>(0);
     const [hireList, setHireList] = useState<IHire[]>();
@@ -87,15 +88,6 @@ export const HireMain = () => {
           )} */}
         </>
       );
-
-
-
-
-
-
-
-
-
 
 
 

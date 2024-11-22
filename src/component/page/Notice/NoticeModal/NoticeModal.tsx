@@ -9,7 +9,7 @@ import { postNoticeApi } from "../../../../api/postNoticeApi";
 import { Notice } from "../../../../api/api";
 import axios, { AxiosRequestConfig } from "axios";
 
-interface INoitceModalProps {
+export interface INoitceModalProps {
   onSuccess: () => void;
   noticeSeq: number;
   setNoticeSeq: (noticeSeq: number | undefined) => void;
