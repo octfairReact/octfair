@@ -3,6 +3,7 @@ import { Login } from "../pages/Login";
 import { DashBoard } from "../component/layout/DashBoard/DashBoard";
 import { NotFound } from "../component/common/NotFound/NotFound";
 import { Notice } from "../pages/Notice";
+import { History } from "../pages/history";
 import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
 import { Post } from "../pages/Post";
 import { ManagePostPage } from "../pages/ManagePostPage";
@@ -56,6 +57,16 @@ const routers: RouteObject[] = [
           },
         ],
       },
+
+      // =========================== 김호관 : 입사지원 =========================
+      {
+        path: "apply",
+        children: [
+          { path: "history.do", element: <History/>},
+          // { path: "history.do/:historyIds", element: <HistoryRouter/>}
+        ]
+      },
+
       {
         path: "mypage",
         children: [
