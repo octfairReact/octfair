@@ -1,4 +1,4 @@
-import { LoginMain } from '../component/page/Login/LoginMain';
+import { LoginMain } from '../component/page/Login/LoginMain/LoginMain';
 
 export const Login = () => {
     return (

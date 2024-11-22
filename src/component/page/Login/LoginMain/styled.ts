@@ -77,3 +77,21 @@ export const LoginStyled = styled.div`
         opacity: 0.9;
     }
 `;
+
+// 아이디찾기를 좌측에 비밀번후를 우측에 붙여 정렬시키는 스타일
+export const SearchIdPwContainer = styled.div`
+    display: flex;
+    justify-content: space-between; /* 좌우로 요소를 배치 */
+    width: 100%; /* 선택 사항: 전체 가로 너비를 차지 */
+    align-items: center; /* 세로 중앙 정렬 */
+`;
+
+// 아이디/비밀번호 찾기에 마우스 올릴 시 손모양커서로 바꾸는 스타일
+export const ClickableLabel = styled.label`
+    cursor: pointer; /* 손 모양 커서 */
+    text-decoration: underline; /* 밑줄 */
+    color: green !important; /* 선택사항: 링크처럼 보이도록 색상 변경 */
+    &:hover {
+        color: magenta !important; /* 선택사항: 호버 시 색상 변경 */
+    }
+`;

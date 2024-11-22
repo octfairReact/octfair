@@ -1,0 +1,46 @@
+/* src/components/CustomAlert.css */
+
+/* 전체 화면을 덮는 반투명 배경과 알림 박스를 중앙에 위치 */
+.custom-alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 알림 박스 자체의 디자인 */
+.custom-alert {
+  background-color: white;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 300px; /* 고정된 가로 길이 */
+  height: 120px; /* 고정된 세로 길이 */
+}
+
+.custom-alert button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 150px; /* 고정된 가로 길이 */
+}
+
+.custom-alert button:hover {
+  background-color: #0056b3;
+}
+
+.custom-alert p {
+  margin-top: 10; /* p 태그의 기본 마진 제거 */
+  margin-bottom: 20px; /* 버튼과 메시지 간의 공간 확보 */
+}
