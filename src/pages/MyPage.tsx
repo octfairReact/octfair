@@ -1,4 +1,4 @@
-import { MyPageUpdate } from "../component/page/mypage/MyPageUpdate";
+import { MyPageUpdate } from "../component/page/MyPage/MyPageUpdate";
 
 export const MyPage = () => {
   return (

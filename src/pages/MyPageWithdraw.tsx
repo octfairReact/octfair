@@ -1,3 +1,13 @@
+import { ContentBox } from "../component/common/ContentBox/ContentBox";
+import { MyPageWithdrawMain } from "../component/page/MyPage/MyPageMain/MyPageWithdrawMain";
+
 export const MyPageWithdraw = () => {
-  return <>성찬님 페이지만 만들어 놧어요</>;
-};
+  return (
+    <>
+      {/* <MyPageWithdrawProvider> */}
+        <ContentBox>회원탈퇴</ContentBox>
+        <MyPageWithdrawMain />
+      {/* </MyPageWithdrawProvider> */}
+    </>
+  );
+}

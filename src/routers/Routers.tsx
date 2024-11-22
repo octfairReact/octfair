@@ -3,15 +3,16 @@ import { Login } from "../pages/Login";
 import { DashBoard } from "../component/layout/DashBoard/DashBoard";
 import { NotFound } from "../component/common/NotFound/NotFound";
 import { Notice } from "../pages/Notice";
-import { History } from "../pages/History";
+import { History } from "../pages/history";
 import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
 import { Post } from "../pages/Post";
 import { ManagePostPage } from "../pages/ManagePostPage";
 import { MyPage } from "../pages/MyPage";
-import { MyPageWithdraw } from "../pages/MyPageWithdraw";
 import { CompanyDetail } from "../pages/Company/CompanyDetail";
 import { CompanyWrite } from "../pages/Company/CompanyWrite";
 import { CompanyUpdate } from "../pages/Company/CompanyUpdate";
+import { MyPageUpdate } from "../pages/MyPageUpdate";
+import { MyPageWithdraw } from "../pages/MyPageWithdraw";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -66,6 +67,14 @@ const routers: RouteObject[] = [
         ]
       },
 
+      {
+        path: "mypage",
+        children: [
+          { path: "update.do", element: <MyPageUpdate /> },
+          { path: "withdraw.do", element: <MyPageWithdraw /> },
+          //:id 이게 키값이 됨
+        ],
+      },
     ],
   },
 ];
