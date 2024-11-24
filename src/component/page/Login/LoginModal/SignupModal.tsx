@@ -61,6 +61,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
         detailAddress: '',
         action: '',
     });
+    const [isIdDuplicateChecked, setIsIdDuplicateChecked] = useState<boolean>(false); // 중복체크 여부에 대한 변수
 
     // Enter키를 누를시 완료버튼 효과를 작동
     const completeEnterHandler = (event) => {
@@ -70,7 +71,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
 
     // 회원가입 완료버튼 누를시 작동
     // 1. 빈값검사 -> 2. 중복검사(아이디중복체크) -> 3. 양식검사(이메일형식/비밀번호형식 등) -> 4. 데이터전송
-    const completeRegisterHandler = async () => {
+    const completeRegisterHandler = () => {
         let isProblem:boolean = false;
         
         // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
@@ -87,8 +88,8 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
         });
 
         // 2. 중복검사: id 입력창에 대하여 DB와의 중복 검사
-        // async/await이 없어도 함수는 동작하지만, 함수의 반환값을 받으려면 함수 내부외부 둘다 async/await을 해야한다.
-        if (isProblem === false && await checkIdDuplicateHandler() === true) {
+        if (isProblem === false && isIdDuplicateChecked === false) {
+            alert("중복체크를 먼저 완료해주세요!");
             isProblem = true;
         }
         
@@ -157,6 +158,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
                     isDuplicate = true;
                 } else {
                     alert("사용가능한 아이디입니다.");
+                    setIsIdDuplicateChecked(true);
                 }
             })
         
@@ -193,8 +195,8 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
 
     return (
         <>
-            <ModalOverlay>
-                <ModalStyled>
+            <ModalOverlay onClick={onClose}>                       {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+                <ModalStyled onClick={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
                     <SignupTable onKeyDown={completeEnterHandler}>
                         <TableCaption>회원가입</TableCaption>
                         <tbody>
@@ -213,7 +215,8 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
                                 <TableHeaderCell>아이디 <RequiredMark>*</RequiredMark></TableHeaderCell>
                                 <TableDataCell colSpan={2}>
                                     <InputField type="text" id="registerId" placeholder="숫자, 영문자 조합으로 6~20자리"
-                                        onChange={(e) => { setSignupInput((prev) => ({ ...prev, loginId: e.target.value })); }}>
+                                        onChange={(e) => {  setSignupInput((prev) => ({ ...prev, loginId: e.target.value }));
+                                                            setIsIdDuplicateChecked(false)                                    }}>
                                     </InputField>
                                 </TableDataCell>
                                 <TableDataCell>

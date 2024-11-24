@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     ModalOverlay,
-    SignupModalStyled,
+    ModalStyled,
     SignupTable,
     TableCaption,
     TableHeaderCell,
@@ -126,8 +126,9 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
 
     return (
         <>
-            <ModalOverlay>
-                <SignupModalStyled>
+            <ModalOverlay onClick={onClose}>                        {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+                <ModalStyled onClick={(e) => e.stopPropagation()} //{/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
+                                style={{ backgroundColor: searchIdPwModal==="pw2" && 'cornsilk' }}> {/* <----- 비밀번호찾기->비밀번호변경으로 모달 변경시 배경색을 변경 */}
                     <SignupTable onKeyDown={completeEnterHandler}>
                         <TableCaption>{title}</TableCaption>
                         <tbody>
@@ -153,7 +154,7 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
                         <Button onClick={completeHandler}>찾기</Button>
                         <Button onClick={onClose} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
                     </div>
-                </SignupModalStyled>
+                </ModalStyled>
             </ModalOverlay>
         </>
     );
