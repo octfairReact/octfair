@@ -44,7 +44,10 @@ export const LoginMain = () => {
 
     // Enter키를 누를시 로그인 완료버튼 효과를 작동
     const completeEnterHandler = (event) => {
-        if (event.key === "Enter") loginHandler();
+        if (event.key === "Enter" 
+            && signupModal === false
+            && searchIdPwModal === "close") 
+            loginHandler();
     };
 
     // 회원가입 버튼 클릭시 회원가입 모달창 팝업

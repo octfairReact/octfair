@@ -77,7 +77,8 @@ export const MyPageUpdateMain = () => {
 
     // Enter키를 누를시 완료버튼 효과를 작동
     const completeEnterHandler = (event) => {
-        if (event.key === "Enter")
+        if (event.key === "Enter" 
+            && updatePasswordModal === false)
             completeUpdateHandler();
     }
 
