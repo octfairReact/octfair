@@ -46,3 +46,10 @@ export const Resume = {
   getDetail: "/apply/resumeDetail.do",
   resumeDelete: "/apply/resumeDelete.do",
 };
+
+export const Hire = {
+  getListBody: "/manage-hire/managehireListBody.do",
+  postSave: "/manage-hire/managehireSaveBody.do",
+
+
+};

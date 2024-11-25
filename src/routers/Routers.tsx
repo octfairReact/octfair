@@ -5,9 +5,10 @@ import { NotFound } from "../component/common/NotFound/NotFound";
 import { Notice } from "../pages/Notice";
 import { History } from "../pages/history";
 import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
+import { Hire } from "../pages/HireMain";
+import { HireAdd } from "../pages/HireWrite";
 import { Post } from "../pages/Post";
 import { ManagePostPage } from "../pages/ManagePostPage";
-import { MyPage } from "../pages/MyPage";
 import { CompanyDetail } from "../pages/Company/CompanyDetail";
 import { CompanyWrite } from "../pages/Company/CompanyWrite";
 import { CompanyUpdate } from "../pages/Company/CompanyUpdate";
@@ -29,8 +30,18 @@ const routers: RouteObject[] = [
         children: [
           { path: "notice.do", element: <Notice /> },
           { path: "notice.do/:noticeIdx", element: <NoticeRouter /> },
+          
           //:id 이게 키값이 됨
         ],
+      },
+      {
+        path: "manage-hire",
+        children: [
+          { path: "post.do", element: <Hire/>},
+          { path: "managehireWritePage.do", element: <HireAdd/>},
+
+
+        ]
       },
       {
         path: "jobs",
@@ -40,13 +51,6 @@ const routers: RouteObject[] = [
       {
         path: "manage-post",
         children: [{ path: "managePostDetailBody.do", element: <ManagePostPage /> }],
-      },
-      {
-        path: "mypage",
-        children: [
-          { path: "update.do", element: <MyPage /> },
-          { path: "withdraw.do", element: <MyPageWithdraw /> },
-        ],
       },
       {
         path: "company",
