@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ManagePost } from "../../../../api/api";
 import { AllDetail, companyDetail, IPostDetail } from "../../../../models/interface/IPost";
 import { postPostApi } from "../../../../api/postPostApi";
@@ -55,7 +55,7 @@ export const PostDetail = () => {
             <div className="container1">
               <div className="job-details">{MDetail && CDetail && <JobDetail data={MDetail} Cdata={CDetail} />}</div>
               <aside className="company-info">
-                {MDetail && CDetail && <CompanytDetail data={MDetail} Cdata={CDetail} />}
+                {MDetail && CDetail && <CompanyInfo data={MDetail} Cdata={CDetail} />}
               </aside>
             </div>
           </li>
@@ -73,6 +73,56 @@ export const PostDetail = () => {
           뒤로 가기
         </button>
       </div>
+    </PostDetailStyled>
+  );
+};
+
+const CompanyInfo = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
+  return (
+    <PostDetailStyled>
+      <div className="company-info-content">
+        <img src={Cdata.logicalPath} alt="Company Logo" width="150" height="150" />
+        <h4>기업 정보</h4>
+        <p>
+          <strong>기업명:</strong> {Cdata.bizName}
+        </p>
+        <p>
+          <strong>연락처:</strong> {Cdata.bizContact}
+        </p>
+        <p>
+          <strong>사원수:</strong> {Cdata.bizEmpCount}
+        </p>
+        <p>
+          <strong>주소:</strong> {Cdata.bizAddr}
+        </p>
+        <p>
+          <strong>대표명:</strong> {Cdata.bizCeoName}
+        </p>
+        <a href="#" className="company-info-link">
+          기업정보→
+        </a>
+      </div>
+      <p>
+        <strong>첨부파일:</strong> <a href="#">{data.fileName}</a>
+      </p>
+      <p>
+        <div className="date">
+          <span className="remaining">남은 기간</span>
+          <div className="date-details">
+            <div className="date-item">
+              <span className="date-item">
+                시작일
+                <br />
+              </span>
+              <span className="date-item">마감일</span>
+            </div>
+            <div className="date-item">
+              <span className="date-item">{data.startDate}</span>
+              <span className="date-item">{data.endDate}</span>
+            </div>
+          </div>
+        </div>
+      </p>
     </PostDetailStyled>
   );
 };
