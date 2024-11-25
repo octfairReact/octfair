@@ -25,6 +25,7 @@ export const History = {
 export const Posts = {
   getPost: "/jobs/posts.do",
   getScrap: "/jobs/scrap.do",
+  getScrapSave: "/jobs/saveScrapBody.do",
 };
 
 export const ManagePost = {
@@ -52,4 +53,8 @@ export const Hire = {
   postSave: "/manage-hire/managehireSaveBody.do",
 
 
+};
+export const ScrapURL = {
+  getScrapList: "/manage-post/scrapListBody.do",
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };

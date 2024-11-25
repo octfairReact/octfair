@@ -16,6 +16,7 @@ import { MyPageUpdate } from "../pages/MyPageUpdate";
 import { MyPageWithdraw } from "../pages/MyPageWithdraw";
 import { Resume } from "../pages/Resume";
 import { ResumeForm } from "../pages/ResumeForm";
+import { Scrap } from "../pages/Scrap";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -30,22 +31,23 @@ const routers: RouteObject[] = [
         children: [
           { path: "notice.do", element: <Notice /> },
           { path: "notice.do/:noticeIdx", element: <NoticeRouter /> },
-          
+
           //:id 이게 키값이 됨
         ],
       },
       {
         path: "manage-hire",
         children: [
-          { path: "post.do", element: <Hire/>},
-          { path: "managehireWritePage.do", element: <HireAdd/>},
-
-
-        ]
+          { path: "post.do", element: <Hire /> },
+          { path: "managehireWritePage.do", element: <HireAdd /> },
+        ],
       },
       {
         path: "jobs",
-        children: [{ path: "posts.do", element: <Post /> }],
+        children: [
+          { path: "posts.do", element: <Post /> },
+          { path: "scrap.do", element: <Scrap /> },
+        ],
       },
 
       {
