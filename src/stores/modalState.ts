@@ -30,3 +30,9 @@ export const withdrawModalState = atom<boolean>({
     key: 'withdrawModalState',
     default: false,
 })
+
+// 회원탈퇴 모달창에 쓰는 모달창state
+export const withdrawModalState = atom<boolean>({
+    key: 'withdrawModalState',
+    default: false,
+})
