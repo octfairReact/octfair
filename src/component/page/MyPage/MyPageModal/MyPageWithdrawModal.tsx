@@ -69,8 +69,8 @@ export const MyPageWithdrawModal: React.FC<WithdrawModalProps> = ({ onClose }) =
 
     return (
         <>
-            <ModalOverlay onClick={onClose}>                       {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
-                <ModalStyled onClick={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
+            <ModalOverlay onMouseDown={onClose}>                       {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+                <ModalStyled onMouseDown={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
                     <Table onKeyDown={completeEnterHandler}>
                     <TableCaption>회원탈퇴 본인확인을 위해 비밀번호를 입력해주세요</TableCaption>
                     <tr>

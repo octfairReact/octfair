@@ -195,8 +195,8 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
 
     return (
         <>
-            <ModalOverlay onClick={onClose}>                       {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
-                <ModalStyled onClick={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
+            <ModalOverlay onMouseDown={onClose}>                       {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+                <ModalStyled onMouseDown={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
                     <SignupTable onKeyDown={completeEnterHandler}>
                         <TableCaption>회원가입</TableCaption>
                         <tbody>

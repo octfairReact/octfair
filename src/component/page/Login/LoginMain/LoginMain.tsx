@@ -33,6 +33,7 @@ export const LoginMain = () => {
         if (data.result === "SUCCESS") {
             setLoginInfo(data);
             sessionStorage.setItem("userInfo", JSON.stringify(data));
+            localStorage.setItem("loginInfoState", JSON.stringify(data));
             navigate("/react");
         } else {
             alert("ID 혹은 비밀번호가 틀립니다");

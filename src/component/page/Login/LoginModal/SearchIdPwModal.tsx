@@ -126,8 +126,8 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
 
     return (
         <>
-            <ModalOverlay onClick={onClose}>                        {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
-                <ModalStyled onClick={(e) => e.stopPropagation()} //{/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
+            <ModalOverlay onMouseDown={onClose}>                        {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+                <ModalStyled onMouseDown={(e) => e.stopPropagation()} //{/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
                                 style={{ backgroundColor: searchIdPwModal==="pw2" && 'cornsilk' }}> {/* <----- 비밀번호찾기->비밀번호변경으로 모달 변경시 배경색을 변경 */}
                     <SignupTable onKeyDown={completeEnterHandler}>
                         <TableCaption>{title}</TableCaption>
