@@ -14,12 +14,11 @@ export const Notice = {
   postUpdate: "/board/noticeUpdateFileForm.do",
 };
 
-// 김호관 : 입자시원-지원이력
 export const History = {
-  // getList: "/apply/historyJson.do",
   getListBody: "/apply/historyBody.do",
   searchList: "/apply/searchHistoryBody.do",
   postDelete: "/apply/cancleApplyBody.do",
+  getModal:"/apply/previewResumeBody.do",
 };
 
 export const Posts = {

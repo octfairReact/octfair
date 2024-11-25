@@ -2,23 +2,22 @@ import { useContext, useEffect, useState } from 'react';
 import { HistoryContext } from '../../../../api/provider/HistoryProvider';
 import { IHistory, IHistoryResponse } from '../../../../models/interface/IHistory';
 import { postHistoryApi } from '../../../../api/postHistoryApi';
-import { History } from '../../../../api/api';
+import { History, ManagePost } from '../../../../api/api';
 import { StyledTable, StyledTd, StyledTh } from '../../../common/styled/StyledTable';
 import { PageNavigate } from '../../../common/pageNavigation/PageNavigate';
 import { useRecoilState } from 'recoil';
 import { modalState } from '../../../../stores/modalState';
 import { HistoryModal } from '../HistoryModal/HistoryModal';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const HistoryMain = () => {
     const { search } = useLocation();
+    const navigate = useNavigate();
     const [historyList, setHistoryList] = useState<IHistory[]>([]);
     const [historyCnt, setHistoryCnt] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const { searchKeyWord } = useContext(HistoryContext);
     const [cPage, setCPage] = useState<number>(1);
-
-    // 모달
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [index, setIndex] = useState<number>();
 
@@ -66,6 +65,18 @@ export const HistoryMain = () => {
         }
     };
 
+    // 상세 페이지로 이동
+    const handlerDetail = (appId, bizIdx) => {
+        navigate(`/react/company/companyDetailPage.do/${appId}/${bizIdx}`);
+    };
+
+    // 채용 공고로 이동
+    const handlerPost = (postIdx: number, bizIdx: number) => {
+        navigate(`/react/manage-post/managePostDetailBody.do`, {
+          state: { postIdx, bizIdx },
+        });
+    };
+
     // 모달창 열기
     const handlerModal = (appId: number) => {
         setModal(true);
@@ -75,7 +86,7 @@ export const HistoryMain = () => {
     return (
         <>
          <pre>총 갯수 : {historyCnt}   현재 페이지 : {cPage} </pre>
-            <StyledTable style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            <StyledTable>
                 <thead>
                     <tr>
                         <StyledTh size={10}>지원일</StyledTh>
@@ -94,9 +105,10 @@ export const HistoryMain = () => {
                                     <p>{history.applyDate.toString()}</p>
                                 </StyledTd>
                                 <StyledTd>
-                                    {history.bizName}
-                                    <p style={{ fontWeight: 'bold' }}>{history.postTitle}</p>
-                                    <span onClick={() => handlerModal(history.appId)}>
+                                    <span onClick={() => handlerDetail(history.appId, history.bizIdx)}>{history.bizName}</span>
+                                    <p style={{ fontWeight: 'bold' }} onClick={() => handlerPost(history.postingId, history.bizIdx)}>{history.postTitle}</p>
+                                    <span 
+                                        onClick={() => handlerModal(history.appId)}>
                                         지원이력서
                                     </span>
                                 </StyledTd>
@@ -131,12 +143,17 @@ export const HistoryMain = () => {
             ></PageNavigate>
 
             {/* 지원이력서 모달 */}
-            {modal && (
+            {/* {modal && (
                 <HistoryModal
                     index={index}
                     setModal={setModal}
+                    resumeInfo={{ name: '', email: '', phone: '' }}
+                    careerInfo={[]}
+                    eduInfo={[]}
+                    skillInfo={[]}
+                    certInfo={[]}
                 />
-            )}
+            )} */}
 
             <br></br>
             <br></br>

@@ -1,142 +1,169 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { HistoryModalStyled } from "./styled";
-
-interface HistoryModalProps {
-    index: number | null;
-    setModal: React.Dispatch<React.SetStateAction<boolean>>;
-    careerInfo?: { company: string; position: string }[];
-    eduInfo?: { schoolName: string; major: string }[];
-    skillInfo?: { skillName: string; skillDetail: string }[];
-    certInfo?: { certName: string; grade: string }[];
-}
+import { IHistoryModal, IHistoryResponse } from "../../../../models/interface/IHistory";
+import { History } from "../../../../api/api";
+import { postHistoryApi } from "../../../../api/postHistoryApi";
 
 export const HistoryModal = ({
     index,
     setModal,
+    resumeInfo = { name: '', email: '', phone: '' },
     careerInfo = [],
     eduInfo = [],
     skillInfo = [],
-    certInfo = [],
-}: HistoryModalProps) => {
-    if (index === null) return null; // index가 없으면 모달을 표시하지 않음
+    certInfo = []
+  }: IHistoryModal) => {
 
-    const handleClose = () => {
-        setModal(false);  // 모달 닫기
+  const [historyData, setHistoryData] = useState<IHistoryResponse | null>(null);
+
+  useEffect(() => {
+    const fetchHistoryData = async () => {
+      try {
+        const response = await postHistoryApi<IHistoryResponse>(History.getModal, { userIdx: index });
+        setHistoryData(response.data);
+      } catch (error) {
+        console.error("Error fetching history data:", error);
+      }
     };
 
-    return (
-        <HistoryModalStyled>
-            <div>
-                <div>모달 내용 - {index}</div>
-                <div>
-                    <p>resTitle</p>
-                    <p>userNm</p>
-                    <p>email</p>
-                    <p>phone</p>
-                </div>
+    if (index !== null) {
+      fetchHistoryData();
+    }
+  }, [index]);
 
-                {/* 경력 정보 */}
-                {careerInfo.length > 0 && (
-                    <div>
-                        <h3>경력</h3>
-                        <ul>
-                            {careerInfo.map((data, idx) => (
-                                <li key={idx}>
-                                    <span>{data.company}</span> - <span>{data.position}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+  // ESC 키로 닫기
+  const handlerEsc = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      handlerClose();
+    }
+  };
 
-                {/* 학력 정보 */}
-                {eduInfo.length > 0 && (
-                    <div>
-                        <h3>학력</h3>
-                        <ul>
-                            {eduInfo.map((data, idx) => (
-                                <li key={idx}>
-                                    <span>{data.schoolName}</span> - <span>{data.major}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+  // 닫기 함수
+  const handlerClose = () => {
+    setModal(false);
+  };
 
-                {/* 스킬 정보 */}
-                {skillInfo.length > 0 && (
-                    <div>
-                        <h3>스킬</h3>
-                        <ul>
-                            {skillInfo.map((data, idx) => (
-                                <li key={idx}>
-                                    <span>{data.skillName}</span> - <span>{data.skillDetail}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+  // 인쇄 기능
+  const handlerPrint = () => {
+    window.print();
+  };
 
-                {/* 자격증 정보 */}
-                {certInfo.length > 0 && (
-                    <div>
-                        <h3>자격증 및 외국어</h3>
-                        <ul>
-                            {certInfo.map((data, idx) => (
-                                <li key={idx}>
-                                    <span>{data.certName}</span> - <span>{data.grade}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+  return (
+    <HistoryModalStyled>
+      <div>
+        <h3>{resumeInfo?.name}</h3>
 
-                <button onClick={handleClose}>닫기</button>
-            </div>
-        </HistoryModalStyled>
-    );
-};
+        {/* 개인 정보 테이블 */}
+        <table>
+          <thead>
+            <tr>
+              <th colSpan={2}>개인 정보</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>이름</td>
+              <td>{resumeInfo.name}</td>
+            </tr>
+            <tr>
+              <td>이메일</td>
+              <td>{resumeInfo.email}</td>
+            </tr>
+            <tr>
+              <td>연락처</td>
+              <td>{resumeInfo.phone}</td>
+            </tr>
+          </tbody>
+        </table>
 
-// 임의 데이터 설정
-const App = () => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [index, setIndex] = useState<number | null>(1);
+        {/* 경력 사항 테이블 */}
+        <table>
+          <thead>
+            <tr>
+              <th colSpan={2}>경력 사항</th>
+            </tr>
+          </thead>
+          <tbody>
+            {careerInfo?.map((career, idx) => (
+              <tr key={idx}>
+                <td>{career.company}</td>
+                <td>{career.position}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-    const mockCareerInfo = [
-        { company: "ABC Corp", position: "Software Engineer" },
-        { company: "XYZ Inc", position: "Senior Developer" },
-    ];
+        {/* 학력 사항 테이블 */}
+        <table>
+          <thead>
+            <tr>
+              <th colSpan={2}>학력 사항</th>
+            </tr>
+          </thead>
+          <tbody>
+            {eduInfo?.map((edu, idx) => (
+              <tr key={idx}>
+                <td>{edu.schoolName}</td>
+                <td>{edu.major}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-    const mockEduInfo = [
-        { schoolName: "서울대학교", major: "컴퓨터공학" },
-        { schoolName: "고려대학교", major: "정보기술" },
-    ];
+        {/* 스킬 테이블 */}
+        <table>
+          <thead>
+            <tr>
+              <th colSpan={2}>스킬</th>
+            </tr>
+          </thead>
+          <tbody>
+            {skillInfo?.map((skill, idx) => (
+              <tr key={idx}>
+                <td>{skill.skillName}</td>
+                <td>{skill.skillDetail}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-    const mockSkillInfo = [
-        { skillName: "JavaScript", skillDetail: "웹 개발" },
-        { skillName: "React", skillDetail: "프론트엔드" },
-    ];
+        {/* 자격증 및 외국어 테이블 */}
+        <table>
+          <thead>
+            <tr>
+              <th colSpan={3}>자격증 및 외국어</th>
+            </tr>
+          </thead>
+          <tbody>
+            {certInfo?.map((cert, idx) => (
+              <tr key={idx}>
+                <td>{cert.certName}</td>
+                <td>{cert.grade}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-    const mockCertInfo = [
-        { certName: "정보처리기사", grade: "1급" },
-        { certName: "TOEIC", grade: "950점" },
-    ];
+        {/* 자기소개서 테이블 */}
+        <table>
+          <thead>
+            <tr>
+              <th>자기소개서</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>누구보다 NPC의 진심입니다</td>
+            </tr>
+          </tbody>
+        </table>
 
-    return (
-        <div>
-            <button onClick={() => setModalVisible(true)}>모달 열기</button>
-            {modalVisible && (
-                <HistoryModal
-                    index={index}
-                    setModal={setModalVisible}
-                    careerInfo={mockCareerInfo}
-                    eduInfo={mockEduInfo}
-                    skillInfo={mockSkillInfo}
-                    certInfo={mockCertInfo}
-                />
-            )}
+        {/* 버튼들 */}
+        <div className="button-container">
+          <button className="close-button" onClick={handlerClose}>닫기</button>
+          <button className="print-button" onClick={handlerPrint}>인쇄</button>
         </div>
-    );
+      </div>
+    </HistoryModalStyled>
+  );
 };
-
-export default App;
