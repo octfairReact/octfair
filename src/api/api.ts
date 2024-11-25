@@ -38,6 +38,7 @@ export const Company = {
   getDetail: (postIdx: number, bizIdx: number) => `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
   getCompanyInfo: "/company/companyUpdatePageRe.do",
   postUpdate: "/company/companyUpdateBody.do",
+  postDelete: "/company/companyDeleteRe.do",
 };
 
 export const Resume = {
@@ -49,8 +50,6 @@ export const Resume = {
 export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   postSave: "/manage-hire/managehireSaveBody.do",
-
-
 };
 export const ScrapURL = {
   getScrapList: "/manage-post/scrapListBody.do",
