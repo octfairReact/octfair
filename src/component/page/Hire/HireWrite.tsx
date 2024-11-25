@@ -6,7 +6,7 @@ import { Hire } from "../../../api/api";
 import { IPostResponse } from "../../../models/interface/INotice";
 import { postHireApi } from "../../../api/postHireApi";
 import { IHireWrite } from "../../../models/interface/IHire";
-import { StyledInput, StyledTable, StyledTableHire, StyledTd, StyledTh } from "../../common/styled/StyledTable";
+import {  StyledTable,  StyledTd, StyledTh } from "../../common/styled/StyledTable";
 import Calendar from "../../Calendar";
 import { ListFormat } from "typescript";
 
@@ -129,7 +129,7 @@ export const HireWrite = () => {
     
   
             <br></br>
-            <StyledTableHire>
+            <StyledTable>
                 <thead>
                     <tr>
                         <th>채용제목</th>
@@ -209,7 +209,7 @@ export const HireWrite = () => {
 
                     
                 </thead>
-            </StyledTableHire>
+            </StyledTable>
             <button onClick={ handlerSaveFile }>등록</button>      
          
             {/* <label>
