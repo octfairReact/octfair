@@ -8,76 +8,41 @@ import { PageNavigate } from '../../../common/pageNavigation/PageNavigate';
 import { useRecoilState } from 'recoil';
 import { modalState } from '../../../../stores/modalState';
 import { HistoryModal } from '../HistoryModal/HistoryModal';
+import { useLocation } from 'react-router-dom';
 
 export const HistoryMain = () => {
+    const { search } = useLocation();
     const [historyList, setHistoryList] = useState<IHistory[]>([]);
     const [historyCnt, setHistoryCnt] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const { searchKeyWord } = useContext(HistoryContext);
+    const [cPage, setCPage] = useState<number>(1);
 
     // 모달
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [index, setIndex] = useState<number>();
 
+    // 검색어가 변경되거나 컴포넌트가 마운트될 때 포스트 리스트를 검색
     useEffect(() => {
-        const fetchData = async () => {
-            await searchHistoryList(1, true); 
+        searchHistoryList(currentPage);
+    }, [search, searchKeyWord, currentPage]);
+
+    // 포스트 리스트 검색 함수
+    const searchHistoryList = async (currentPage?: number) => {
+        const searchParam = {
+            ...searchKeyWord,
+            currentPage: currentPage.toString(),
+            pageSize: "5",
         };
-        setCurrentPage(1);
-        fetchData();
-    }, [searchKeyWord]);
-    
-    useEffect(() => {
-        searchHistoryList(currentPage, true);
-    }, [currentPage]);
 
-    useEffect(() => {
-        const savedPage = localStorage.getItem('currentPage');
-        if (savedPage) {
-            setCurrentPage(parseInt(savedPage));
-        }
-    }, []);
+        const searchList = await postHistoryApi<IHistoryResponse>(History.searchList, searchParam);
 
-    useEffect(() => {
-        localStorage.setItem('currentPage', currentPage.toString());
-    }, [currentPage]);
-
-    
-    
-    // 기본 리스트 출력
-    const searchHistoryList = async (currentPage: number, isSearchTriggered = false) => {
-        const searchParam = { 
-            ...searchKeyWord, 
-            currentPage: currentPage.toString(), 
-            pageSize: "5"
-        };
-        try {
-            let searchList;
-            if (isSearchTriggered) {
-                searchList = await postHistoryApi<IHistoryResponse>(History.searchList, searchParam);
-            } else {
-                searchList = await postHistoryApi<IHistoryResponse>(History.getListBody, searchParam);
-            }
-            if (searchList) {
-                setHistoryList(searchList.data.history);
-                setHistoryCnt(searchList.data.historyCnt);
-            }
-        } catch (error) {
-            console.error("API 호출 중 오류 발생:", error);
+        if (searchList) {
+            setHistoryList(searchList.data.history);
+            setHistoryCnt(searchList.data.historyCnt);
+            setCPage(currentPage);
         }
     };
-
-    // 현재 페이지에 맞는 항목만 추출
-    const getPagedHistoryList = () => {
-        const startIndex = (currentPage - 1) * 5;
-        const endIndex = startIndex + 5;
-    
-        if (historyList.length > 0) {
-            return historyList.slice(startIndex, endIndex);
-        }
-        return [];
-    };
-    
 
     // 지원 취소 기능
     const handlerCancel = async (appId: number, postTitle: string) => {
@@ -101,7 +66,7 @@ export const HistoryMain = () => {
         }
     };
 
-    // 모달창
+    // 모달창 열기
     const handlerModal = (appId: number) => {
         setModal(true);
         setIndex(appId);
@@ -109,9 +74,8 @@ export const HistoryMain = () => {
 
     return (
         <>
-            총 갯수: {historyCnt}
-            현재 페이지 : {currentPage}
-            <StyledTable>
+         <pre>총 갯수 : {historyCnt}   현재 페이지 : {cPage} </pre>
+            <StyledTable style={{ maxHeight: '400px', overflowY: 'auto' }}>
                 <thead>
                     <tr>
                         <StyledTh size={10}>지원일</StyledTh>
@@ -122,8 +86,8 @@ export const HistoryMain = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {getPagedHistoryList()?.length > 0 ? (
-                        getPagedHistoryList()?.map((history) => (
+                    {historyList.length > 0 ? (
+                        historyList.map((history) => (
                             <tr key={history.appId}>
                                 <StyledTd>
                                     <p>지원완료</p>
@@ -133,7 +97,7 @@ export const HistoryMain = () => {
                                     {history.bizName}
                                     <p style={{ fontWeight: 'bold' }}>{history.postTitle}</p>
                                     <span onClick={() => handlerModal(history.appId)}>
-                                    지원이력서
+                                        지원이력서
                                     </span>
                                 </StyledTd>
                                 <StyledTd><p>{history.status}</p></StyledTd>
@@ -146,7 +110,6 @@ export const HistoryMain = () => {
                                 >
                                     {history.viewed == 1 ? '취소 불가' : '지원 취소'}
                                 </StyledTd>
-
                             </tr>
                         ))
                     ) : (
@@ -158,20 +121,25 @@ export const HistoryMain = () => {
                     )}
                 </tbody>
             </StyledTable>
-            <PageNavigate
-                totalItemsCount={historyCnt}
-                onChange={setCurrentPage}
-                activePage={currentPage}
-                itemsCountPerPage={5}
-            />
 
-            {/* 이력서 모달 */}
+            {/* 페이징 처리 */}
+            <PageNavigate 
+                totalItemsCount={historyCnt} 
+                onChange={searchHistoryList}
+                activePage={cPage} 
+                itemsCountPerPage={5}
+            ></PageNavigate>
+
+            {/* 지원이력서 모달 */}
             {modal && (
                 <HistoryModal
                     index={index}
                     setModal={setModal}
                 />
             )}
+
+            <br></br>
+            <br></br>
         </>
     );
 };
