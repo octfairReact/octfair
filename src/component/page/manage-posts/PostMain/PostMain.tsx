@@ -1,11 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
-import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
 import { useContext, useEffect, useState } from "react";
 import { IPost, IPostListResponse } from "../../../../models/interface/IPost";
 import { PostContext } from "../../../../api/provider/PostProvider";
 import { ManagePost } from "../../../../api/api";
 import { postPostApi } from "../../../../api/postPostApi";
+import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
 
 export const PostMain = () => {
   const { search } = useLocation();
