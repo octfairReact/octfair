@@ -42,13 +42,6 @@ const routers: RouteObject[] = [
         children: [{ path: "managePostDetailBody.do", element: <ManagePostPage /> }],
       },
       {
-        path: "mypage",
-        children: [
-          { path: "update.do", element: <MyPage /> },
-          { path: "withdraw.do", element: <MyPageWithdraw /> },
-        ],
-      },
-      {
         path: "company",
         children: [
           { path: "companyWritePage.do", element: <CompanyWrite /> },
