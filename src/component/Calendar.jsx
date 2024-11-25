@@ -24,7 +24,7 @@ const Calendar = ({ label, onDateChange }) => {
         //timeCaption="시간" // 시간 선택 드롭다운 캡션
         minDate={new Date()} //오늘 이후 날짜만 선택 가능
         timeFormat="HH aa" // 시간 형식 설정 (오전/오후 포함)
-        dateFormat="yyyy-MM-dd h:mm aa" // 전체 날짜와 시간 형식
+        dateFormat ="yyyy-MM-dd h:mm aa" // 전체 날짜와 시간 형식
         
       />
 

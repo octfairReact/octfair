@@ -96,16 +96,22 @@ export const HireWrite = () => {
         const fileForm = new FormData();
         const textData = {
           title: title?.current.value,
-         
+          workLocation: workLocation?.current.value,
           salary: salary?.current.value,
           openings: openings?.current.value,
           loginId: userInfo?.loginId,
+          benefits: benefits?.current.value,
+          
         };
         fileData && fileForm.append("file", fileData);
         fileForm.append("text", new Blob([JSON.stringify(textData)], { type: "application/json" }));
-    
-        const save = await postHireApi<IPostResponse>(Hire.postSave, fileForm);
         
+        console.log(fileForm);
+        console.log("api 실행 전");
+
+        const save = await postHireApi<IPostResponse>(Hire.postSave, fileForm);
+        console.log("api 실행 후");
+        console.log("save data : " , save);
         if (save && save.data.result === "success") {
         //   onSuccess();
         alert("성공");
@@ -132,7 +138,7 @@ export const HireWrite = () => {
                     <tr>
                         <th>경력 여부</th>
                             <td>
-                            <div style={{display: "flex", gap: "16px"}}>
+                            <label style={{display: "flex", gap: "16px"}}>
                                 {checkBox.map((checkbox) => (
                                     <label key={checkbox.id}>
                                         <input  type="checkbox" 
@@ -140,7 +146,7 @@ export const HireWrite = () => {
                                                 onChange={() => handleCheckboxChange(checkbox.id)}/>
                                         {checkbox.label}
                                     </label>
-                            ))}</div></td>
+                            ))}</label></td>
                         <th>경력</th>
                             <td>
                             <select value={expYears} onChange={handleChange} 
@@ -175,9 +181,9 @@ export const HireWrite = () => {
                                    placeholder="과정을 하나씩 적은 후 절차등록 버튼을 눌러주세요"></input>
                             <button onClick={handleClick}>절차등록</button>
                             <button onClick={handleClickRefresh}>초기화</button>
-                            <div>
+                            <label>
                                 {recruitProcessList.join(' - ')}
-                            </div>  
+                            </label>  
                         </td>                  
                     </tr>
                     <tr>
@@ -201,13 +207,10 @@ export const HireWrite = () => {
                         <td><button>파일선택</button></td>
                     </tr>
 
-                    <div><button onClick={ handlerSaveFile }>등록</button></div>
                     
-
-
                 </thead>
             </StyledTableHire>
-            
+            <button onClick={ handlerSaveFile }>등록</button>      
          
             {/* <label>
                 제목 :<input type="text" ref={title} defaultValue={hireWrite?.title}></input>
