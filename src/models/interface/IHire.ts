@@ -10,15 +10,15 @@ export interface IHire {
 
 export interface IHireWrite extends IHire{
     expYears:              string;
-    salary:                string;
-    workLocation:          string;
-    openings:              string;     //모집인원   
-    posDescription:        string; 
-    duties:                string;
-    reqQualifications:     string;
-    prefQualifications:    string;
-    benefits:              string;
-    hirProcess:            string;
+    salary:                string;  //급여
+    workLocation:          string;  //근무지역
+    openings:              string;  //모집인원   
+    posDescription:        string;  //포지션설명
+    duties:                string;  //업무
+    reqQualifications:     string;  //자격조건
+    prefQualifications:    string;  //우대사항
+    benefits:              string;  //혜택&복지
+    hirProcess:            string;  //채용절차
 
     fileName:              string;
     phsycalPath:           string | null;
