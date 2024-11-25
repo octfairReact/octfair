@@ -1,4 +1,4 @@
-export const UpdateUserModal = () => {
+export const ManageUserSearch = () => {
     return (
         <>
         </>
