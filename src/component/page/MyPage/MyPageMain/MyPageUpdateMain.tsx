@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
-    SignupTable,
+    Table,
     TableCaption,
     TableHeaderCell,
     TableDataCell,
@@ -15,6 +15,7 @@ import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { passwordModalState as updatePasswordModalState } from "../../../../stores/modalState";
 import { MyPageUpdatePasswordModal } from "../MyPageModal/MyPageUpdatePasswordModal";
+import { useNavigate } from "react-router-dom";
 
 declare global {
     interface Window {
@@ -38,9 +39,10 @@ export interface UpdateInput {
 export const MyPageUpdateMain = () => {
     const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(updatePasswordModalState);
     const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
+    const [bizIdx, setBizIdx] = useState<number>();
     const [updateInput, setUpdateInput] = useState<UpdateInput>({
         // 기본값
-        loginId: userInfo.loginId,
+        loginId: userInfo.loginId, // 아이디 칸은 읽기전용
         name: '',
         sex: '',
         birthday: '',
@@ -50,6 +52,7 @@ export const MyPageUpdateMain = () => {
         address: '',
         detailAddress: '',
     });
+    const navigate = useNavigate();
 
     // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
     useEffect(() => {
@@ -57,8 +60,9 @@ export const MyPageUpdateMain = () => {
             .then((res) => {
                 console.log(res);
                 let prevData = res.data.detail;
+                setBizIdx(res.data.chkRegBiz.bizIdx);
                 setUpdateInput({
-                    loginId: userInfo.loginId,
+                    loginId: userInfo.loginId, // 아이디 칸은 읽기전용
                     name: prevData.name,
                     sex: prevData.sex,
                     birthday: prevData.birthday,
@@ -160,6 +164,17 @@ export const MyPageUpdateMain = () => {
         return () => { document.body.removeChild(script); };
     }, []);
 
+    // 기업 등록 버튼 누를시 기업등록 페이지로 이동
+    const handlerBizCreate = () => {
+        navigate("/react/company/companyWritePage.do");
+    };
+
+    // 기업 수정 버튼 누를시 기업수정 페이지로 이동
+    const handlerBizUpdate = () => {
+        navigate("/react/company/companyUpdatePage.do");
+    };
+
+    // 비밀번호 수정 버튼 누를시 비밀번호수정 관련 모달 팝업
     const updatePasswordHandler = () => {
         if (updatePasswordModal === false)
             setUpdatePasswordModal(true);
@@ -175,13 +190,13 @@ export const MyPageUpdateMain = () => {
 
     return (
         <>
-            <SignupTable onKeyDown={completeEnterHandler}>
+            <Table onKeyDown={completeEnterHandler}>
                 <TableCaption>회원가입</TableCaption>
                 <tbody>
                     <tr>
                         <TableHeaderCell>아이디 <RequiredMark>*</RequiredMark></TableHeaderCell>
                         <TableDataCell colSpan={2}>
-                            <InputField type="text" id="id" placeholder="숫자, 영문자 조합으로 6~20자리" value={userInfo.loginId}
+                            <InputField type="text" id="id" placeholder="숫자, 영문자 조합으로 6~20자리" value={userInfo.loginId} readOnly // 아이디 칸은 읽기전용
                                 onChange={(e) => { setUpdateInput((prev) => ({ ...prev, loginId: e.target.value })); }}>
                             </InputField>
                         </TableDataCell>
@@ -231,6 +246,15 @@ export const MyPageUpdateMain = () => {
                             </InputField>
                         </TableDataCell>
                     </tr>
+                    { bizIdx >= 0 && ( // bizIdx: 0이상이면 기업회원이기에 기업정보 칸 동적생성, 0이상 중에서도 0이면 등록 1이상이면 수정
+                        <tr>
+                            <TableHeaderCell>기업정보 <RequiredMark>*</RequiredMark></TableHeaderCell>
+                            <TableDataCell colSpan={3}>
+                                { bizIdx === 0 && ( <Button onClick={handlerBizCreate}>등록</Button> )}
+                                { bizIdx  >  0 && ( <Button onClick={handlerBizUpdate}>수정</Button> )}
+                            </TableDataCell>
+                        </tr>
+                    )}
                     <tr>
                         <TableHeaderCell>우편번호 <RequiredMark>*</RequiredMark></TableHeaderCell>
                         <TableDataCell colSpan={2}>
@@ -259,7 +283,7 @@ export const MyPageUpdateMain = () => {
                         </TableDataCell>
                     </tr>
                 </tbody>
-            </SignupTable>
+            </Table>
             <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
                 <Button onClick={completeUpdateHandler}>수정</Button>
                 <Button onClick={() => {}} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>

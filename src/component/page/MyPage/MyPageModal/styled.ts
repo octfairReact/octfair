@@ -15,7 +15,7 @@ export const ModalOverlay = styled.div`
 `;
 
 // 모달 컨테이너 스타일
-export const SignupModalStyled = styled.div`
+export const ModalStyled = styled.div`
     width: 600px;
     max-height: 90vh;
     overflow-y: auto;
@@ -44,7 +44,7 @@ export const CloseButton = styled.button`
 `;
 
 // 테이블 스타일
-export const SignupTable = styled.table`
+export const Table = styled.table`
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;

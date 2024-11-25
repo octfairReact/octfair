@@ -1,14 +1,14 @@
 import {
   ModalOverlay,
   ModalStyled,
-  SignupTable,
+  Table,
   TableCaption,
   TableHeaderCell,
   TableDataCell,
   InputField,
   RequiredMark,
   Button,
-} from "../MyPageMain/styled";
+} from "./styled";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
@@ -87,9 +87,13 @@ export const MyPageUpdatePasswordModal: React.FC<updatePasswordModalProps> = ({ 
 
   return (
     <>
-      <ModalOverlay>
-        <ModalStyled>
-          <SignupTable onKeyDown={completeEnterHandler}>
+      <ModalOverlay onMouseDown={onClose}>
+        {" "}
+        {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+        <ModalStyled onMouseDown={(e) => e.stopPropagation()}>
+          {" "}
+          {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
+          <Table onKeyDown={completeEnterHandler}>
             <TableCaption>회원탈퇴 본인확인을 위해 비밀번호를 입력해주세요</TableCaption>
             <tr>
               <TableHeaderCell>
@@ -136,7 +140,7 @@ export const MyPageUpdatePasswordModal: React.FC<updatePasswordModalProps> = ({ 
                 ></InputField>
               </TableDataCell>
             </tr>
-          </SignupTable>
+          </Table>
           <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
             <Button onClick={completeWithdrawHandler}>수정</Button>
             <Button onClick={onClose} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>
