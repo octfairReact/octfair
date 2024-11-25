@@ -76,8 +76,6 @@ export const NoticeMain = () => {
     // searchParam.append("pageSize", "5");
 
     const searchParam = { ...searchKeyWord, currentPage: currentPage.toString(), pageSize: "5" };
-
-    console.log(searchParam);
     const searchList = await postNoticeApi<INoitceListResponse>(Notice.getListBody, searchParam);
     if (searchList) {
       setNoticeList(searchList.data.notice);
