@@ -19,6 +19,7 @@ export const PostDetail = () => {
   const [param, setParam] = useState<{ postIdx: string | number; bizIdx: string | number } | null>(null);
   const [CDetail, setCDetail] = useState<companyDetail>();
   const [MDetail, setMDetail] = useState<IPostDetail>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (postIdx && bizIdx) {
@@ -55,7 +56,7 @@ export const PostDetail = () => {
             <div className="container1">
               <div className="job-details">{MDetail && CDetail && <JobDetail data={MDetail} Cdata={CDetail} />}</div>
               <aside className="company-info">
-                {MDetail && CDetail && <CompanyInfo data={MDetail} Cdata={CDetail} />}
+                {MDetail && CDetail && <CompanyInfo data={MDetail} Cdata={CDetail} postIdx={postIdx} bizIdx={bizIdx} />}
               </aside>
             </div>
           </li>
@@ -77,7 +78,23 @@ export const PostDetail = () => {
   );
 };
 
-const CompanyInfo = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
+const CompanyInfo = ({
+  data,
+  Cdata,
+  bizIdx,
+  postIdx,
+}: {
+  data: IPostDetail;
+  Cdata: companyDetail;
+  bizIdx: string | number;
+  postIdx: string | number;
+}) => {
+  const navigate = useNavigate();
+
+  const companyDetail = () => {
+    navigate(`/react/company/companyDetailPage.do/${postIdx}/${bizIdx}`);
+  };
+
   return (
     <PostDetailStyled>
       <div className="company-info-content">
@@ -98,9 +115,7 @@ const CompanyInfo = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail 
         <p>
           <strong>대표명:</strong> {Cdata.bizCeoName}
         </p>
-        <a href="#" className="company-info-link">
-          기업정보→
-        </a>
+        <button onClick={companyDetail}>기업정보→</button>
       </div>
       <p>
         <strong>첨부파일:</strong> <a href="#">{data.fileName}</a>
