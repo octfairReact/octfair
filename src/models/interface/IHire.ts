@@ -2,7 +2,7 @@
 export interface IHire {
     postIdx:        number;
     title:          string;
-    expRequired:    string;
+    expRequired:    string; //경력여부
     appStatus:      string;
     postDate:       string;
     endDate:        string;

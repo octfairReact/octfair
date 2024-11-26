@@ -165,6 +165,12 @@ export const MyPageUpdateMain = () => {
         return () => { document.body.removeChild(script); };
     }, []);
 
+    // 비밀번호 수정 버튼 누를시 비밀번호수정 관련 모달 팝업
+    const updatePasswordHandler = () => {
+        if (updatePasswordModal === false)
+            setUpdatePasswordModal(true);
+    }
+
     // 기업 등록 버튼 누를시 기업등록 페이지로 이동
     const createBizHandler = () => {
         navigate("/react/company/companyWritePage.do");
@@ -174,12 +180,6 @@ export const MyPageUpdateMain = () => {
     const updateBizHandler = () => {
         navigate("/react/company/companyUpdatePage.do");
     };
-
-    // 비밀번호 수정 버튼 누를시 비밀번호수정 관련 모달 팝업
-    const updatePasswordHandler = () => {
-        if (updatePasswordModal === false)
-            setUpdatePasswordModal(true);
-    }
 
     return (
         <>

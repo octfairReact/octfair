@@ -3,22 +3,22 @@ import { useState } from "react";
 import axios from "axios";
 import { updatePasswordModalState } from "../../../../stores/modalState";
 import {
-  ModalOverlay,
-  ModalStyled,
-  Table,
-  TableCaption,
-  TableHeaderCell,
-  TableDataCell,
-  InputField,
-  RequiredMark,
-  Button,
+    ModalOverlay,
+    ModalStyled,
+    Table,
+    TableCaption,
+    TableHeaderCell,
+    TableDataCell,
+    InputField,
+    RequiredMark,
+    Button,
 } from "./styled";
 
 // 패스워드 3세트
 export interface PasswordInputs {
-  prevPassword: string;
-  newPassword: string;
-  checkPassword: string;
+    prevPassword: string;
+    newPassword: string;
+    checkPassword: string;
 }
 
 export const MyPageUpdatePasswordModal = () => {
