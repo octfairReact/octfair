@@ -58,3 +58,13 @@ export const ScrapURL = {
   getScrapList: "/manage-post/scrapListBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
+
+export const ManageUser = {
+  getApplicantList: "/manage-user/applicantListBody.do",
+  getApplicantDetail: "/manage-user/applicantManageDetail.do",
+  updateApplicantInfo: "/manage-user/applicantInfoUpdate.do",
+  resetApplicantPassword: "/manage-user/applicantPwReset.do",
+  getBizList: "/manage-user/bizListBody.do",
+  getBizDetail: "/manage-user/bizManageDetail.do",
+  updateBizInfo: "/manage-user/bizInfoUpdate.do",
+}

@@ -1,4 +1,4 @@
-import { NoticeSearchStyled } from "../../manage-user/ManageUserSearch/styled";
+import { NoticeSearchStyled } from "./styled";
 import { Button } from "../../../common/Button/Button";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";

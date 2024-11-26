@@ -1,4 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { ILoginInfo } from "../../../../models/interface/store/userInfo";
+import { loginInfoState } from "../../../../stores/userInfo";
+import { updatePasswordModalState } from "../../../../stores/modalState";
+import { MyPageUpdatePasswordModal } from "../MyPageModal/MyPageUpdatePasswordModal";
+import { useNavigate } from "react-router-dom";
 import {
     Table,
     TableCaption,
@@ -9,13 +16,6 @@ import {
     RequiredMark,
     Button,
 } from "./styled";
-import axios from "axios";
-import { useRecoilState } from "recoil";
-import { ILoginInfo } from "../../../../models/interface/store/userInfo";
-import { loginInfoState } from "../../../../stores/userInfo";
-import { passwordModalState as updatePasswordModalState } from "../../../../stores/modalState";
-import { MyPageUpdatePasswordModal } from "../MyPageModal/MyPageUpdatePasswordModal";
-import { useNavigate } from "react-router-dom";
 
 declare global {
     interface Window {
@@ -23,7 +23,7 @@ declare global {
     }
 }
 
-// 회원가입 입력데이터 구조체/멤버변수
+// 회원수정 입력데이터 구조체/멤버변수
 export interface UpdateInput {
     loginId: string;
     name: string;
@@ -56,9 +56,8 @@ export const MyPageUpdateMain = () => {
 
     // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
     useEffect(() => {
-        axios.get("/mypage/userDetail.do" + "?loginId=" + userInfo.loginId)
+        axios.get("/mypage/userDetail.do?loginId=" + userInfo.loginId)
             .then((res) => {
-                console.log(res);
                 let prevData = res.data.detail;
                 setBizIdx(res.data.chkRegBiz.bizIdx);
                 setUpdateInput({
@@ -83,7 +82,7 @@ export const MyPageUpdateMain = () => {
     }
 
     // 회원수정 완료버튼 누를시 작동
-    // 1. 빈값검사 -> 2. 양식검사(이메일형식/전화번호형식) -> 3. 데이터전송
+    // 1. 빈값검사 -> 2. 양식검사(날짜/이메일형식/전화번호형식) -> 3. 데이터전송
     const completeUpdateHandler = async () => {
         let isProblem:boolean = false;
         
@@ -100,7 +99,7 @@ export const MyPageUpdateMain = () => {
             return false;
         });
         
-        // 2. 양식검사: pwd/email 입력창에 대하여 지켜야할 정규식패턴 검사
+        // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
         const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         const phoneRules = /^[0-9]([-]?[0-9])*$/;
 
@@ -117,12 +116,13 @@ export const MyPageUpdateMain = () => {
             }
         }
 
-        // 회원수정 입력정보 문제없음! 서버로 Update요청!
+        // 3. 데이터전송: 회원수정 입력정보 문제없음! 서버로 Update요청!
         if (isProblem === false) {
             const query: string[] = [];
             Object.entries(updateInput).forEach(([key, value]) => {
                 query.push(`${key}=${encodeURIComponent(value)}`);
             });
+
             // 쿼리 앞에 '?' 붙이고 쿼리key/value쌍 사이마다 '&' 붙이기
             const queryString = query.length > 0 ? `?${query.join(`&`)}` : "";
 
@@ -166,12 +166,12 @@ export const MyPageUpdateMain = () => {
     }, []);
 
     // 기업 등록 버튼 누를시 기업등록 페이지로 이동
-    const handlerBizCreate = () => {
+    const createBizHandler = () => {
         navigate("/react/company/companyWritePage.do");
     };
 
     // 기업 수정 버튼 누를시 기업수정 페이지로 이동
-    const handlerBizUpdate = () => {
+    const updateBizHandler = () => {
         navigate("/react/company/companyUpdatePage.do");
     };
 
@@ -180,14 +180,6 @@ export const MyPageUpdateMain = () => {
         if (updatePasswordModal === false)
             setUpdatePasswordModal(true);
     }
-    
-    // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
-    const close_Modal_Handler = () => {
-        if (updatePasswordModal !== false)
-            setUpdatePasswordModal(false);
-    };
-    
-        
 
     return (
         <>
@@ -196,7 +188,7 @@ export const MyPageUpdateMain = () => {
                 <tbody>
                     <tr>
                         <TableHeaderCell>아이디 <RequiredMark>*</RequiredMark></TableHeaderCell>
-                        <TableDataCell colSpan={2}>
+                        <TableDataCell colSpan={3}>
                             <InputField type="text" id="id" placeholder="숫자, 영문자 조합으로 6~20자리" value={userInfo.loginId} readOnly // 아이디 칸은 읽기전용
                                 onChange={(e) => { setUpdateInput((prev) => ({ ...prev, loginId: e.target.value })); }}>
                             </InputField>
@@ -251,8 +243,8 @@ export const MyPageUpdateMain = () => {
                         <tr>
                             <TableHeaderCell>기업정보 <RequiredMark>*</RequiredMark></TableHeaderCell>
                             <TableDataCell colSpan={3}>
-                                { bizIdx === 0 && ( <Button onClick={handlerBizCreate}>등록</Button> )}
-                                { bizIdx  >  0 && ( <Button onClick={handlerBizUpdate}>수정</Button> )}
+                                { bizIdx === 0 && ( <Button onClick={createBizHandler}>등록</Button> )}
+                                { bizIdx  >  0 && ( <Button onClick={updateBizHandler}>수정</Button> )}
                             </TableDataCell>
                         </tr>
                     )}
@@ -290,7 +282,7 @@ export const MyPageUpdateMain = () => {
                 <Button onClick={() => {}} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
             </div>
             {updatePasswordModal !== false && (
-                <MyPageUpdatePasswordModal onClose={close_Modal_Handler} />
+                <MyPageUpdatePasswordModal/>
             )}
         </>
     );

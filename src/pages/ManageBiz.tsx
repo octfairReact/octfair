@@ -5,11 +5,11 @@ import { ManageUserSearch } from "../component/page/manage-user/ManageUserSearch
 export const ManageBiz = () => {
   return (
     <>
-      {/* <ManageBizProvider> */}
-        <ContentBox>회원탈퇴</ContentBox>
+      {/* <ManageUserProvider> */}
+        <ContentBox>기업회원관리</ContentBox>
         <ManageUserSearch />
         <ManageBizMain />
-      {/* </ManageBizProvider> */}
+      {/* </ManageUserProvider> */}
     </>
   );
 }

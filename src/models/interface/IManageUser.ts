@@ -9,9 +9,18 @@ export interface IManageApplicant {
 
 // 각 타입은 JSP(bizList)와 DB(tb_biz)를 확인함
 export interface IManageBiz {
-    bizIdx: string;
+    bizIdx: number;
     bizName: string;
     bizCeoName: string;
-    bizcontact: string;
+    bizContact: string;
     bizWebUrl: string;
+}
+
+export interface IManageApplicantListResponse {
+    applicantCnt: number;
+    applicant: IManageApplicant[];
+}
+export interface IManageBizListResponse {
+    bizCnt: number;
+    biz: IManageBiz[];
 }

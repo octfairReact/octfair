@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ManageUserSearchStyled = styled.div`
+export const NoticeSearchStyled = styled.div`
     margin-bottom: 10px;
     float: inline-end;
     input {

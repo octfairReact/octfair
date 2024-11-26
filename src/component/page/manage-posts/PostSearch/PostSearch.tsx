@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { PostContext } from "../../../../api/provider/PostProvider";
 import { useNavigate } from "react-router-dom";
-import { NoticeSearchStyled } from "../../manage-user/ManageUserSearch/styled";
+import { NoticeSearchStyled } from "../../Notice/NoticeSearch/styled";
 import { Button } from "react-bootstrap";
 
 export const PostSearch = () => {

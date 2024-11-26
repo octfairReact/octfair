@@ -1,3 +1,4 @@
+import { ManageUserProvider } from "../api/provider/ManageUserProvider";
 import { ContentBox } from "../component/common/ContentBox/ContentBox";
 import { ManageApplicantMain } from "../component/page/manage-user/ManageUserMain/ManageApplicantMain";
 import { ManageUserSearch } from "../component/page/manage-user/ManageUserSearch/ManageUserSearch";
@@ -5,11 +6,11 @@ import { ManageUserSearch } from "../component/page/manage-user/ManageUserSearch
 export const ManageApplicant = () => {
   return (
     <>
-      {/* <ManageApplicantProvider> */}
-        <ContentBox>회원탈퇴</ContentBox>
+      <ManageUserProvider>
+        <ContentBox>개인회원관리</ContentBox>
         <ManageUserSearch />
         <ManageApplicantMain />
-      {/* </ManageApplicantProvider> */}
+      </ManageUserProvider>
     </>
   );
 }

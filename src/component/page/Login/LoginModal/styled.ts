@@ -44,7 +44,7 @@ export const CloseButton = styled.button`
 `;
 
 // 테이블 스타일
-export const SignupTable = styled.table`
+export const Table = styled.table`
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
