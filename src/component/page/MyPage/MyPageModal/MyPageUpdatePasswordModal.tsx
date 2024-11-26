@@ -3,22 +3,22 @@ import { useState } from "react";
 import axios from "axios";
 import { updatePasswordModalState } from "../../../../stores/modalState";
 import {
-    ModalOverlay,
-    ModalStyled,
-    Table,
-    TableCaption,
-    TableHeaderCell,
-    TableDataCell,
-    InputField,
-    RequiredMark,
-    Button,
+  ModalOverlay,
+  ModalStyled,
+  Table,
+  TableCaption,
+  TableHeaderCell,
+  TableDataCell,
+  InputField,
+  RequiredMark,
+  Button,
 } from "./styled";
 
 // 패스워드 3세트
 export interface PasswordInputs {
-    prevPassword: string;
-    newPassword: string;
-    checkPassword: string;
+  prevPassword: string;
+  newPassword: string;
+  checkPassword: string;
 }
 
 export const MyPageUpdatePasswordModal = () => {
@@ -35,11 +35,10 @@ export const MyPageUpdatePasswordModal = () => {
             setUpdatePasswordModal(false);
     };
 
-    // Enter키를 누를시 완료버튼 효과를 작동
+  // Enter키를 누를시 완료버튼 효과를 작동
     const completeEnterHandler = (event) => {
-        if (event.key === "Enter")
-            completeWithdrawHandler();
-    }
+        if (event.key === "Enter") completeWithdrawHandler();
+    };
 
     // 탈퇴요청 버튼 누를 시 작동
     // 1. 빈값검사 -> 2. 양식검사(비밀번호형식) -> 3. 데이터전송
@@ -124,4 +123,4 @@ export const MyPageUpdatePasswordModal = () => {
             </ModalOverlay>
         </>
     );
-}
+};

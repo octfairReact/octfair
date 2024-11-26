@@ -327,4 +327,4 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
             </ModalOverlay>
         </>
     );
-}
+};

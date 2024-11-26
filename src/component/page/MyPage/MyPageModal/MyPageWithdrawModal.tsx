@@ -28,9 +28,8 @@ export const MyPageWithdrawModal = () => {
 
     // Enter키를 누를시 완료버튼 효과를 작동
     const completeEnterHandler = (event) => {
-        if (event.key === "Enter")
-            completeWithdrawHandler();
-    }
+        if (event.key === "Enter") completeWithdrawHandler();
+    };
 
     // 탈퇴요청 버튼 누를 시 작동
     // 1. 빈값검사 -> 2. 양식검사(비밀번호형식) -> 3. 데이터전송
@@ -91,4 +90,4 @@ export const MyPageWithdrawModal = () => {
             </ModalOverlay>
         </>
     );
-}
+};

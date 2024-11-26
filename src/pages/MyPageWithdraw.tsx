@@ -5,9 +5,9 @@ export const MyPageWithdraw = () => {
   return (
     <>
       {/* <MyPageWithdrawProvider> */}
-        <ContentBox>회원탈퇴</ContentBox>
-        <MyPageWithdrawMain />
+      <ContentBox>회원탈퇴</ContentBox>
+      <MyPageWithdrawMain />
       {/* </MyPageWithdrawProvider> */}
     </>
   );
-}
+};

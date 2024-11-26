@@ -30,16 +30,15 @@ export const Posts = {
 
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) =>
-    `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
 export const Company = {
   postSave: "/company/companySaveBody.do",
-  getDetail: (postIdx: number, bizIdx: number) =>
-    `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
+  getDetail: (postIdx: number, bizIdx: number) => `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
   getCompanyInfo: "/company/companyUpdatePageRe.do",
   postUpdate: "/company/companyUpdateBody.do",
+  postDelete: "/company/companyDeleteRe.do",
 };
 
 export const Resume = {
@@ -51,12 +50,18 @@ export const Resume = {
 export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   postSave: "/manage-hire/managehireSaveBody.do",
-
-
 };
 export const ScrapURL = {
   getScrapList: "/manage-post/scrapListBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+};
+
+export const Faq = {
+  getList: "/board/faqListRe.do",
+  postSave: "/board/faqSaveRe.do",
+  getDetail: "/board/faqDetailRe.do",
+  postUpdate: "/board/faqUpdateRe.do",
+  postDelete: "/board/faqDeleteRe.do",
 };
 
 export const ManageUser = {

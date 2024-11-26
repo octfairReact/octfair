@@ -234,4 +234,4 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({refreshUserListHandle
             </ModalOverlay>
         </>
     );
-}
+};

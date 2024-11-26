@@ -1,7 +1,7 @@
 import { Button } from "./styled";
 import { withdrawModalState } from "../../../../stores/modalState";
+import { MyPageWithdrawModal } from "../MyPageModal/MyPageWithdrawModal";
 import { useRecoilState } from "recoil";
-import { MyPageWithdrawModal } from '../MyPageModal/MyPageWithdrawModal';
 
 export const MyPageWithdrawMain = () => {
     const [withdrawModal, setWithdrawModal] = useRecoilState<boolean>(withdrawModalState);
