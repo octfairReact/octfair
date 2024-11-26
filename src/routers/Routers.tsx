@@ -18,6 +18,7 @@ import { Resume } from "../pages/Resume";
 import { ResumeForm } from "../pages/ResumeForm";
 import { Scrap } from "../pages/Scrap";
 import { FaQ } from "../pages/FaQ";
+import { QnA } from "../pages/QnA";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -33,6 +34,7 @@ const routers: RouteObject[] = [
           { path: "notice.do", element: <Notice /> },
           { path: "notice.do/:noticeIdx", element: <NoticeRouter /> },
           { path: "faq.do", element: <FaQ /> },
+          { path: "qna.do", element: <QnA /> },
         ],
       },
       {

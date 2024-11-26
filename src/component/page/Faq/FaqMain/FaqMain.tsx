@@ -16,7 +16,7 @@ import { modalState } from "../../../../stores/modalState";
 
 export const FaqMain = () => {
   // const { search } = useLocation();
-  const [faqCnt, setFaqCntCnt] = useState<number>(0);
+  const [faqCnt, setFaqCnt] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [cPage, setCPage] = useState<number>();
   const { searchKeyWord } = useContext(FqaContext);
@@ -26,6 +26,7 @@ export const FaqMain = () => {
   const [modal, setModal] = useRecoilState<boolean>(modalState);
   const [showContext, setShowContext] = useState(null);
   const [faqIndex, setFaqIndex] = useState<number>();
+  const [isLoaded, setIsLoaded] = useState(false); //로딩 상태 관리. 조회 결과 나오기전까지 랜더링 안되게
 
   useEffect(() => {
     console.log(userInfo.userType);
@@ -58,9 +59,10 @@ export const FaqMain = () => {
 
     if (searchList) {
       setFaqList(searchList.data.faq);
-      setFaqCntCnt(searchList.data.faqCnt);
+      setFaqCnt(searchList.data.faqCnt);
       setCPage(currentPage);
     }
+    setIsLoaded(true);
   };
 
   // faqType 변경하는 버튼 클릭 핸들러
@@ -87,6 +89,10 @@ export const FaqMain = () => {
       console.log("User info is not loaded yet.");
     }
   };
+
+  if (!isLoaded) {
+    return null; // 로딩 완료 전까지 아무것도 렌더링하지 않음
+  }
 
   return (
     <>

@@ -63,3 +63,11 @@ export const Faq = {
   postUpdate: "/board/faqUpdateRe.do",
   postDelete: "/board/faqDeleteRe.do",
 };
+
+export const Qna = {
+  getList: "/board/qnaListRe.do",
+  postSave: "/board/",
+  getDetail: "/board/",
+  postUpdate: "/board/",
+  postDelete: "/board/",
+};
