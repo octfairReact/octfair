@@ -48,8 +48,8 @@ export const Resume = {
 
 export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
-  postSave: "/manage-hire/managehireSaveBody.do",
-
+  //postSave: "/manage-hire/managehireSaveBody.do", hireSaveFileForm
+  postSave: "/manage-hire/managehireSaveFileForm.do",
 
 };
 export const ScrapURL = {
