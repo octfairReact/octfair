@@ -38,6 +38,10 @@ export const PostDetail = () => {
     setMDetail(response.data.postDetail);
   };
 
+  const handleBack = () => {
+    navigate(-1); // -1은 이전 페이지로 이동
+  };
+
   return (
     <PostDetailStyled>
       <ContentBoxPost>
@@ -63,14 +67,29 @@ export const PostDetail = () => {
         </ul>
       </div>
       <div className="date-item">
-        <button type="button" id="updateAppStatusY" name="btn" className="btn btn-outline-secondary" data-status="승인">
-          승인
-        </button>
-        <button type="button" id="updateAppStatusN" name="btn" className="btn btn-outline-secondary" data-status="불허">
-          불허
-        </button>
-
-        <button type="button" id="backToList" name="btn" className="btn btn-close">
+        {userInfo.userType === "M" && (
+          <>
+            <button
+              type="button"
+              id="updateAppStatusY"
+              name="btn"
+              className="btn btn-outline-secondary"
+              data-status="승인"
+            >
+              승인
+            </button>
+            <button
+              type="button"
+              id="updateAppStatusN"
+              name="btn"
+              className="btn btn-outline-secondary"
+              data-status="불허"
+            >
+              불허
+            </button>
+          </>
+        )}
+        <button type="button" id="backToList" name="btn" className="btn btn-close" onClick={handleBack}>
           뒤로 가기
         </button>
       </div>

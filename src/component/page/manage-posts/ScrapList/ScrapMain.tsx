@@ -96,8 +96,8 @@ export const ScrapMain = () => {
             <StyledTh size={20}>공고제목</StyledTh>
             <StyledTh size={10}>자격요건</StyledTh>
             <StyledTh size={18}>근무지역</StyledTh>
-            <StyledTh size={10}>마감일 </StyledTh>
-            <StyledTh size={8}> </StyledTh>
+            <StyledTh size={10}>마감일</StyledTh>
+            <StyledTh size={8}></StyledTh>
           </tr>
         </thead>
         <tbody>
@@ -105,18 +105,30 @@ export const ScrapMain = () => {
             scrapList.map((scrap) => (
               <tr key={scrap.scrapIdx}>
                 <StyledTd>
-                  <input type="checkbox" onChange={(e) => handleCheckboxChange(e, scrap.scrapIdx)}></input>
+                  <input type="checkbox" onChange={(e) => handleCheckboxChange(e, scrap.scrapIdx)} />
                 </StyledTd>
-                <StyledTd onClick={() => handlerDetail(scrap.postIdx, scrap.postBizIdx)}>{scrap.postBizName}</StyledTd>
-                <StyledTd onClick={() => handlerDetail(scrap.postIdx, scrap.postBizIdx)}>{scrap.postTitle}</StyledTd>
-                <StyledTd>{scrap.postExpRequired}</StyledTd>
-                <StyledTd>{scrap.postWorkLocation}</StyledTd>
-                <StyledTd>{scrap.postEndDate?.substring(0, 10) || "Invalid Date"}</StyledTd>
-                <StyledTd>
-                  <button type="button" className="btn btn-warning">
-                    입사지원
-                  </button>
-                </StyledTd>
+                {!scrap.loginId ? (
+                  <>
+                    <StyledTd onClick={() => handlerDetail(scrap.postIdx, scrap.postBizIdx)}>
+                      {scrap.postBizName}
+                    </StyledTd>
+                    <StyledTd onClick={() => handlerDetail(scrap.postIdx, scrap.postBizIdx)}>
+                      {scrap.postTitle}
+                    </StyledTd>
+                    <StyledTd>{scrap.postExpRequired}</StyledTd>
+                    <StyledTd>{scrap.postWorkLocation}</StyledTd>
+                    <StyledTd>{scrap.postEndDate?.substring(0, 10) || "Invalid Date"}</StyledTd>
+                    <StyledTd>
+                      <button type="button" className="btn btn-warning">
+                        입사지원
+                      </button>
+                    </StyledTd>
+                  </>
+                ) : (
+                  <StyledTd colSpan={6}>
+                    <span>삭제된 공고입니다</span>
+                  </StyledTd>
+                )}
               </tr>
             ))
           ) : (
@@ -126,6 +138,7 @@ export const ScrapMain = () => {
           )}
         </tbody>
       </StyledTable>
+
       <PageNavigate totalItemsCount={scrapCnt} onChange={searchScrapList} activePage={cPage} itemsCountPerPage={5} />
     </>
   );

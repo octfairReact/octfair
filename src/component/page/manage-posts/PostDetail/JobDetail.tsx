@@ -36,8 +36,8 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
     setMDetail(response.data.postDetail);
   };
   const handlerScrapSave = async () => {
-    const loginIdx = userInfo.loginId;
-    const saveParam = { postIdx, loginIdx };
+    const loginId = userInfo.loginId;
+    const saveParam = { postIdx, loginId };
 
     const response = await postPostApi<IScrapResponse>(Posts.getScrapSave, saveParam);
     console.log(response.data);

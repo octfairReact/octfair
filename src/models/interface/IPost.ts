@@ -6,6 +6,7 @@ export interface IPost {
   expRequired: string;
   endDate: string;
   postDate: string;
+  appStatus: string;
 }
 
 export interface IPostResponse {
@@ -55,4 +56,6 @@ export interface AllDetail {
 export interface IPostListResponse {
   approvalPostCnt: number;
   approvalList: IPost[];
+  pendingList: IPost[];
+  pendingPostCnt: number;
 }
