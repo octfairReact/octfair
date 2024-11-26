@@ -17,7 +17,6 @@ import { MyPageWithdraw } from "../pages/MyPageWithdraw";
 import { Resume } from "../pages/Resume";
 import { ResumeForm } from "../pages/ResumeForm";
 import { Scrap } from "../pages/Scrap";
-import { FaQ } from "../pages/FaQ";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -32,7 +31,8 @@ const routers: RouteObject[] = [
         children: [
           { path: "notice.do", element: <Notice /> },
           { path: "notice.do/:noticeIdx", element: <NoticeRouter /> },
-          { path: "faq.do", element: <FaQ /> },
+
+          //:id 이게 키값이 됨
         ],
       },
       {
