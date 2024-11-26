@@ -6,6 +6,10 @@ export const modalState = atom<boolean>({
   key: "modalState",
   default: false,
 });
+export const ApplyModalState = atom<boolean>({
+  key: "ApplyModalState",
+  default: false,
+});
 
 // 회원가입 모달창에 쓰는 모달창state
 export const signupModalState = atom<boolean>({

@@ -25,11 +25,14 @@ export const History = {
 export const Posts = {
   getPost: "/jobs/posts.do",
   getScrap: "/jobs/scrap.do",
+  applyUserResumeDetail: "/jobs/applyUserResumeDetailBody.do",
+  applyBizPostDetail: "/jobs/applyBizPostDetailBody.do",
   getScrapSave: "/jobs/saveScrapBody.do",
 };
 
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
+  statusUpdate: "/manage-post/statusUpdateBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 

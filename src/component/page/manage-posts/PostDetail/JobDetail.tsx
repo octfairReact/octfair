@@ -8,6 +8,9 @@ import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { IScrapResponse } from "../../../../models/interface/IScrap";
+import { ApplyModalState } from "../../../../stores/modalState";
+import { Portal } from "../../../common/portal/Portal";
+import { ApplyModal } from "../applyModal/applyModal";
 
 export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
   const location = useLocation();
@@ -16,6 +19,7 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
   const [param, setParam] = useState<{ postIdx: string | number; bizIdx: string | number } | null>(null);
   const [CDetail, setCDetail] = useState<companyDetail>();
   const [MDetail, setMDetail] = useState<IPostDetail>();
+  const [modal, setModal] = useRecoilState<boolean>(ApplyModalState);
 
   useEffect(() => {
     if (postIdx && bizIdx) {
@@ -24,6 +28,10 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
 
     fetchPostDetail();
   }, [postIdx, bizIdx]);
+
+  const handlerModal = () => {
+    setModal(!modal);
+  };
 
   const apiUrl = postIdx && bizIdx ? ManagePost.getpostDetail(postIdx, bizIdx) : "";
 
@@ -49,6 +57,18 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
     }
   };
 
+  const managePostDetailModal = async () => {
+    setModal(!modal);
+    const { loginId } = userInfo;
+    var param = {
+      bizIdx: bizIdx,
+      postIdx: postIdx,
+      loginId: loginId,
+    };
+    const applBIzPostDetail = await postPostApi<IScrapResponse>(Posts.applyUserResumeDetail, param);
+    const applyUserResumeList = await postPostApi<IScrapResponse>(Posts.applyBizPostDetail, param);
+  };
+
   return (
     <PostDetailStyled>
       <div className="job-details-content">
@@ -63,7 +83,7 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
                 <button type="button" className="btn btn-outline-secondary" onClick={handlerScrapSave}>
                   스크랩
                 </button>
-                <button type="button" className="btn btn-warning">
+                <button type="button" className="btn btn-warning" onClick={managePostDetailModal}>
                   입사지원
                 </button>
               </>
@@ -87,6 +107,11 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
           {data.benefits && <DetailSection title="혜택 & 복지" content={data.benefits} />}
         </div>
       </div>
+      {modal && (
+        <Portal>
+          <ApplyModal />
+        </Portal>
+      )}
     </PostDetailStyled>
   );
 };
