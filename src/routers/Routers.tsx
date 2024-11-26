@@ -19,6 +19,7 @@ import { ResumeForm } from "../pages/ResumeForm";
 import { Scrap } from "../pages/Scrap";
 import { FaQ } from "../pages/FaQ";
 
+
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
   { path: "/", element: <Login /> },
