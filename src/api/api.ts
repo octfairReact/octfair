@@ -55,3 +55,11 @@ export const ScrapURL = {
   getScrapList: "/manage-post/scrapListBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
+
+export const Faq = {
+  getList: "/board/faqListRe.do",
+  postSave: "/board/faqSaveRe.do",
+  getDetail: "/board/faqDetailRe.do",
+  postUpdate: "/board/faqUpdateRe.do",
+  postDelete: "/board/faqDeleteRe.do",
+};

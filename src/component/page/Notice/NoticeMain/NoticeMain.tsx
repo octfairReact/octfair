@@ -12,6 +12,7 @@ import { Notice } from "../../../../api/api";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { NoticeContext } from "../../../../api/provider/NoticeProvider";
 import { start } from "repl";
+import { PageNavigateStyled } from "../../../common/pageNavigation/styled";
 
 export const NoticeMain = () => {
   const { search } = useLocation();
@@ -123,7 +124,7 @@ export const NoticeMain = () => {
           <tr>
             <StyledTh size={5}>번호</StyledTh>
             <StyledTh size={50}>제목</StyledTh>
-            <StyledTh size={10}>제목</StyledTh>
+            <StyledTh size={10}>작성자</StyledTh>
             <StyledTh size={20}>등록일</StyledTh>
           </tr>
         </thead>
@@ -160,12 +161,14 @@ export const NoticeMain = () => {
           )}
         </tbody>
       </StyledTable>
-      <PageNavigate
-        totalItemsCount={noticeCnt}
-        onChange={searchNoticeList}
-        activePage={cPage}
-        itemsCountPerPage={5}
-      ></PageNavigate>
+      <PageNavigateStyled>
+        <PageNavigate
+          totalItemsCount={noticeCnt}
+          onChange={searchNoticeList}
+          activePage={cPage}
+          itemsCountPerPage={5}
+        ></PageNavigate>
+      </PageNavigateStyled>
       {/* 페이지네이션 버튼 */}
       {/* <div>
         <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>

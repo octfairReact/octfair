@@ -1,43 +1,89 @@
+import { RouteObject, createBrowserRouter } from "react-router-dom";
+import { Login } from "../pages/Login";
+import { DashBoard } from "../component/layout/DashBoard/DashBoard";
+import { NotFound } from "../component/common/NotFound/NotFound";
+import { Notice } from "../pages/Notice";
+import { History } from "../pages/History";
+import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
+import { Hire } from "../pages/HireMain";
+import { HireAdd } from "../pages/HireWrite";
+import { Post } from "../pages/Post";
+import { ManagePostPage } from "../pages/ManagePostPage";
+import { CompanyDetail } from "../pages/Company/CompanyDetail";
+import { CompanyWrite } from "../pages/Company/CompanyWrite";
+import { CompanyUpdate } from "../pages/Company/CompanyUpdate";
+import { MyPageUpdate } from "../pages/MyPageUpdate";
+import { MyPageWithdraw } from "../pages/MyPageWithdraw";
+import { Resume } from "../pages/Resume";
+import { ResumeForm } from "../pages/ResumeForm";
+import { Scrap } from "../pages/Scrap";
+import { FaQ } from "../pages/FaQ";
 
-export interface IHire {
-    postIdx:        number;
-    title:          string;
-    expRequired:    string;
-    appStatus:      string;
-    postDate:       string;
-    endDate:        string;
-}
+const routers: RouteObject[] = [
+  { path: "*", element: <NotFound /> },
+  { path: "/", element: <Login /> },
+  {
+    path: "/react",
+    element: <DashBoard />,
 
-export interface IHireWrite extends IHire{
-    expYears:              string;
-    salary:                string;  //급여
-    workLocation:          string;  //근무지역
-    openings:              string;  //모집인원   
-    posDescription:        string;  //포지션설명
-    duties:                string;  //업무
-    reqQualifications:     string;  //자격조건
-    prefQualifications:    string;  //우대사항
-    benefits:              string;  //혜택&복지
-    hirProcess:            string;  //채용절차
+    children: [
+      {
+        path: "board",
+        children: [
+          { path: "notice.do", element: <Notice /> },
+          { path: "notice.do/:noticeIdx", element: <NoticeRouter /> },
+          { path: "faq.do", element: <FaQ /> },
+        ],
+      },
+      {
+        path: "manage-hire",
+        children: [
+          { path: "post.do", element: <Hire /> },
+          { path: "managehireWritePage.do", element: <HireAdd /> },
+        ],
+      },
+      {
+        path: "jobs",
+        children: [
+          { path: "posts.do", element: <Post /> },
+          { path: "scrap.do", element: <Scrap /> },
+        ],
+      },
 
-    fileName:              string;
-    phsycalPath:           string | null;
-    logicalPath:           string | null;
-    fileSize:              number;
-    //fileExt
-}
+      {
+        path: "manage-post",
+        children: [{ path: "managePostDetailBody.do", element: <ManagePostPage /> }],
+      },
+      {
+        path: "company",
+        children: [
+          { path: "companyWritePage.do", element: <CompanyWrite /> },
+          { path: "companyUpdatePage.do", element: <CompanyUpdate /> },
+          {
+            path: "companyDetailPage.do/:postIdx/:bizIdx", // :postIdx와 :bizIdx는 URL 파라미터로 취급됩니다.
+            element: <CompanyDetail />,
+          },
+        ],
+      },
+      {
+        path: "mypage",
+        children: [
+          { path: "update.do", element: <MyPageUpdate /> },
+          { path: "withdraw.do", element: <MyPageWithdraw /> },
+          //:id 이게 키값이 됨
+        ],
+      },
+      {
+        path: "apply",
+        children: [
+          { path: "history.do", element: <History /> },
+          { path: "resume.do", element: <Resume /> },
+          { path: "resume-new.do", element: <ResumeForm /> },
+          { path: "resume-detail/:resIdx", element: <ResumeForm /> },
+        ],
+      },
+    ],
+  },
+];
 
-export interface IHirePostResponse{
-    result: string;
-}
-
-export interface IHireListResponse{
-    MCount: number;
-    MList: IHire[];
-}
-
-export interface IHireProps {
-    onSuccess: () => void;
-    noticeSeq: number;
-    setNoticeSeq: (noticeSeq: number | undefined) => void;
-  }
+export const Routers = createBrowserRouter(routers);
