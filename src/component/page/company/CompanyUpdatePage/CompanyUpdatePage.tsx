@@ -202,11 +202,12 @@ export const CompanyUpdatePage = () => {
       document.getElementById("bizIntroInput")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
-    //로고
-    if (!fileData) {
-      alert("로고를 등록해주세요.");
-      return; // 유효성 검사 실패 시 함수 종료
-    }
+
+    // //로고
+    // if (!fileData) {
+    //   alert("로고를 등록해주세요.");
+    //   return; // 유효성 검사 실패 시 함수 종료
+    // }
 
     const fileForm = new FormData();
     const { loginId } = userInfo;
@@ -273,8 +274,20 @@ export const CompanyUpdatePage = () => {
     }
   };
 
-  const CompanyDelete = () => {
-    console.log("기업 정보 삭제");
+  //삭제
+  const CompanyDelete = async () => {
+    const param = {
+      loginId: userId,
+    };
+
+    const CompanyDelete = await postCompanyApi<IPostResponse>(Company.postDelete, param);
+
+    if (CompanyDelete && CompanyDelete.data.result === "success") {
+      console.log("성공", "success");
+      navigate("/react/mypage/update.do");
+    } else {
+      console.error("Failed to save notice:", CompanyDelete?.data);
+    }
   };
 
   return (
