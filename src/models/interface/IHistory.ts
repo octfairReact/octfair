@@ -29,16 +29,20 @@ export interface IHistoryResponse {
 export interface IHistoryModal {
     index: number | null;
     setModal: React.Dispatch<React.SetStateAction<boolean>>;
-    resumeInfo: IResumeInfo;
+    resumeInfo: { userNm: string; email: string; phone: string; resTitle: string; shortIntro: string; perStatement: string;};
     careerInfo: ICareerInfo[];
     eduInfo: IEduInfo[];
     skillInfo: ISkillInfo[];
     certInfo: ICertInfo[];
+    resIdx: number;
 }
 export interface IResumeInfo {
-    name: string;
+    userNm: string;
     email: string;
     phone: string;
+    resTitle: string;
+    shortIntro: string;
+    perStatement?: string;
 }
 export interface ICareerInfo {
     company: string;
@@ -55,4 +59,6 @@ export interface ISkillInfo {
 export interface ICertInfo {
     certName: string;
     grade: string;
+    issuer: string;
+    acqDate: string;
 }

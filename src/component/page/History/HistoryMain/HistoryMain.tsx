@@ -2,13 +2,14 @@ import { useContext, useEffect, useState } from 'react';
 import { HistoryContext } from '../../../../api/provider/HistoryProvider';
 import { IHistory, IHistoryResponse } from '../../../../models/interface/IHistory';
 import { postHistoryApi } from '../../../../api/postHistoryApi';
-import { History, ManagePost } from '../../../../api/api';
+import { History } from '../../../../api/api';
 import { StyledTable, StyledTd, StyledTh } from '../../../common/styled/StyledTable';
 import { PageNavigate } from '../../../common/pageNavigation/PageNavigate';
 import { useRecoilState } from 'recoil';
 import { modalState } from '../../../../stores/modalState';
 import { HistoryModal } from '../HistoryModal/HistoryModal';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { HistoryMainStyled, StyledHoverText } from './styled';
 
 export const HistoryMain = () => {
     const { search } = useLocation();
@@ -20,13 +21,13 @@ export const HistoryMain = () => {
     const [cPage, setCPage] = useState<number>(1);
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const [index, setIndex] = useState<number>();
+    const [resIdx, setResIdx] = useState<number | null>(null);
+    const [isLoaded, setIsLoaded] = useState(false);
 
-    // 검색어가 변경되거나 컴포넌트가 마운트될 때 포스트 리스트를 검색
     useEffect(() => {
         searchHistoryList(currentPage);
     }, [search, searchKeyWord, currentPage]);
 
-    // 포스트 리스트 검색 함수
     const searchHistoryList = async (currentPage?: number) => {
         const searchParam = {
             ...searchKeyWord,
@@ -41,9 +42,9 @@ export const HistoryMain = () => {
             setHistoryCnt(searchList.data.historyCnt);
             setCPage(currentPage);
         }
+        setIsLoaded(true);
     };
 
-    // 지원 취소 기능
     const handlerCancel = async (appId: number, postTitle: string) => {
         const isConfirmed = window.confirm(`정말로 '${postTitle}' 지원 내역을 삭제하시겠습니까?`);
         if (!isConfirmed) {
@@ -65,27 +66,30 @@ export const HistoryMain = () => {
         }
     };
 
-    // 상세 페이지로 이동
     const handlerDetail = (appId, bizIdx) => {
         navigate(`/react/company/companyDetailPage.do/${appId}/${bizIdx}`);
     };
 
-    // 채용 공고로 이동
     const handlerPost = (postIdx: number, bizIdx: number) => {
         navigate(`/react/manage-post/managePostDetailBody.do`, {
           state: { postIdx, bizIdx },
         });
     };
+    const handlerJobs = () => {
+        navigate(`/react/jobs/posts.do`);
+    };
 
-    // 모달창 열기
-    const handlerModal = (appId: number) => {
-        setModal(true);
-        setIndex(appId);
+
+    const handlerModal = (appId: number, resIdx: number) => {
+        if (!modal) {
+            setModal(true);
+            setIndex(appId);
+            setResIdx(resIdx);
+        }
     };
 
     return (
-        <>
-         <pre>총 갯수 : {historyCnt}   현재 페이지 : {cPage} </pre>
+        <HistoryMainStyled>
             <StyledTable>
                 <thead>
                     <tr>
@@ -97,21 +101,32 @@ export const HistoryMain = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {historyList.length > 0 ? (
+                    {!isLoaded ? (
+                        <tr/>
+                    ) : historyList.length > 0 ? (
                         historyList.map((history) => (
                             <tr key={history.appId}>
                                 <StyledTd>
                                     <p>지원완료</p>
                                     <p>{history.applyDate.toString()}</p>
                                 </StyledTd>
+
                                 <StyledTd>
-                                    <span onClick={() => handlerDetail(history.appId, history.bizIdx)}>{history.bizName}</span>
-                                    <p style={{ fontWeight: 'bold' }} onClick={() => handlerPost(history.postingId, history.bizIdx)}>{history.postTitle}</p>
-                                    <span 
-                                        onClick={() => handlerModal(history.appId)}>
-                                        지원이력서
-                                    </span>
-                                </StyledTd>
+  <StyledHoverText onClick={() => handlerDetail(history.appId, history.bizIdx)}>
+    {history.bizName}
+  </StyledHoverText>
+  <StyledHoverText 
+    className="bold" 
+    onClick={() => handlerPost(history.postingId, history.bizIdx)}
+  >
+    {history.postTitle}
+  </StyledHoverText>
+  <StyledHoverText onClick={() => handlerModal(history.appId, history.resIdx)}>
+    지원이력서
+  </StyledHoverText>
+</StyledTd>
+
+
                                 <StyledTd><p>{history.status}</p></StyledTd>
                                 <StyledTd>{history.viewed == 1 ? "열람" : "미열람"}</StyledTd>
                                 <StyledTd
@@ -126,37 +141,38 @@ export const HistoryMain = () => {
                         ))
                     ) : (
                         <tr>
-                            <StyledTd colSpan={5} height={300}>
-                                <p>데이터가 없습니다.</p>
+                            <StyledTd colSpan={5} height={400}>
+                                <img src='/images/admin/comm/history_not_found.png' alt='지원하러가기' style={{ transform: 'scaleX(-1)', margin: '5px' }} width={150} />
+                                <p>입사 지원 내역이 없어요.</p>
+                                <p onClick={handlerJobs}>현재 채용중인 공고 보러가기▶</p>
                             </StyledTd>
                         </tr>
                     )}
                 </tbody>
             </StyledTable>
 
-            {/* 페이징 처리 */}
-            <PageNavigate 
-                totalItemsCount={historyCnt} 
-                onChange={searchHistoryList}
-                activePage={cPage} 
-                itemsCountPerPage={5}
-            ></PageNavigate>
+            {historyList.length > 0 && (
+                <PageNavigate 
+                    totalItemsCount={historyCnt} 
+                    onChange={searchHistoryList}
+                    activePage={cPage} 
+                    itemsCountPerPage={5}
+                />
+            )}
 
-            {/* 지원이력서 모달 */}
-            {/* {modal && (
+            {modal && (
                 <HistoryModal
                     index={index}
                     setModal={setModal}
-                    resumeInfo={{ name: '', email: '', phone: '' }}
+                    resumeInfo={{ userNm: '', email: '', phone: '', resTitle: '', shortIntro: '', perStatement: ''}}
                     careerInfo={[]}
                     eduInfo={[]}
                     skillInfo={[]}
                     certInfo={[]}
+                    resIdx={resIdx}
                 />
-            )} */}
-
-            <br></br>
-            <br></br>
-        </>
+            )}
+            <br/><br/>
+        </HistoryMainStyled>
     );
 };
