@@ -1,6 +1,17 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
-// History 지원내역 모달 css
+// 모달 등장 애니메이션
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-30px); /* 화면 위에서 내려오는 효과 */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* 원래 위치로 돌아오기 */
+  }
+`;
+
 export const HistoryModalStyled = styled.div`
   position: fixed;
   top: 0;
@@ -12,6 +23,9 @@ export const HistoryModalStyled = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
+
+  /* 모달 등장 애니메이션 */
+  animation: ${fadeIn} 0.5s ease-out; /* 애니메이션 추가 */
 
   > div {
     background-color: white;
@@ -107,6 +121,7 @@ export const HistoryModalStyled = styled.div`
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   }
+
   .no-align {
     text-align: left;
   }
