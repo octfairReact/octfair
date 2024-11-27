@@ -9,6 +9,7 @@ export interface IHistory {
     resIdx: number;
     bizName: String;
     resumeData: string;
+    bizIdx : number;
 }
 
 export enum Status {
@@ -25,16 +26,39 @@ export interface IHistoryResponse {
     history: IHistory[];
 }
 
-export interface ISearchKeyword {
-    searchTitle?: string;
-    searchPeriod?: string;
-    viewStatus?: string;
-    sortOrder?: string;
-    isSearchButtonClicked: boolean;
+export interface IHistoryModal {
+    index: number | null;
+    setModal: React.Dispatch<React.SetStateAction<boolean>>;
+    resumeInfo: { userNm: string; email: string; phone: string; resTitle: string; shortIntro: string; perStatement: string;};
+    careerInfo: ICareerInfo[];
+    eduInfo: IEduInfo[];
+    skillInfo: ISkillInfo[];
+    certInfo: ICertInfo[];
+    resIdx: number;
 }
-
-export interface IResumeModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    historyData: IHistory;
+export interface IResumeInfo {
+    userNm: string;
+    email: string;
+    phone: string;
+    resTitle: string;
+    shortIntro: string;
+    perStatement?: string;
+}
+export interface ICareerInfo {
+    company: string;
+    position: string;
+}
+export interface IEduInfo {
+    schoolName: string;
+    major: string;
+}
+export interface ISkillInfo {
+    skillName: string;
+    skillDetail: string;
+}
+export interface ICertInfo {
+    certName: string;
+    grade: string;
+    issuer: string;
+    acqDate: string;
 }
