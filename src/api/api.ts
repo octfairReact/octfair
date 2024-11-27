@@ -66,8 +66,9 @@ export const Faq = {
 
 export const Qna = {
   getList: "/board/qnaListRe.do",
-  postSave: "/board/",
-  getDetail: "/board/",
+  getMyList: "/board/qnaListRe.do",
+  postSave: "/board/qnaFileSaveRe.do",
+  getDetail: "/board/qnaDetailFileRe.do",
   postUpdate: "/board/",
   postDelete: "/board/",
 };
