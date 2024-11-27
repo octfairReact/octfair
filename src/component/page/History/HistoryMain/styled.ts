@@ -27,6 +27,7 @@ export const StyledHoverText = styled.span`
   margin-bottom: 10px;  /* 아래쪽에 간격을 주기 */
 `;
 
+// 지원 취소 버튼
 export const CancelButton = styled.button`
   padding: 8px 16px;
   font-size: 14px;
