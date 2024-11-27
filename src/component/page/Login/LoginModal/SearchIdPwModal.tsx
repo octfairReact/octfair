@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { searchIdPwModalState } from "../../../../stores/modalState";
+import { Login } from "../../../../api/api";
 import {
     ModalOverlay,
     ModalStyled,
@@ -93,11 +94,11 @@ export const SearchIdPwModal = () => {
             
             let serverApiAddress = "";
             if (searchIdPwModal === "id") {
-                serverApiAddress = "/selectFindInfoId.do";
+                serverApiAddress = Login.getSearchId;
             } else if (searchIdPwModal === "pw") {
-                serverApiAddress = "/selectFindInfoPw.do";
+                serverApiAddress = Login.getSearchPw;
             } else {
-                serverApiAddress = "/updateFindPw.do";
+                serverApiAddress = Login.putResetPw;
             }
             
             // 전송주소의 'board'와 같은 상위경로가 없는 이유는 Spring컨트롤러의 @RequestMapping에 분류토록 명시된 상위경로가 없기 때문
