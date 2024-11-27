@@ -143,24 +143,22 @@ const CompanyInfo = ({
       <p>
         <strong>첨부파일:</strong> <a href="#">{data.fileName}</a>
       </p>
-      <p>
-        <div className="date">
-          <span className="remaining">남은 기간</span>
-          <div className="date-details">
-            <div className="date-item">
-              <span className="date-item">
-                시작일
-                <br />
-              </span>
-              <span className="date-item">마감일</span>
-            </div>
-            <div className="date-item">
-              <span className="date-item">{data.startDate}</span>
-              <span className="date-item">{data.endDate}</span>
-            </div>
+      <div className="date">
+        <span className="remaining">남은 기간</span>
+        <div className="date-details">
+          <div className="date-item">
+            <span className="date-item">
+              시작일
+              <br />
+            </span>
+            <span className="date-item">마감일</span>
+          </div>
+          <div className="date-item">
+            <span className="date-item">{data.startDate}</span>
+            <span className="date-item">{data.endDate}</span>
           </div>
         </div>
-      </p>
+      </div>
     </PostDetailStyled>
   );
 };

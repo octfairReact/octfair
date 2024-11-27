@@ -2,92 +2,123 @@ import { useRecoilState } from "recoil";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { ApplyModalState } from "../../../../stores/modalState";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
-import { useState } from "react";
-import { StyledModal } from "./styled";
+import { FC, useEffect, useState } from "react";
+import { postPostApi } from "../../../../api/postPostApi";
+import { IScrapResponse } from "../../../../models/interface/IScrap";
+import { Posts } from "../../../../api/api";
+import { ApplybizDetail, ApplyDetailAll, ApplyUserDetail } from "../../../../models/interface/IPost";
+import { AxiosResponse } from "axios";
+import { NoticeModalStyled } from "../../Notice/NoticeModal/styled";
+import { ApplyModalStyled } from "./styled";
+import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
 
-export const ApplyModal = () => {
+export interface IApplyModalProps {
+  onSuccess: () => void;
+  indexGroup: number[];
+}
+
+export const ApplyModal: FC<IApplyModalProps> = ({ onSuccess, indexGroup }) => {
   const [modal, setModal] = useRecoilState<boolean>(ApplyModalState);
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [imageUrl, setImageUrl] = useState<string>();
   const [fileData, setFileData] = useState<File>();
+  const [index, setIndex] = useState<number>();
+  const [bizDetail, setBizDetail] = useState<ApplybizDetail>();
+  const [userResumeList, setUserResumeList] = useState<ApplyUserDetail[]>();
 
-  const dummyResumeList = [
-    {
-      userIdx: 1,
-      resumeTitle: "이력서 제목 1",
-      userEmail: "user1@example.com",
-      userPhone: "010-1234-5678",
-      resumeIdx: 101,
-    },
-    {
-      userIdx: 2,
-      resumeTitle: "이력서 제목 2",
-      userEmail: "user2@example.com",
-      userPhone: "010-8765-4321",
-      resumeIdx: 102,
-    },
-  ];
+  useEffect(() => {
+    if (bizDetail) {
+      console.log("업데이트된 회사 detail", bizDetail);
+    }
+
+    if (userResumeList) {
+      console.log("업데이트된 이력서 리스트", userResumeList);
+    }
+    if (modal) {
+      console.log("모달 확인: ", modal);
+      managePostDetail();
+    }
+    // }, [bizDetail, userResumeList]);
+  }, [modal]);
 
   const handleApply = () => {
     console.log("입사지원 완료");
   };
 
   const handleClose = () => {
-    setModal(false);
+    setModal(!modal);
+  };
+  const managePostDetail = async () => {
+    const { loginId } = userInfo;
+    console.log(indexGroup[0]);
+    console.log(indexGroup[1]);
+
+    const param = {
+      postIdx: indexGroup[0],
+      bizIdx: indexGroup[1],
+      loginId: loginId,
+    };
+
+    const applBizPostDetail = await postPostApi<ApplyDetailAll>(Posts.applyBizPostDetail, param);
+    const applyUserResumeList = await postPostApi<ApplyDetailAll>(Posts.applyUserResumeDetail, param);
+
+    console.log("여기는 JobDetail");
+    console.log("회사 detail 데이터:", applBizPostDetail.data.bizPostDetail);
+    console.log("이력서 리스트 데이터:", applyUserResumeList.data.userResumeList);
+
+    // 상태 업데이트
+    setBizDetail(applBizPostDetail.data.bizPostDetail);
+    setUserResumeList(applyUserResumeList.data.userResumeList);
   };
 
   return (
-    <StyledModal isOpen={modal}>
-      <div className="layerPop layerType2 apply-modal">
-        <div className="modal-content">
-          <strong className="modal-title">입사 지원</strong>
-          <p className="company-name">기업 이름</p>
-          <p className="job-title">공고 제목</p>
+    <ApplyModalStyled>
+      <div className="container">
+        {bizDetail && (
+          <>
+            <h1>{bizDetail?.bizName}</h1>
+            <h2>{bizDetail?.postTitle}</h2>
+          </>
+        )}
 
-          <div className="resume-container">
-            <table className="resume-table">
-              <thead>
+        <div>
+          <StyledTable>
+            <thead>
+              <tr>
+                <StyledTh size={5}></StyledTh>
+                <StyledTh size={50}>제목</StyledTh>
+                <StyledTh size={50}>이메일 주소</StyledTh>
+                <StyledTh size={20}>핸드폰</StyledTh>
+              </tr>
+            </thead>
+            <tbody>
+              {userResumeList?.length > 0 ? (
+                userResumeList?.map((list) => {
+                  return (
+                    <tr key={list.resumeIdx}>
+                      <StyledTd>
+                        <input type="radio" />
+                      </StyledTd>
+                      <StyledTd>{list.resumeTitle}</StyledTd>
+                      <StyledTd>{list.userEmail}</StyledTd>
+                      <StyledTd>{list.userPhone}</StyledTd>
+                    </tr>
+                  );
+                })
+              ) : (
                 <tr>
-                  <th>지원 이력서</th>
+                  <StyledTd colSpan={5}>데이터가 없습니다.</StyledTd>
                 </tr>
-              </thead>
-              <tbody>
-                {dummyResumeList.map((item) => (
-                  <tr key={item.resumeIdx} className="spaceBetweenRB">
-                    <td className="resume-details">
-                      <input type="hidden" name="userIdx" value={item.userIdx} />
-                      <div className="resumeTitle">
-                        <strong>{item.resumeTitle}</strong>{" "}
-                        <a href={`/apply/resume-detail.do?resumeNum=${item.resumeIdx}`} className="edit-link">
-                          <span>수정</span>
-                        </a>
-                      </div>
-                      <div className="resume-info">
-                        <div>이메일 주소: {item.userEmail}</div>
-                        <div>핸드폰: {item.userPhone}</div>
-                      </div>
-                    </td>
-                    <td className="select-radio">
-                      <input type="radio" name="resumeSelect" value={item.resumeIdx} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              )}
+            </tbody>
+          </StyledTable>
+        </div>
 
-          <div className="btn-area">
-            {userInfo?.userType === "A" && (
-              <button type="button" className="btn btn-apply" onClick={handleApply}>
-                입사지원
-              </button>
-            )}
-            <button type="button" className="btn btn-close" onClick={handleClose}>
-              닫기
-            </button>
-          </div>
+        <div className={"button-container"}>
+          <button>등록</button>
+          <button onClick={handleClose}>나가기</button>
         </div>
       </div>
-    </StyledModal>
+    </ApplyModalStyled>
   );
 };

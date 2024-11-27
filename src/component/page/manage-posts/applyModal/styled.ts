@@ -1,145 +1,91 @@
 import styled from "styled-components";
 
-export const StyledModal = styled.div<{ isOpen: boolean }>`
-  display: ${(props) => (props.isOpen ? "flex" : "none")};
-  position: fixed;
-  top: 0;
-  left: 0;
+export const ApplyModalStyled = styled.div`
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  align-items: center;
+  position: fixed;
+  display: flex;
+  flex-flow: row wrep;
   justify-content: center;
-  z-index: 1000;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  font-weight: bold;
 
-  .layerPop {
-    background: #fff;
-    border-radius: 8px;
-    width: 600px;
+  label {
+    display: flex;
+    flex-direction: column;
+  }
+
+  input[type="text"] {
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .container {
+    background: white;
     padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    position: relative;
+    width: 900px;
+  }
 
-    .modal-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+  img {
+    width: 100px;
+    height: 100px;
+  }
 
-      .modal-title {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 15px;
-      }
+  .img-label {
+    margin-top: 10px;
+    padding: 6px 25px;
+    background-color: #ccc;
+    border-radius: 4px;
+    color: rgba(0, 0, 0, 0.9);
+    cursor: pointer;
 
-      .company-name,
-      .job-title {
-        font-size: 14px;
-        color: #555;
-        margin: 5px 0;
-      }
+    &:hover {
+      background-color: #45a049;
+      color: white;
+    }
 
-      .resume-container {
-        width: 100%;
-        margin-top: 15px;
+    &:active {
+      background-color: #3e8e41;
+      box-shadow: 0 2px #666;
+      transform: translateY(2px);
+    }
+  }
 
-        .resume-table {
-          width: 100%;
-          border-collapse: collapse;
+  .button-container {
+    text-align: right;
+    margin-top: 10px;
+  }
+  button {
+    background-color: #3bb2ea;
+    border: none;
+    color: white;
+    padding: 10px 22px;
+    text-align: right;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0 4px #999;
+    transition: 0.3s;
 
-          th {
-            background: #f4f4f4;
-            padding: 10px;
-            text-align: left;
-          }
+    &:hover {
+      background-color: #45a049;
+    }
 
-          tbody {
-            tr.spaceBetweenRB {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              padding: 10px 0;
-              border-bottom: 1px solid #eaeaea;
-
-              .resume-details {
-                flex: 8;
-                display: flex;
-                flex-direction: column;
-
-                .resumeTitle {
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-
-                  strong {
-                    font-weight: bold;
-                  }
-
-                  .edit-link {
-                    color: gray;
-                    font-size: 12px;
-                    text-decoration: none;
-
-                    &:hover {
-                      text-decoration: underline;
-                    }
-                  }
-                }
-
-                .resume-info {
-                  margin-top: 10px;
-                  font-size: 12px;
-                  color: #666;
-
-                  div {
-                    margin: 5px 0;
-                  }
-                }
-              }
-
-              .select-radio {
-                flex: 2;
-                text-align: right;
-
-                input[type="radio"] {
-                  cursor: pointer;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      .btn-area {
-        margin-top: 20px;
-        text-align: right;
-        width: 100%;
-
-        .btn {
-          margin-left: 10px;
-          padding: 8px 16px;
-          border: none;
-          border-radius: 4px;
-          font-size: 14px;
-          cursor: pointer;
-
-          &.btn-apply {
-            background: #007bff;
-            color: white;
-
-            &:hover {
-              background: #0056b3;
-            }
-          }
-
-          &.btn-close {
-            background: #ccc;
-            color: #333;
-
-            &:hover {
-              background: #aaa;
-            }
-          }
-        }
-      }
+    &:active {
+      background-color: #3e8e41;
+      box-shadow: 0 2px #666;
+      transform: translateY(2px);
     }
   }
 `;

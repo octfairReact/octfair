@@ -52,6 +52,21 @@ export interface AllDetail {
   bizDetail: companyDetail;
   postDetail: IPostDetail;
 }
+export interface ApplybizDetail {
+  bizName: string;
+  postTitle: string;
+}
+export interface ApplyUserDetail {
+  userIdx: number;
+  userPhone: string;
+  userEmail: string;
+  resumeIdx: number;
+  resumeTitle: string;
+}
+export interface ApplyDetailAll {
+  userResumeList: ApplyUserDetail[];
+  bizPostDetail: ApplybizDetail;
+}
 
 export interface IPostListResponse {
   approvalPostCnt: number;
