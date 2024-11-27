@@ -64,3 +64,13 @@ export const Faq = {
   postUpdate: "/board/faqUpdateRe.do",
   postDelete: "/board/faqDeleteRe.do",
 };
+
+export const ManageUser = {
+  getApplicantList: "/manage-user/applicantListBody.do",
+  getApplicantDetail: "/manage-user/applicantManageDetail.do",
+  updateApplicantInfo: "/manage-user/applicantInfoUpdate.do",
+  resetApplicantPassword: "/manage-user/applicantPwReset.do",
+  getBizList: "/manage-user/bizListBody.do",
+  getBizDetail: "/manage-user/bizManageDetail.do",
+  updateBizInfo: "/manage-user/bizInfoUpdate.do",
+}
