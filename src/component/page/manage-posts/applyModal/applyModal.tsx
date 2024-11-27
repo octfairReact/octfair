@@ -107,7 +107,7 @@ export const ApplyModal: FC<IApplyModalProps> = ({ onSuccess, indexGroup }) => {
                 })
               ) : (
                 <tr>
-                  <StyledTd colSpan={5}>데이터가 없습니다.</StyledTd>
+                  <StyledTd colSpan={5}>이력서가 없습니다.</StyledTd>
                 </tr>
               )}
             </tbody>
