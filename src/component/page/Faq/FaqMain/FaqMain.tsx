@@ -16,7 +16,7 @@ import { modalState } from "../../../../stores/modalState";
 
 export const FaqMain = () => {
   // const { search } = useLocation();
-  const [faqCnt, setFaqCntCnt] = useState<number>(0);
+  const [faqCnt, setFaqCnt] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [cPage, setCPage] = useState<number>();
   const { searchKeyWord } = useContext(FqaContext);
@@ -26,23 +26,41 @@ export const FaqMain = () => {
   const [modal, setModal] = useRecoilState<boolean>(modalState);
   const [showContext, setShowContext] = useState(null);
   const [faqIndex, setFaqIndex] = useState<number>();
+  const [isLoaded, setIsLoaded] = useState(false); //로딩 상태 관리. 조회 결과 나오기전까지 랜더링 안되게
 
   useEffect(() => {
-    console.log(userInfo.userType);
-    if (faqType) {
+    if (userInfo && userInfo.userType) {
+      if (userInfo.userType === "M") {
+        setFaqType("1"); // userType이 "M"일 경우 faqType을 1로 설정
+      } else {
+        setFaqType(userInfo.userType); // 그 외의 경우 userInfo.userType 값을 그대로 설정
+      }
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    let transFaqType = faqType;
+    if (faqType === "B") {
+      transFaqType = "2";
+    } else if (faqType === "M" || faqType === "A") {
+      transFaqType = "1";
+    }
+    setFaqType(transFaqType);
+
+    if (faqType && searchKeyWord) {
       searchFaqList(currentPage, faqType);
     } else {
-      console.log("User info is not loaded yet.");
+      console.log("유저정보 아직");
     }
-  }, [faqType]);
+  }, [faqType, searchKeyWord]);
 
   // useEffect(() => {
   //   searchFaqList(currentPage);
   // }, [search]);
 
-  useEffect(() => {
-    searchFaqList();
-  }, [searchKeyWord]);
+  // useEffect(() => {
+  //   searchFaqList();
+  // }, [searchKeyWord]);
 
   const searchFaqList = async (currentPage?: number, faqType?: string) => {
     currentPage = currentPage || 1;
@@ -52,15 +70,14 @@ export const FaqMain = () => {
       pageSize: "5",
       faq_type: faqType,
     };
-
-    console.log("뭐 담기나", userInfo.userType);
     const searchList = await postFaqApi<IFaqListResponse>(Faq.getList, searchParam);
 
     if (searchList) {
       setFaqList(searchList.data.faq);
-      setFaqCntCnt(searchList.data.faqCnt);
+      setFaqCnt(searchList.data.faqCnt);
       setCPage(currentPage);
     }
+    setIsLoaded(true);
   };
 
   // faqType 변경하는 버튼 클릭 핸들러
@@ -73,7 +90,6 @@ export const FaqMain = () => {
   };
 
   const handlerModal = ({ faqIdx }) => {
-    console.log("인덱스 확인", faqIdx);
     setModal(!modal);
     setFaqIndex(faqIdx);
   };
@@ -84,9 +100,13 @@ export const FaqMain = () => {
     if (faqType) {
       searchFaqList(currentPage, faqType);
     } else {
-      console.log("User info is not loaded yet.");
+      console.log("유저정보 아직2");
     }
   };
+
+  if (!isLoaded || faqType === undefined) {
+    return null; // 로딩 완료 전까지 아무것도 렌더링하지 않음
+  }
 
   return (
     <>

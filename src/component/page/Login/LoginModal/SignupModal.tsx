@@ -3,6 +3,7 @@ import axios from "axios";
 import qs from "qs";
 import { useRecoilState } from "recoil";
 import { signupModalState } from "../../../../stores/modalState";
+import { Login } from "../../../../api/api";
 import {
     ModalOverlay,
     ModalStyled,
@@ -126,16 +127,18 @@ export const SignupModal = () => {
             signupInput.action = "I"; // setSignupInput()을 하지 않은 이유: 1) 상태값에 반응할 컴포넌트가 없기 때문, 2) set()을 할 경우 동기/비동기 문제가 있어서 즉각반영이 안됨
 
             const query: string[] = [];
+
             Object.entries(signupInput).forEach(([key, value]) => {
                 query.push(`${key}=${encodeURIComponent(value)}`);
             });
+            
             // 쿼리 앞에 '?' 붙이고 쿼리key/value쌍 사이마다 '&' 붙이기
             const queryString = query.length > 0 ? `?${query.join(`&`)}` : "";
 
             // 전송주소의 'board'와 같은 상위경로가 없는 이유는 Spring컨트롤러의 @RequestMapping에 분류토록 명시된 상위경로가 없기 때문
             // axios.post()가 아니라 axios.get()인 이유는 Spring컨트롤러가 @RequestBody가 아니라 @RequestParam이기 때문
             // navigate()가 아니라 axios인 이유는 navigate식 URL쿼리전송은 React페이지 내의 전송일때고, 서버로의 URL쿼리 전송은 axios
-            axios.get(`/register.do${queryString}`)
+            axios.get(Login.postSignup + queryString)
             .then((res) => {
                 if (res.data.result.toUpperCase() === "SUCCESS") {
                     alert("회원가입이 완료되었습니다!");
@@ -155,7 +158,7 @@ export const SignupModal = () => {
         }
 
         let isDuplicate = false;
-        await axios.post("/check_loginId.do", qs.stringify({ loginId: signupInput.loginId }))
+        await axios.post(Login.getCheckId, qs.stringify({ loginId: signupInput.loginId }))
             .then((res) => {
                 if (res.data === 1) { // 결과값이 1이면 중복이란 뜻 (Mapper에서 해당id의 갯수를 반환하기 때문)
                     alert("입력하신 아이디는 이미 사용중 입니다.");

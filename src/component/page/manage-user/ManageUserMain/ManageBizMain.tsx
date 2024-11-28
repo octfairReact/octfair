@@ -32,7 +32,7 @@ export const ManageBizMain = () => {
     const searchUserList = async (currentPage?: number) => {
         currentPage = currentPage || 1;
         const searchParam = { ...searchKeyWord, currentPage: currentPage.toString(), pageSize: "5" };
-        const searchList = await postManageUserApi<IManageBizListResponse>(ManageUser.getBizList, searchParam);
+        const searchList = await postManageUserApi<IManageBizListResponse>(ManageUser.getBizListBody, searchParam);
         
         if (searchList) {
             setUserList(searchList.data.biz);

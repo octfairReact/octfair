@@ -2,7 +2,9 @@ import styled from 'styled-components';
 
 export const HistorySearchStyled = styled.div`
     margin-bottom: 10px;
-    float: inline-end;
+    position: absolute;
+    right: 10px;
+    top: 88px;
     input {
         padding: 8px;
         margin-top: 5px;
@@ -10,10 +12,6 @@ export const HistorySearchStyled = styled.div`
         margin-right: 5px;
         border-radius: 4px;
         border: 1px solid #ccc;
-
         position: relative;
-    }
-
-    @media (max-width: 1000px) {
     }
 `;

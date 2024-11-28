@@ -2,6 +2,7 @@ import { useRecoilState } from "recoil";
 import { useState } from "react";
 import axios from "axios";
 import { updatePasswordModalState } from "../../../../stores/modalState";
+import { MyPage } from "../../../../api/api";
 import {
     ModalOverlay,
     ModalStyled,
@@ -16,17 +17,17 @@ import {
 
 // 패스워드 3세트
 export interface PasswordInputs {
-    prevPassword: string;
-    newPassword: string;
-    checkPassword: string;
+    passwd: string;
+    newPasswd: string;
+    newPasswdConfirm: string;
 }
 
 export const MyPageUpdatePasswordModal = () => {
     const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(updatePasswordModalState);
     const [password, setPassword] = useState<PasswordInputs>({
-        prevPassword: '',
-        newPassword: '',
-        checkPassword: '',
+        passwd: '',
+        newPasswd: '',
+        newPasswdConfirm: '',
     });
     
     // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
@@ -72,7 +73,16 @@ export const MyPageUpdatePasswordModal = () => {
 
         // 3. 데이터전송: 비번수정 입력정보 문제없음! 서버로 Update요청!
         if (isProblem === false) {
-            axios.get("/mypage/updatePw.do" + "?password=" + encodeURIComponent(password.newPassword))
+            const query: string[] = [];
+            
+            Object.entries(password).forEach(([key, value]) => {
+                query.push(`${key}=${encodeURIComponent(value)}`);
+            });
+            
+            // 쿼리 앞에 '?' 붙이고 쿼리key/value쌍 사이마다 '&' 붙이기
+            const queryString = query.length > 0 ? `?${query.join(`&`)}` : "";
+
+            axios.get(MyPage.putUserPw + queryString)
             .then((res) => {
                 if (res.data.result.toUpperCase() === "SUCCESS") {
                     alert("비밀번호 변경이 완료되었습니다!");
@@ -94,7 +104,7 @@ export const MyPageUpdatePasswordModal = () => {
                         <TableHeaderCell>기존 비밀번호 <RequiredMark>*</RequiredMark></TableHeaderCell>
                         <TableDataCell colSpan={3}>
                             <InputField type="password" id="prevPassword" placeholder="숫자, 영문자, 특수문자 조합으로 8~15자리"
-                                onChange={(e) => { setPassword((prev) => ({ ...prev, prevPassword: e.target.value })); }}>
+                                onChange={(e) => { setPassword((prev) => ({ ...prev, passwd: e.target.value })); }}>
                             </InputField>
                         </TableDataCell>
                     </tr>
@@ -102,7 +112,7 @@ export const MyPageUpdatePasswordModal = () => {
                         <TableHeaderCell>변경할 비밀번호 <RequiredMark>*</RequiredMark></TableHeaderCell>
                         <TableDataCell colSpan={3}>
                             <InputField type="password" id="newPassword" placeholder="숫자, 영문자, 특수문자 조합으로 8~15자리"
-                                onChange={(e) => { setPassword((prev) => ({ ...prev, newPassword: e.target.value })); }}>
+                                onChange={(e) => { setPassword((prev) => ({ ...prev, newPasswd: e.target.value })); }}>
                             </InputField>
                         </TableDataCell>
                     </tr>
@@ -110,7 +120,7 @@ export const MyPageUpdatePasswordModal = () => {
                         <TableHeaderCell>비밀번호 확인<RequiredMark>*</RequiredMark></TableHeaderCell>
                         <TableDataCell colSpan={3}>
                             <InputField type="password" id="checkPassword" placeholder="숫자, 영문자, 특수문자 조합으로 8~15자리"
-                                onChange={(e) => { setPassword((prev) => ({ ...prev, checkPassword: e.target.value })); }}>
+                                onChange={(e) => { setPassword((prev) => ({ ...prev, newPasswdConfirm: e.target.value })); }}>
                             </InputField>
                         </TableDataCell>
                     </tr>

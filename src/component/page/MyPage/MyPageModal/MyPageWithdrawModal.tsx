@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { withdrawModalState } from "../../../../stores/modalState";
+import { MyPage } from "../../../../api/api";
 import {
     ModalOverlay,
     ModalStyled,
@@ -54,7 +55,7 @@ export const MyPageWithdrawModal = () => {
 
         // 3. 데이터 전송: 회원탈퇴 입력정보 문제없음! 서버로 Delete요청!
         if (isProblem === false) {
-            axios.get("/mypage/deleteUser.do" + "?password=" + encodeURIComponent(password))
+            axios.get(MyPage.deleteUser + "?password=" + encodeURIComponent(password))
             .then((res) => {
                 if (res.data.result.toUpperCase() === "SUCCESS") {
                     alert("회원탈퇴가 완료되었습니다!");

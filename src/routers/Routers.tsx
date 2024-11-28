@@ -19,7 +19,7 @@ import { ResumeForm } from "../pages/ResumeForm";
 import { Scrap } from "../pages/Scrap";
 import { FaQ } from "../pages/FaQ";
 import { Applicant } from "../pages/Applicant";
-
+import { QnA } from "../pages/QnA";
 import { ManageApplicant } from "../pages/ManageApplicant";
 import { ManageBiz } from "../pages/ManageBiz";
 
@@ -37,6 +37,7 @@ const routers: RouteObject[] = [
           { path: "notice.do", element: <Notice /> },
           { path: "notice.do/:noticeIdx", element: <NoticeRouter /> },
           { path: "faq.do", element: <FaQ /> },
+          { path: "qna.do", element: <QnA /> },
         ],
       },
       {
@@ -57,7 +58,11 @@ const routers: RouteObject[] = [
 
       {
         path: "manage-post",
-        children: [{ path: "managePostDetailBody.do", element: <ManagePostPage /> }],
+        children: [
+          { path: "managePostDetailBody.do", element: <ManagePostPage /> },
+          { path: "approval.do", element: <Post /> },
+          { path: "post.do", element: <Post /> },
+        ],
       },
       {
         path: "company",
