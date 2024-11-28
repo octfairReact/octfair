@@ -24,8 +24,8 @@ export const searchIdPwModalState = atom<string>({
 });
 
 // 비번수정 모달창에 쓰는 모달창state
-export const passwordModalState = atom<boolean>({
-  key: "passwordModalState",
+export const updatePasswordModalState = atom<boolean>({
+  key: "updatePasswordModalState",
   default: false,
 });
 
