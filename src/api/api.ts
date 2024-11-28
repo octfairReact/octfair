@@ -29,7 +29,7 @@ export const Posts = {
 
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post/managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
 export const Company = {
@@ -49,6 +49,7 @@ export const Resume = {
 export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   postSave: "/manage-hire/managehireSaveBody.do",
+  fileDownload: "manage-hire/managehireDownload.do",
 };
 export const ScrapURL = {
   getScrapList: "/manage-post/scrapListBody.do",
