@@ -47,11 +47,20 @@ export const Resume = {
   resumeDelete: "/apply/resumeDelete.do",
 };
 
+//채용공고 리스트,등록 - 신효
 export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   postSave: "/manage-hire/managehireSaveFileForm.do",
 
 };
+
+//지원자관리 - 신효
+export const Applicant = {
+  getPostIdx: "/manage-hire/applicantJson.do",
+  gitListBody: "/manage-hire/applicantListBody.do",
+
+};
+
 export const ScrapURL = {
   getScrapList: "/manage-post/scrapListBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
