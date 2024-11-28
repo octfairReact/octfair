@@ -221,4 +221,21 @@ export const PostDetailStyled = styled.div`
     background-color: #b9b7b6;
     color: white;
   }
+
+  // 다운로드 글자 스타일
+  .download-link {
+    color: red; /* 기본 색상: 빨간색 */
+    font-size: 18px; /* 글자 크기 */
+    font-weight: bold; /* 글자 두께 */
+    cursor: pointer; /* 커서가 손 모양으로 변경 */
+    text-decoration: none; /* 밑줄 제거 */
+    margin-left: 10px; /* 첨부파일과 텍스트 간 간격 추가 */
+  }
+  .download-link:hover {
+    color: blue; /* 호버 시 글자 색상 변경 */
+    text-decoration: none; /* 호버 시 밑줄 제거 */
+  }
+
 `;
+
+

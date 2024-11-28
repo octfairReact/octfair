@@ -122,7 +122,7 @@ export const HistoryMain = () => {
     };
 
     return (
-        <HistoryMainStyled>
+        <>
             <StyledTable>
                 <thead>
                     <tr>
@@ -231,7 +231,6 @@ export const HistoryMain = () => {
                     handlerCancel={handlerCancel}
                 />
             )}
-            <br /><br />
-        </HistoryMainStyled>
+        </>
     );
 };
