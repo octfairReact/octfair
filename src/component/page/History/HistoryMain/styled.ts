@@ -11,7 +11,7 @@ export const HistoryMainStyled = styled.table`
 export const StyledHoverText = styled.span`
   cursor: pointer;
   color: black;  /* 기본 글자 색상 검은색 */
-  text-decoration: none;  /* 밑줄 제거 */
+  text-decoration: none !important;  /* 밑줄 제거 */
 
   /* 호버 시 빨간색으로 변경하고 밑줄 추가 */
   &:hover {
@@ -31,13 +31,12 @@ export const StyledHoverText = styled.span`
 export const CancelButton = styled.button`
   padding: 8px 16px;
   font-size: 14px;
-  background-color: #d9534f;  /* 진한 붉은색 */
+  background-color: #d9534f !important;  /* 진한 붉은색 */
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-
   &:hover {
     background-color: #c9302c;  /* 호버 시 더 진한 붉은색 */
     transform: scale(1.05);
@@ -53,11 +52,11 @@ export const CancelButton = styled.button`
 export const DisabledButton = styled.button`
   padding: 8px 16px;
   font-size: 14px;
-  background-color: #ccc;  /* 회색 */
+  background-color: #ccc !important;  /* 회색 */
   color: #666;  /* 회색 글자 */
   border: none;
   border-radius: 5px;
-  cursor: not-allowed;  /* 클릭 불가 스타일 */
+  cursor: not-allowed !important;  /* 클릭 불가 스타일 */
   transition: background-color 0.3s ease;
 
   &:hover {

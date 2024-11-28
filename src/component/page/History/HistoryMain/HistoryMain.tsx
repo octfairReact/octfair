@@ -9,7 +9,7 @@ import { useRecoilState } from 'recoil';
 import { modalState } from '../../../../stores/modalState';
 import { HistoryModal } from '../HistoryModal/HistoryModal';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CancelButton, DisabledButton, HistoryMainStyled, StyledHoverText } from './styled';
+import { CancelButton, DisabledButton, StyledHoverText } from './styled';   // 스타일 적용
 import { CancelModal } from '../CancelModal/CancelModal';
 
 export const HistoryMain = () => {
