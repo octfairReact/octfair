@@ -70,6 +70,15 @@ export const Faq = {
   postDelete: "/board/faqDeleteRe.do",
 };
 
+export const Qna = {
+  getList: "/board/qnaListRe.do",
+  getMyList: "/board/qnaListRe.do",
+  postSave: "/board/qnaFileSaveRe.do",
+  getDetail: "/board/qnaDetailFileRe.do",
+  postUpdate: "/board/qnaFileUpdateRe.do",
+  postDelete: "/board/qnaFileDeleteRe.do",
+};
+
 export const ManageUser = {
   getApplicantListBody: "/manage-user/applicantListBody.do",
   getApplicantDetail: "/manage-user/applicantManageDetail.do",
