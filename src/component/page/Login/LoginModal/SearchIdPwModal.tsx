@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { searchIdPwModalState } from "../../../../stores/modalState";
 import {
     ModalOverlay,
     ModalStyled,
-    SignupTable,
+    Table,
     TableCaption,
     TableHeaderCell,
     TableDataCell,
@@ -10,22 +13,14 @@ import {
     RequiredMark,
     Button,
 } from "./styled";
-import axios from "axios";
-import { useRecoilState } from "recoil";
-import { searchIdPwModalState } from "../../../../stores/modalState";
 
-// 닫기버튼/액션도 부모(LoginMain)에서 생성된 SignupModal의 상태(0/1)를 참조/조절함
-interface SearchIdPwModalProps {
-    onClose: () => void;
-}
-
-// 회원가입 입력데이터 구조체/멤버변수
+// 입력데이터 구조체/멤버변수
 export interface Inputs {
     inputA: string; // 아이디찾기의 경우 이름, 비밀번호찾기의 경우 아이디가 입력됨
     inputB: string; // 이메일이 입력됨
 }
 
-export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) => {
+export const SearchIdPwModal = () => {
     const [searchIdPwModal, setSearchIdPwModal] = useRecoilState<string>(searchIdPwModalState); // "close"(닫힘) 또는 "id"(아이디찾기 로 열림) 또는 "pw"(비밀번호찾기 로 열림) 또는 "pw2"(비밀번호재설정 로 열림)
     const [inputs, setInputs] = useState<Inputs>({ inputA: '', inputB: '', }); // 기본값
     const [saveId, setSaveId] = useState<string>(); // '비밀번호찾기'->'비밀번호재설정' 으로 넘어갈시에 '비밀번호재설정'에서 아이디를 입력받지않기에 '비밀번호찾기'에서 입력했던 아이디를 기억해놓는 것
@@ -35,6 +30,12 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
     let input1_type = searchIdPwModal === "id" ? "text" : (searchIdPwModal === "pw" ? "text" : "password");
     let input2_type = searchIdPwModal === "id" ? "email" : (searchIdPwModal === "pw" ? "email" : "password");
 
+    // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
+    const closeModalHandler = () => {
+        if (searchIdPwModal !== "close")
+            setSearchIdPwModal("close");
+    };
+
     // Enter키를 누를시 완료버튼 효과를 작동
     const completeEnterHandler = (event) => {
         if (event.key === "Enter")
@@ -42,17 +43,17 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
     }
 
     // 완료버튼 누를시 작동
+    // 1. 빈값검사 -> 2. 양식검사(이메일형식/비밀번호형식 등) -> 3. 데이터전송
     const completeHandler = () => {
         let isProblem = false;
 
-        // 빈값검사
+        // 1. 빈값검사
         if (!inputs.inputA || !inputs.inputB) {
             alert("빈칸을 채워주세요!")
             isProblem = true;
         }
 
-        // 이메일형식에 맞지 않아도 서버랑 매칭하는 걸로 대체가능하긴 하나
-        // 가능한 서버에 요청시키지 않는게 프론트의 역할
+        // 2. 양식검사: 이메일형식에 맞지 않아도 서버랑 매칭하는 걸로 대체가능하긴 하나 가능한 서버에 요청시키지 않는게 프론트의 역할
         const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
         const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         if (!isProblem) {
@@ -72,7 +73,7 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
             }
         }
 
-        // 입력정보 문제없음! 서버로 매칭요청!
+        // 3. 데이터전송: 입력정보 문제없음! 서버로 매칭요청!
         if (isProblem === false) {
             const query: string[] = [];
             
@@ -107,7 +108,7 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
                 if (res.data.result.toUpperCase() === "SUCCESS") {
                     if (searchIdPwModal === "id") {
                         alert("찾으시는 아이디는 " + res.data.id + "입니다.");
-                        onClose();
+                        closeModalHandler();
                     } else if (searchIdPwModal === "pw") {
                         alert("확인되었습니다. 비밀번호를 변경해 주세요!");
                         setSaveId(inputs.inputA);
@@ -115,7 +116,7 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
                         setInputs({ inputA: '', inputB: '' });
                     } else {
                         alert("비밀번호 변경이 완료되었습니다!");
-                        onClose();
+                        closeModalHandler();
                     }
                 } else {
                     alert("일치하는 정보가 존재하지 않습니다.");
@@ -126,10 +127,10 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
 
     return (
         <>
-            <ModalOverlay onMouseDown={onClose}>                        {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+            <ModalOverlay onMouseDown={closeModalHandler}>              {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
                 <ModalStyled onMouseDown={(e) => e.stopPropagation()} //{/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
                                 style={{ backgroundColor: searchIdPwModal==="pw2" && 'cornsilk' }}> {/* <----- 비밀번호찾기->비밀번호변경으로 모달 변경시 배경색을 변경 */}
-                    <SignupTable onKeyDown={completeEnterHandler}>
+                    <Table onKeyDown={completeEnterHandler}>
                         <TableCaption>{title}</TableCaption>
                         <tbody>
                             <tr>
@@ -149,10 +150,10 @@ export const SearchIdPwModal: React.FC<SearchIdPwModalProps> = ({ onClose, }) =>
                                 </TableDataCell>
                             </tr>
                         </tbody>
-                    </SignupTable>
+                    </Table>
                     <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
                         <Button onClick={completeHandler}>찾기</Button>
-                        <Button onClick={onClose} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
+                        <Button onClick={closeModalHandler} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
                     </div>
                 </ModalStyled>
             </ModalOverlay>

@@ -48,10 +48,29 @@ export const Resume = {
 
 export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
-  postSave: "/manage-hire/managehireSaveBody.do",
   fileDownload: "manage-hire/managehireDownload.do",
+  postSave: "/manage-hire/managehireSaveFileForm.do",
+
 };
 export const ScrapURL = {
   getScrapList: "/manage-post/scrapListBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
+
+export const Faq = {
+  getList: "/board/faqListRe.do",
+  postSave: "/board/faqSaveRe.do",
+  getDetail: "/board/faqDetailRe.do",
+  postUpdate: "/board/faqUpdateRe.do",
+  postDelete: "/board/faqDeleteRe.do",
+};
+
+export const ManageUser = {
+  getApplicantList: "/manage-user/applicantListBody.do",
+  getApplicantDetail: "/manage-user/applicantManageDetail.do",
+  updateApplicantInfo: "/manage-user/applicantInfoUpdate.do",
+  resetApplicantPassword: "/manage-user/applicantPwReset.do",
+  getBizList: "/manage-user/bizListBody.do",
+  getBizDetail: "/manage-user/bizManageDetail.do",
+  updateBizInfo: "/manage-user/bizInfoUpdate.do",
+}
