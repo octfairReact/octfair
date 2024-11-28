@@ -1,8 +1,13 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
+import axios from "axios";
+import qs from "qs";
+import { useRecoilState } from "recoil";
+import { signupModalState } from "../../../../stores/modalState";
+import { Login } from "../../../../api/api";
 import {
     ModalOverlay,
     ModalStyled,
-    SignupTable,
+    Table,
     TableCaption,
     TableHeaderCell,
     TableDataCell,
@@ -11,8 +16,6 @@ import {
     RequiredMark,
     Button,
 } from "./styled";
-import axios from "axios";
-import qs from "qs";
 
 // daum우편주소찾기API에 쓰일 window.daum을 활성화 시키기 위하여
 // window하위로 daum을 명시해 넣는 코드
@@ -22,29 +25,25 @@ declare global {
     }
 }
 
-// 닫기버튼/액션도 부모(LoginMain)에서 생성된 SignupModal의 상태(0/1)를 참조/조절함
-interface SignupModalProps {
-    onClose: () => void;
-}
-
 // 회원가입 입력데이터 구조체/멤버변수
 export interface SignupInput {
-    userType: string; // 선택박스로 'A'/'B' 중 하나가 입력 됨
+    userType: string; // 유저타입 (선택박스로 'M'(관리자)/'A'(개인회원)/'B'(기업회원) 중 하나가 입력 됨)
     loginId: string;
     password: string;
     passwordOk: string;
     name: string;
-    sex: string;  // 선택박스로 '1'/'2' 중 하나가 입력 됨
+    sex: string; // 성별 (선택박스로 '1'/'2' 중 하나가 입력 됨)
     birthday: string;
     phone: string;
     email: string;
-    zipCode: string; // 직접입력 또는 우편번호찾기 API로 입력 됨
+    zipCode: string; // 우편번호 (직접입력 또는 우편번호찾기 API로 입력 됨)
     address: string;
     detailAddress: string;
     action: string; // 서버 컨트롤러에서 action="I"인지로 정상경로(회원가입 모달창)으로부터 온 데이터인지 보는듯????
 }
 
-export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
+export const SignupModal = () => {
+    const [signupModal, setSignupModal] = useRecoilState<boolean>(signupModalState); // false(닫힘) 또는 true(열림)
     const [signupInput, setSignupInput] = useState<SignupInput>({
         // 기본값
         userType: '',
@@ -62,6 +61,12 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
         action: '',
     });
     const [isIdDuplicateChecked, setIsIdDuplicateChecked] = useState<boolean>(false); // 중복체크 여부에 대한 변수
+
+    // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
+    const closeModalHandler = () => {
+        if (signupModal !== false)
+            setSignupModal(false);
+    };
 
     // Enter키를 누를시 완료버튼 효과를 작동
     const completeEnterHandler = (event) => {
@@ -93,7 +98,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
             isProblem = true;
         }
         
-        // 3. 양식검사: pwd/email 입력창에 대하여 지켜야할 정규식패턴 검사
+        // 3. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
         const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
         const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         const phoneRules = /^[0-9]([-]?[0-9])*$/;
@@ -117,25 +122,27 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
             }
         }
 
-        // 회원가입 입력정보 문제없음! 서버로 Create요청!
+        // 4. 데이터전송: 회원가입 입력정보 문제없음! 서버로 Create요청!
         if (isProblem === false) {
             signupInput.action = "I"; // setSignupInput()을 하지 않은 이유: 1) 상태값에 반응할 컴포넌트가 없기 때문, 2) set()을 할 경우 동기/비동기 문제가 있어서 즉각반영이 안됨
 
             const query: string[] = [];
+
             Object.entries(signupInput).forEach(([key, value]) => {
                 query.push(`${key}=${encodeURIComponent(value)}`);
             });
+            
             // 쿼리 앞에 '?' 붙이고 쿼리key/value쌍 사이마다 '&' 붙이기
             const queryString = query.length > 0 ? `?${query.join(`&`)}` : "";
 
             // 전송주소의 'board'와 같은 상위경로가 없는 이유는 Spring컨트롤러의 @RequestMapping에 분류토록 명시된 상위경로가 없기 때문
             // axios.post()가 아니라 axios.get()인 이유는 Spring컨트롤러가 @RequestBody가 아니라 @RequestParam이기 때문
             // navigate()가 아니라 axios인 이유는 navigate식 URL쿼리전송은 React페이지 내의 전송일때고, 서버로의 URL쿼리 전송은 axios
-            axios.get(`/register.do${queryString}`)
+            axios.get(Login.postSignup + queryString)
             .then((res) => {
                 if (res.data.result.toUpperCase() === "SUCCESS") {
                     alert("회원가입이 완료되었습니다!");
-                    onClose();
+                    closeModalHandler();
                 } else {
                     alert("회원가입 실패, 담당자(유성찬)에게 문의하세요!");
                 }
@@ -143,7 +150,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
         }
     };
 
-    // Spring컨트롤러의 파라미터가 @RequestBody(JSON)이 아닌 UserInfoModel(URL-encoded레거시코드)라서, Spring에서 파라미터를 바꿔주든가 React에서 qs.stringify를 하면됨
+    // 아이디 중복체크: Spring컨트롤러의 파라미터가 @RequestBody(JSON)이 아닌 UserInfoModel(URL-encoded레거시코드)라서, Spring에서 파라미터를 바꿔주든가 React에서 qs.stringify를 하면됨
     const checkIdDuplicateHandler = async () => {
         if (!signupInput.loginId) { // 아이디입력란이 공백일경우
             alert("아이디를 입력해 주세요.")
@@ -151,7 +158,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
         }
 
         let isDuplicate = false;
-        await axios.post("/check_loginId.do", qs.stringify({ loginId: signupInput.loginId }))
+        await axios.post(Login.getCheckId, qs.stringify({ loginId: signupInput.loginId }))
             .then((res) => {
                 if (res.data === 1) { // 결과값이 1이면 중복이란 뜻 (Mapper에서 해당id의 갯수를 반환하기 때문)
                     alert("입력하신 아이디는 이미 사용중 입니다.");
@@ -166,7 +173,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
         else             return false;
     }
 
-    // 우편번호검색API 창을 띄워주고, 검색된 값을 회원가입 정보입력창에 넣어준다.
+    // 우편번호검색: API 창을 띄워주고, 검색된 값을 회원가입 정보입력창에 넣어준다.
     const postcodeSearchHandler = useCallback(() => { // useCallback은 해당함수의 반복호출마다 랜더링되지 않고 최초때부터 재사용 되게 랜더링한다는 뜻
         const script = document.createElement("script");
         script.src = "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
@@ -195,9 +202,9 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
 
     return (
         <>
-            <ModalOverlay onMouseDown={onClose}>                       {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+            <ModalOverlay onMouseDown={closeModalHandler}>             {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
                 <ModalStyled onMouseDown={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
-                    <SignupTable onKeyDown={completeEnterHandler}>
+                    <Table onKeyDown={completeEnterHandler}>
                         <TableCaption>회원가입</TableCaption>
                         <tbody>
                             <tr>
@@ -308,10 +315,10 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose }) => {
                                 </TableDataCell>
                             </tr>
                         </tbody>
-                    </SignupTable>
+                    </Table>
                     <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
                         <Button onClick={completeRegisterHandler}>회원가입 완료</Button>
-                        <Button onClick={onClose} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
+                        <Button onClick={closeModalHandler} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
                     </div>
                 </ModalStyled>
             </ModalOverlay>

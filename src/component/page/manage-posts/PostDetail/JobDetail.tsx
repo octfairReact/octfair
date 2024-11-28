@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ManagePost, Posts } from "../../../../api/api";
-import { AllDetail, companyDetail, IPostDetail } from "../../../../models/interface/IPost";
+import { AllDetail, ApplyDetailAll, companyDetail, IPostDetail } from "../../../../models/interface/IPost";
 import { postPostApi } from "../../../../api/postPostApi";
 import { PostDetailStyled } from "./ManagePostPage";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { IScrapResponse } from "../../../../models/interface/IScrap";
+import { ApplyModalState } from "../../../../stores/modalState";
+import { Portal } from "../../../common/portal/Portal";
+import { ApplyModal } from "../applyModal/ApplyModal";
 
 export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
   const location = useLocation();
@@ -16,6 +19,8 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
   const [param, setParam] = useState<{ postIdx: string | number; bizIdx: string | number } | null>(null);
   const [CDetail, setCDetail] = useState<companyDetail>();
   const [MDetail, setMDetail] = useState<IPostDetail>();
+  const [modal, setModal] = useRecoilState<boolean>(ApplyModalState);
+  const [index, setIndex] = useState<number[]>();
 
   useEffect(() => {
     if (postIdx && bizIdx) {
@@ -36,8 +41,8 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
     setMDetail(response.data.postDetail);
   };
   const handlerScrapSave = async () => {
-    const loginIdx = userInfo.loginId;
-    const saveParam = { postIdx, loginIdx };
+    const loginId = userInfo.loginId;
+    const saveParam = { postIdx, loginId };
 
     const response = await postPostApi<IScrapResponse>(Posts.getScrapSave, saveParam);
     console.log(response.data);
@@ -49,6 +54,15 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
     }
   };
 
+  const handlerModal = (postIdx: number, bizIdx: number) => {
+    setModal(!modal);
+    setIndex([postIdx, bizIdx]);
+  };
+
+  const onPostSuccess = () => {
+    setModal(!modal);
+    fetchPostDetail();
+  };
   return (
     <PostDetailStyled>
       <div className="job-details-content">
@@ -63,7 +77,11 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
                 <button type="button" className="btn btn-outline-secondary" onClick={handlerScrapSave}>
                   스크랩
                 </button>
-                <button type="button" className="btn btn-warning">
+                <button
+                  type="button"
+                  className="btn btn-warning"
+                  onClick={() => handlerModal(data.postIdx, data.bizIdx)}
+                >
                   입사지원
                 </button>
               </>
@@ -87,6 +105,11 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
           {data.benefits && <DetailSection title="혜택 & 복지" content={data.benefits} />}
         </div>
       </div>
+      {modal && (
+        <Portal>
+          <ApplyModal onSuccess={onPostSuccess} indexGroup={index} />
+        </Portal>
+      )}
     </PostDetailStyled>
   );
 };

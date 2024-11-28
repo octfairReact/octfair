@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const postHistoryApi = async <T>(api: string, param: object) => {
   try {
@@ -6,5 +6,6 @@ export const postHistoryApi = async <T>(api: string, param: object) => {
     return result;
   } catch (error) {
     alert(error);
+    throw error;
   }
 };
