@@ -7,11 +7,12 @@ import { StyledTable, StyledTh } from "../../../common/styled/StyledTable";
 import { PageNavigateStyled } from "../../../common/pageNavigation/styled";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { QnaModal } from "../QnaModal/QnaModal";
-import { modalState, qnaMyListState } from "../../../../stores/modalState";
+import { modalState, qnaMyListState, qnaPasswordModalState } from "../../../../stores/modalState";
 import { IQnaAns, IQnaListResponse } from "../../../../models/interface/IQna";
 import { postQnaApi } from "../../../../api/postQnaApi";
 import { Qna } from "../../../../api/api";
 import { QnaContext } from "../../../../api/provider/QnaProvider";
+import { QnaPassword } from "../QnaModal/QnaPassword";
 
 export const QnaMain = () => {
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
@@ -25,6 +26,8 @@ export const QnaMain = () => {
   const { searchKeyWord } = useContext(QnaContext);
   const [qnaMyList, setQnaMyList] = useRecoilState<string>(qnaMyListState);
   const [index, setIndex] = useState<number>();
+  const [passwordmodal, setPasswordModal] = useRecoilState<boolean>(qnaPasswordModalState);
+  const [password, setPassword] = useState<string>(""); // 비밀번호 상태 관리
 
   useEffect(() => {
     if (userInfo && userInfo.userType) {
@@ -35,6 +38,8 @@ export const QnaMain = () => {
       }
     }
   }, [userInfo]);
+
+  console.log("qnaType", qnaType);
 
   useEffect(() => {
     if (qnaType && searchKeyWord) {
@@ -90,6 +95,21 @@ export const QnaMain = () => {
     setIndex(qnaIdx);
   };
 
+  const handlerPasswordModal = (qnaIdx: number) => {
+    setPasswordModal(!passwordmodal);
+    setIndex(qnaIdx);
+  };
+
+  // 비밀번호 모달에서 비밀번호를 전달받고, 상태 업데이트
+  const handlePasswordSubmit = (submittedPassword: string, index: number) => {
+    setPassword(submittedPassword); // 비밀번호 상태 업데이트
+    setIndex(index);
+    console.log("패스워드 전달 값", password);
+    console.log("패스워드 전달 값 + index", index);
+    setPasswordModal(false); // 비밀번호 모달 닫기
+    setModal(!modal);
+  };
+
   return (
     <>
       <QnaMainStyled>
@@ -127,7 +147,13 @@ export const QnaMain = () => {
                 <tr key={qna?.qnaIdx}>
                   <td>{qna?.qnaIdx}</td>
                   <td
-                    onClick={() => handlerModal(qna?.qnaIdx)}
+                    onClick={() => {
+                      if (userInfo.userType !== "M") {
+                        handlerPasswordModal(qna?.qnaIdx); // ans_content가 null이면 비밀번호 모달을 띄운다
+                      } else {
+                        handlerModal(qna?.qnaIdx); // 그렇지 않으면 기존의 모달을 띄운다
+                      }
+                    }}
                     onMouseEnter={(e) => (e.currentTarget.style.textDecoration = "underline")}
                     onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
                     style={{ cursor: "pointer" }}
@@ -170,7 +196,8 @@ export const QnaMain = () => {
       </PageNavigateStyled>
 
       {/* 모달 컴포넌트 */}
-      {modal && <QnaModal onSuccess={onPostSuccess} qnaSeq={index} setQnaSeq={setIndex} />}
+      {modal && <QnaModal onSuccess={onPostSuccess} qnaSeq={index} setQnaSeq={setIndex} qnaPassword={password} />}
+      {passwordmodal && <QnaPassword onPasswordSubmit={handlePasswordSubmit} qnaIdx={index} />}
     </>
   );
 };

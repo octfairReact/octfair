@@ -32,6 +32,10 @@ export interface IDetailResponse {
   detail: IQnaDetail;
 }
 
+export interface IDetailResponse2 extends IPostResponse {
+  detail: IQnaDetail;
+}
+
 export interface IQnaListResponse {
   qnaCnt: number;
   qna: IQnaAns[];

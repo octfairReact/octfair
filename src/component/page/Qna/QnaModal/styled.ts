@@ -20,6 +20,22 @@ export const QnaModalStyled = styled.div`
     margin-top: 20px; /* 원하는 만큼 아래로 띄워줄 여백 추가 */
   }
 
+  .password {
+    background-color: #3e4463;
+    padding: 10px; /* 패딩을 추가하여 내용과 배경이 붙지 않도록 함 */
+    color: white; /* 텍스트 색상도 흰색으로 설정 */
+    text-align: left;
+    margin-bottom: 20px; /* .passinput와의 간격을 띄우기 위해 margin-bottom 추가 */
+  }
+
+  .passinput input {
+    width: 100px; // 원하는 너비로 설정
+    height: 35px; // 원하는 높이로 설정
+    font-size: 14px; // 폰트 크기 조정
+    padding: 5px; // 패딩 조정 (너비에 영향을 미침)
+    border-radius: 4px; // 테두리 반경 (옵션)
+  }
+
   .modal-container {
     position: relative;
     width: 600px;

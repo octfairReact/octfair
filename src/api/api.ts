@@ -69,6 +69,6 @@ export const Qna = {
   getMyList: "/board/qnaListRe.do",
   postSave: "/board/qnaFileSaveRe.do",
   getDetail: "/board/qnaDetailFileRe.do",
-  postUpdate: "/board/",
-  postDelete: "/board/",
+  postUpdate: "/board/qnaFileUpdateRe.do",
+  postDelete: "/board/qnaFileDeleteRe.do",
 };
