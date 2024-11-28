@@ -55,7 +55,11 @@ const routers: RouteObject[] = [
 
       {
         path: "manage-post",
-        children: [{ path: "managePostDetailBody.do", element: <ManagePostPage /> }],
+        children: [
+          { path: "managePostDetailBody.do", element: <ManagePostPage /> },
+          { path: "approval.do", element: <Post /> },
+          { path: "post.do", element: <Post /> },
+        ],
       },
       {
         path: "company",

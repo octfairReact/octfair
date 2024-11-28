@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ManagePost } from "../../../../api/api";
+import { Hire, ManagePost } from "../../../../api/api";
 import { AllDetail, companyDetail, IPostDetail } from "../../../../models/interface/IPost";
 import { postPostApi } from "../../../../api/postPostApi";
 import { PostDetailStyled } from "./ManagePostPage";
@@ -11,6 +11,7 @@ import { JobDetail } from "./JobDetail";
 import { CompanytDetail } from "./CompanytDetail";
 import { ContentBoxPost } from "../../../common/ContentBox/ContentBoxPost";
 import { IScrap } from "../../../../models/interface/IScrap";
+import { IPostResponse } from "../../../../models/interface/INotice";
 
 export const PostDetail = () => {
   const location = useLocation();
@@ -38,6 +39,25 @@ export const PostDetail = () => {
     setMDetail(response.data.postDetail);
   };
 
+  const handleBack = () => {
+    navigate(-1); // -1은 이전 페이지로 이동
+  };
+
+  const statusUpdate = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    // data-status 값을 가져오기
+    const appStatus = event.currentTarget.dataset.status;
+    console.log(appStatus); // "승인"이 출력됩니다.
+
+    const param = { postIdx, appStatus };
+    // status 값을 이용하여 처리
+    const response = await postPostApi<IPostResponse>(ManagePost.statusUpdate, param);
+    console.log(response);
+    if (response.data.result === "success") {
+      alert(`${appStatus}되었습니다.`);
+      handleBack();
+    }
+  };
+
   return (
     <PostDetailStyled>
       <ContentBoxPost>
@@ -63,14 +83,17 @@ export const PostDetail = () => {
         </ul>
       </div>
       <div className="date-item">
-        <button type="button" id="updateAppStatusY" name="btn" className="btn btn-outline-secondary" data-status="승인">
-          승인
-        </button>
-        <button type="button" id="updateAppStatusN" name="btn" className="btn btn-outline-secondary" data-status="불허">
-          불허
-        </button>
-
-        <button type="button" id="backToList" name="btn" className="btn btn-close">
+        {userInfo.userType === "M" && (
+          <>
+            <button type="button" className="btn btn-outline-secondary" data-status="승인" onClick={statusUpdate}>
+              승인
+            </button>
+            <button type="button" className="btn btn-outline-secondary" data-status="불허" onClick={statusUpdate}>
+              불허
+            </button>
+          </>
+        )}
+        <button type="button" id="backToList" name="btn" className="btn btn-close" onClick={handleBack}>
           뒤로 가기
         </button>
       </div>
@@ -120,24 +143,22 @@ const CompanyInfo = ({
       <p>
         <strong>첨부파일:</strong> <a href="#">{data.fileName}</a>
       </p>
-      <p>
-        <div className="date">
-          <span className="remaining">남은 기간</span>
-          <div className="date-details">
-            <div className="date-item">
-              <span className="date-item">
-                시작일
-                <br />
-              </span>
-              <span className="date-item">마감일</span>
-            </div>
-            <div className="date-item">
-              <span className="date-item">{data.startDate}</span>
-              <span className="date-item">{data.endDate}</span>
-            </div>
+      <div className="date">
+        <span className="remaining">남은 기간</span>
+        <div className="date-details">
+          <div className="date-item">
+            <span className="date-item">
+              시작일
+              <br />
+            </span>
+            <span className="date-item">마감일</span>
+          </div>
+          <div className="date-item">
+            <span className="date-item">{data.startDate}</span>
+            <span className="date-item">{data.endDate}</span>
           </div>
         </div>
-      </p>
+      </div>
     </PostDetailStyled>
   );
 };

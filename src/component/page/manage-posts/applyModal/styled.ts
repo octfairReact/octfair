@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const NoticeModalStyled = styled.div`
+export const ApplyModalStyled = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
@@ -31,7 +31,7 @@ export const NoticeModalStyled = styled.div`
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     position: relative;
-    width: 400px;
+    width: 900px;
   }
 
   img {

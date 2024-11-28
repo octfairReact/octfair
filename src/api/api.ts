@@ -18,17 +18,20 @@ export const History = {
   getListBody: "/apply/historyBody.do",
   searchList: "/apply/searchHistoryBody.do",
   postDelete: "/apply/cancleApplyBody.do",
-  getModal:"/apply/previewResumeBody.do",
+  getModal: "/apply/previewResumeBody.do",
 };
 
 export const Posts = {
   getPost: "/jobs/posts.do",
   getScrap: "/jobs/scrap.do",
+  applyUserResumeDetail: "/jobs/applyUserResumeDetailBody.do",
+  applyBizPostDetail: "/jobs/applyBizPostDetailBody.do",
   getScrapSave: "/jobs/saveScrapBody.do",
 };
 
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
+  statusUpdate: "/manage-post/statusUpdateBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
@@ -49,10 +52,11 @@ export const Resume = {
 export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   postSave: "/manage-hire/managehireSaveFileForm.do",
-
+  postSaveBody: "/manage-hire/managehireSaveBody.do",
 };
 export const ScrapURL = {
-  getScrapList: "/manage-post/scrapListBody.do",
+  getScrapList: "/jobs/scrapListBody.do",
+  getScarpDelete: "/jobs/deleteScrapBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
@@ -72,4 +76,4 @@ export const ManageUser = {
   getBizList: "/manage-user/bizListBody.do",
   getBizDetail: "/manage-user/bizManageDetail.do",
   updateBizInfo: "/manage-user/bizInfoUpdate.do",
-}
+};
