@@ -11,6 +11,7 @@ import { AxiosResponse } from "axios";
 import { NoticeModalStyled } from "../../Notice/NoticeModal/styled";
 import { ApplyModalStyled } from "./styled";
 import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
+import { IPostResponse } from "../../../../models/interface/INotice";
 
 export interface IApplyModalProps {
   onSuccess: () => void;
@@ -25,6 +26,7 @@ export const ApplyModal: FC<IApplyModalProps> = ({ onSuccess, indexGroup }) => {
   const [index, setIndex] = useState<number>();
   const [bizDetail, setBizDetail] = useState<ApplybizDetail>();
   const [userResumeList, setUserResumeList] = useState<ApplyUserDetail[]>();
+  const [selectedValue, setSelectedValue] = useState({ resumeIdx: null, userIdx: null });
 
   useEffect(() => {
     if (bizDetail) {
@@ -70,6 +72,34 @@ export const ApplyModal: FC<IApplyModalProps> = ({ onSuccess, indexGroup }) => {
     setBizDetail(applBizPostDetail.data.bizPostDetail);
     setUserResumeList(applyUserResumeList.data.userResumeList);
   };
+  const handleRadioChange = (event) => {
+    const [resumeIdx, userIdx] = event.target.value.split(",").map(Number);
+    setSelectedValue({ resumeIdx, userIdx }); // 상태 업데이트
+  };
+
+  const applyPostSaveHandler = async () => {
+    const { loginId } = userInfo;
+    console.log("여기 모스트헨들러", selectedValue);
+    const param = {
+      postIdx: indexGroup[0],
+      bizIdx: indexGroup[1],
+      loginId: loginId,
+      resumeIdx: selectedValue.resumeIdx,
+      userIdx: selectedValue.userIdx,
+    };
+    console.log("param : ", param);
+
+    const applyPostSave = await postPostApi<IPostResponse>(Posts.saveApplyBody, param);
+    console.log("데이트 잘와??");
+    console.log(applyPostSave);
+    if (applyPostSave.data.result == "success") {
+      alert("이력서를 넣었습니다.");
+    } else {
+      alert("이미 이력서를 넣었습니다.");
+    }
+    handleClose();
+    managePostDetail();
+  };
 
   return (
     <ApplyModalStyled>
@@ -94,10 +124,32 @@ export const ApplyModal: FC<IApplyModalProps> = ({ onSuccess, indexGroup }) => {
             <tbody>
               {userResumeList?.length > 0 ? (
                 userResumeList?.map((list) => {
+                  const isSelected =
+                    selectedValue.resumeIdx === list.resumeIdx && selectedValue.userIdx === list.userIdx;
+
                   return (
-                    <tr key={list.resumeIdx}>
+                    <tr
+                      key={list.resumeIdx}
+                      onClick={() =>
+                        handleRadioChange({
+                          target: {
+                            value: `${list.resumeIdx},${list.userIdx}`,
+                          },
+                        })
+                      }
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: isSelected ? "#f0f8ff" : "inherit", // 선택된 행 강조
+                      }}
+                    >
                       <StyledTd>
-                        <input type="radio" />
+                        <input
+                          type="radio"
+                          name="resume"
+                          value={`${list.resumeIdx},${list.userIdx}`}
+                          checked={isSelected}
+                          readOnly
+                        />
                       </StyledTd>
                       <StyledTd>{list.resumeTitle}</StyledTd>
                       <StyledTd>{list.userEmail}</StyledTd>
@@ -115,7 +167,7 @@ export const ApplyModal: FC<IApplyModalProps> = ({ onSuccess, indexGroup }) => {
         </div>
 
         <div className={"button-container"}>
-          <button>등록</button>
+          <button onClick={applyPostSaveHandler}>등록</button>
           <button onClick={handleClose}>나가기</button>
         </div>
       </div>
