@@ -10,8 +10,10 @@ import { Scrap } from "./../../../../pages/Scrap";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
-import { scrapIndexGrop, scrapState } from "../../../../stores/modalState";
+import { ApplyModalState, scrapIndexGrop, scrapState } from "../../../../stores/modalState";
 import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
+import { Portal } from "../../../common/portal/Portal";
+import { ApplyModal } from "../applyModal/ApplyModal";
 
 export const ScrapMain = () => {
   const { search } = useLocation();
@@ -26,7 +28,8 @@ export const ScrapMain = () => {
   const [scrapIndexG, setScrapIndexG] = useRecoilState<number[]>(scrapIndexGrop);
   const scrapIndexes = useRecoilValue(scrapIndexGrop);
   const [selectedItems, setSelectedItems] = useState([]);
-
+  const [modal, setModal] = useRecoilState<boolean>(ApplyModalState);
+  const [index, setIndex] = useState<number[]>();
   // 검색어가 변경되거나 컴포넌트가 마운트될 때 포스트 리스트를 검색
   useEffect(() => {
     searchScrapList(currentPage);
@@ -58,6 +61,10 @@ export const ScrapMain = () => {
       setCPage(currentPage);
     }
   };
+  const handlerModal = (postIdx: number, bizIdx: number) => {
+    setModal(!modal);
+    setIndex([postIdx, bizIdx]);
+  };
 
   // 상세 보기 핸들러 함수
   const handlerDetail = (postIdx: number, bizIdx: number) => {
@@ -84,6 +91,10 @@ export const ScrapMain = () => {
         return updatedItems;
       });
     }
+  };
+  const onPostSuccess = () => {
+    setModal(!modal);
+    searchScrapList(currentPage);
   };
 
   return (
@@ -119,7 +130,11 @@ export const ScrapMain = () => {
                     <StyledTd>{scrap.postWorkLocation}</StyledTd>
                     <StyledTd>{scrap.postEndDate?.substring(0, 10) || "Invalid Date"}</StyledTd>
                     <StyledTd>
-                      <button type="button" className="btn btn-warning">
+                      <button
+                        type="button"
+                        className="btn btn-warning"
+                        onClick={() => handlerModal(scrap.postIdx, scrap.postBizIdx)}
+                      >
                         입사지원
                       </button>
                     </StyledTd>
@@ -138,7 +153,11 @@ export const ScrapMain = () => {
           )}
         </tbody>
       </StyledTable>
-
+      {modal && (
+        <Portal>
+          <ApplyModal onSuccess={onPostSuccess} indexGroup={index} />
+        </Portal>
+      )}
       <PageNavigate totalItemsCount={scrapCnt} onChange={searchScrapList} activePage={cPage} itemsCountPerPage={5} />
     </>
   );
