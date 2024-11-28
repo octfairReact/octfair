@@ -7,12 +7,10 @@ export const History = () => {
   return (
     <div>
       <HistoryProvider>
-        {/* 제목 */}
         <ContentBox>
-          입사지원 내역
-          {/* 검색 기능 */}
-          <HistorySearch />
+          <span>입사지원 내역</span>
         </ContentBox>
+        <HistorySearch />
 
         {/* 지원내역 테이블 출력 */}
         <HistoryMain />

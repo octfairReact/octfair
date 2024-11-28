@@ -4,14 +4,15 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { NoticeModal } from "../NoticeModal/NoticeModal";
 import { Portal } from "../../../common/portal/Portal";
-import { useRecoilState } from "recoil";
-import { modalState } from "../../../../stores/modalState";
+import { RecoilState, useRecoilState } from "recoil";
+import { modalState, noticeState } from "../../../../stores/modalState";
 import { INoitce, INoitceListResponse } from "../../../../models/interface/INotice";
 import { postNoticeApi } from "../../../../api/postNoticeApi";
 import { Notice } from "../../../../api/api";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { NoticeContext } from "../../../../api/provider/NoticeProvider";
 import { start } from "repl";
+import { PageNavigateStyled } from "../../../common/pageNavigation/styled";
 
 export const NoticeMain = () => {
   const { search } = useLocation();
@@ -23,6 +24,7 @@ export const NoticeMain = () => {
   const [index, setIndex] = useState<number>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [cPage, setCPage] = useState<number>();
+  const [IsNotice, setIsNotice] = useRecoilState<boolean>(noticeState);
 
   const { searchKeyWord } = useContext(NoticeContext);
   // 혼자 페이징 처리
@@ -39,6 +41,14 @@ export const NoticeMain = () => {
   useEffect(() => {
     searchNoticeList();
   }, [searchKeyWord]);
+
+  useEffect(() => {
+    setIsNotice(true); // Scrap 페이지에 들어왔을 때
+    return () => {
+      setIsNotice(false); // Scrap 페이지를 나갈 때
+    };
+  }, []);
+
   //변경을 감지하고 유스이펙트 안에 있는 함수를 실행 시켜주는 것이 의존성 배열
 
   // useEffect(() => {
@@ -123,7 +133,7 @@ export const NoticeMain = () => {
           <tr>
             <StyledTh size={5}>번호</StyledTh>
             <StyledTh size={50}>제목</StyledTh>
-            <StyledTh size={10}>제목</StyledTh>
+            <StyledTh size={10}>작성자</StyledTh>
             <StyledTh size={20}>등록일</StyledTh>
           </tr>
         </thead>
@@ -160,12 +170,14 @@ export const NoticeMain = () => {
           )}
         </tbody>
       </StyledTable>
-      <PageNavigate
-        totalItemsCount={noticeCnt}
-        onChange={searchNoticeList}
-        activePage={cPage}
-        itemsCountPerPage={5}
-      ></PageNavigate>
+      <PageNavigateStyled>
+        <PageNavigate
+          totalItemsCount={noticeCnt}
+          onChange={searchNoticeList}
+          activePage={cPage}
+          itemsCountPerPage={5}
+        ></PageNavigate>
+      </PageNavigateStyled>
       {/* 페이지네이션 버튼 */}
       {/* <div>
         <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
