@@ -32,7 +32,10 @@ export const ManageApplicantMain = () => {
   const searchUserList = async (currentPage?: number) => {
     currentPage = currentPage || 1;
     const searchParam = { ...searchKeyWord, currentPage: currentPage.toString(), pageSize: "5" };
-    const searchList = await postManageUserApi<IManageApplicantListResponse>(ManageUser.getApplicantList, searchParam);
+    const searchList = await postManageUserApi<IManageApplicantListResponse>(
+      ManageUser.getApplicantListBody,
+      searchParam
+    );
 
     if (searchList) {
       setUserList(searchList.data.applicant);

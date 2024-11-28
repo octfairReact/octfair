@@ -9,6 +9,7 @@ import logo_img from '../../../../assets/logo_img.png';
 import { signupModalState, searchIdPwModalState } from '../../../../stores/modalState';
 import { SignupModal } from "../LoginModal/SignupModal";
 import { SearchIdPwModal } from '../LoginModal/SearchIdPwModal';
+import { Login } from '../../../../api/api';
 
 export interface IAccount {
     lgn_Id: string;
@@ -27,7 +28,7 @@ export const LoginMain = () => {
     param.append("lgn_Id", account.lgn_Id);
     param.append("pwd", account.pwd);
 
-    axios.post("/loginProc.do", param).then((res) => {
+    axios.post(Login.login, param).then((res) => {
         const data = res.data;
 
         if (data.result === "SUCCESS") {

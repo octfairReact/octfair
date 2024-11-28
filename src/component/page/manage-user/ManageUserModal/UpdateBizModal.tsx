@@ -116,6 +116,7 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({ refreshUserListHandl
     // 3. 데이터전송: 회원수정 입력정보 문제없음! 서버로 Update요청!
     if (isProblem === false) {
       const query: string[] = [];
+
       Object.entries(userData).forEach(([key, value]) => {
         query.push(`${key}=${encodeURIComponent(value)}`);
       });
@@ -123,7 +124,7 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({ refreshUserListHandl
       // 쿼리 앞에 '?' 붙이고 쿼리key/value쌍 사이마다 '&' 붙이기
       const queryString = query.length > 0 ? `?${query.join(`&`)}` : "";
 
-      axios.get(ManageUser.updateBizInfo + queryString).then((res) => {
+      axios.get(ManageUser.putBizInfo + queryString).then((res) => {
         if (res.data.result.toUpperCase() === "SUCCESS") {
           alert("회원수정이 완료되었습니다!");
           closeModalHandler();
