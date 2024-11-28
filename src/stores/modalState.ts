@@ -6,6 +6,10 @@ export const modalState = atom<boolean>({
   key: "modalState",
   default: false,
 });
+export const ApplyModalState = atom<boolean>({
+  key: "ApplyModalState",
+  default: false,
+});
 
 // 회원가입 모달창에 쓰는 모달창state
 export const signupModalState = atom<boolean>({
@@ -20,16 +24,16 @@ export const searchIdPwModalState = atom<string>({
 });
 
 // 비번수정 모달창에 쓰는 모달창state
-export const updatePasswordModalState = atom<boolean>({
-    key: 'updatePasswordModalState',
-    default: false,
-})
+export const passwordModalState = atom<boolean>({
+  key: "passwordModalState",
+  default: false,
+});
 
 // 회원탈퇴 모달창에 쓰는 모달창state
 export const withdrawModalState = atom<boolean>({
-    key: 'withdrawModalState',
-    default: false,
-})
+  key: "withdrawModalState",
+  default: false,
+});
 
 // 회원관리탭의 개인회원수정 모달창에 쓰는 모달창state
 export const updateApplicantModalState = atom<boolean>({
@@ -42,6 +46,20 @@ export const updateBizModalState = atom<boolean>({
     key: 'updateBizModalState',
     default: false,
 })
+
+export const scrapState = atom<boolean>({
+  key: "scrapState",
+  default: false,
+});
+export const noticeState = atom<boolean>({
+  key: "noticeState",
+  default: false,
+});
+
+export const scrapIndexGrop = atom<number[]>({
+  key: "scrapIndexGrop",
+  default: [],
+});
 
 export const qnaMyListState = atom<string>({
   key: "qnaMyListState",

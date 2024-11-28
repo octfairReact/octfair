@@ -20,10 +20,10 @@ export const StyledTable = styled.table`
     background-color: #2676bf;
     color: #ddd;
   }
-    th {
-        background-color: #2676bf;
-        color: #ddd;
-    }
+  th {
+    background-color: #2676bf;
+    color: #ddd;
+  }
 
   /* 테이블 올렸을 때 */
   tbody tr:hover {
@@ -64,6 +64,6 @@ export const StyledTh = styled.th<{ size?: number }>`
 `;
 
 export const StyledTd = styled.td`
-    padding: 12px;
-    border: 1px solid #ddd;
+  padding: 12px;
+  border: 1px solid #ddd;
 `;

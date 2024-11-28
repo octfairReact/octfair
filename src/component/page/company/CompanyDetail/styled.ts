@@ -16,4 +16,8 @@ export const CompanyDetailStyled = styled.div`
     max-width: 300px;
     margin: 10px 0; /* 상하 여백 설정 */
   }
+  .align {
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+  }
 `;
