@@ -9,12 +9,9 @@ import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { JobDetail } from "./JobDetail";
 import { ContentBoxPost } from "../../../common/ContentBox/ContentBoxPost";
-<<<<<<< HEAD
 import { IScrap } from "../../../../models/interface/IScrap";
 import { IPostResponse } from "../../../../models/interface/INotice";
-=======
 import axios, { AxiosRequestConfig } from "axios";
->>>>>>> f4052244656fd46c70bb943eda48588cadccf924
 
 export const PostDetail = () => {
   const location = useLocation();
@@ -50,7 +47,6 @@ export const PostDetail = () => {
     }
   };
 
-<<<<<<< HEAD
   const handleBack = () => {
     navigate(-1); // -1은 이전 페이지로 이동
   };
@@ -69,9 +65,6 @@ export const PostDetail = () => {
       handleBack();
     }
   };
-=======
-  if (loading) return <div>Loading...</div>; // 로딩 중일 때 표시
->>>>>>> f4052244656fd46c70bb943eda48588cadccf924
 
   return (
     <PostDetailStyled>
@@ -100,7 +93,6 @@ export const PostDetail = () => {
         </ul>
       </div>
       <div className="date-item">
-<<<<<<< HEAD
         {userInfo.userType === "M" && (
           <>
             <button type="button" className="btn btn-outline-secondary" data-status="승인" onClick={statusUpdate}>
@@ -112,15 +104,6 @@ export const PostDetail = () => {
           </>
         )}
         <button type="button" id="backToList" name="btn" className="btn btn-close" onClick={handleBack}>
-=======
-        <button type="button" id="updateAppStatusY" name="btn" className="btn btn-outline-secondary" data-status="승인">
-          승인
-        </button>
-        <button type="button" id="updateAppStatusN" name="btn" className="btn btn-outline-secondary" data-status="불허">
-          불허
-        </button>
-        <button type="button" id="backToList" name="btn" className="btn btn-close" onClick={() => navigate(-1)}>
->>>>>>> f4052244656fd46c70bb943eda48588cadccf924
           뒤로 가기
         </button>
       </div>
@@ -205,24 +188,12 @@ const CompanyInfo = ({
         <span className="remaining">남은 기간</span>
         <div className="date-details">
           <div className="date-item">
-<<<<<<< HEAD
-            <span className="date-item">
-              시작일
-              <br />
-            </span>
-            <span className="date-item">마감일</span>
-          </div>
-          <div className="date-item">
-            <span className="date-item">{data.startDate}</span>
-            <span className="date-item">{data.endDate}</span>
-=======
             <span>시작일</span>
             <span>마감일</span>
           </div>
           <div className="date-item">
             <span>{data.startDate}</span>
             <span>{data.endDate}</span>
->>>>>>> f4052244656fd46c70bb943eda48588cadccf924
           </div>
         </div>
       </div>

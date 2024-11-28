@@ -90,7 +90,7 @@ export const ManageUser = {
   putApplicantPassword: "/manage-user/applicantPwResetBCrypt.do",
   getBizListBody: "/manage-user/bizListBody.do",
   getBizDetail: "/manage-user/bizManageDetail.do",
-  updateBizInfo: "/manage-user/bizInfoUpdate.do",
+  putBizInfo: "/manage-user/bizInfoUpdate.do",
 }
 
 export const MyPage = {

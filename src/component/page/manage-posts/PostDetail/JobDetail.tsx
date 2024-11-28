@@ -10,7 +10,7 @@ import { loginInfoState } from "../../../../stores/userInfo";
 import { IScrapResponse } from "../../../../models/interface/IScrap";
 import { ApplyModalState } from "../../../../stores/modalState";
 import { Portal } from "../../../common/portal/Portal";
-import { ApplyModal } from "../applyModal/ApplyModal";
+import { ApplyModal } from "../applyModal/applyModal";
 
 export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
   const location = useLocation();
