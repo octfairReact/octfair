@@ -1,10 +1,10 @@
 export const Login = {
-  login: "/loginProc.do",
-  postSignup: "/register.do",
+  login: "/loginProcBCrypt.do",
+  postSignup: "/registerBCrypt.do",
   getCheckId: "/check_loginId.do",
   getSearchId: "/selectFindInfoId.do",
   getSearchPw: "/selectFindInfoPw.do",
-  putResetPw: "/updateFindPw.do",
+  putResetPw: "/updateFindPwBCrypt.do",
 };
 
 export const Notice = {
@@ -74,7 +74,7 @@ export const ManageUser = {
   getApplicantListBody: "/manage-user/applicantListBody.do",
   getApplicantDetail: "/manage-user/applicantManageDetail.do",
   putApplicantInfo: "/manage-user/applicantInfoUpdate.do",
-  putApplicantPassword: "/manage-user/applicantPwReset.do",
+  putApplicantPassword: "/manage-user/applicantPwResetBCrypt.do",
   getBizListBody: "/manage-user/bizListBody.do",
   getBizDetail: "/manage-user/bizManageDetail.do",
   putBizInfo: "/manage-user/bizInfoUpdate.do",
@@ -83,6 +83,6 @@ export const ManageUser = {
 export const MyPage = {
   getUserInfo: "/mypage/userDetail.do",
   putUserInfo: "/mypage/updateUserInfo.do",
-  putUserPw: "/mypage/updatePw.do", 
-  deleteUser: "/mypage/deleteUser.do",
+  putUserPw: "/mypage/updatePwBCrypt.do", 
+  deleteUser: "/mypage/deleteUserBCrypt.do",
 }

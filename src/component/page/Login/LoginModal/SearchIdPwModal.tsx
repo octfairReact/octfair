@@ -26,10 +26,11 @@ export const SearchIdPwModal = () => {
     const [inputs, setInputs] = useState<Inputs>({ inputA: '', inputB: '', }); // 기본값
     const [saveId, setSaveId] = useState<string>(); // '비밀번호찾기'->'비밀번호재설정' 으로 넘어갈시에 '비밀번호재설정'에서 아이디를 입력받지않기에 '비밀번호찾기'에서 입력했던 아이디를 기억해놓는 것
     let title  = searchIdPwModal === "id" ? "아이디 찾기" : (searchIdPwModal === "pw" ? "비밀번호 찾기" : "비밀번호 변경");
-    let input1 = searchIdPwModal === "id" ? "이름" : (searchIdPwModal === "pw" ? "아이디" : "변경할 비밀번호");
-    let input2 = searchIdPwModal === "id" ? "이메일" : (searchIdPwModal === "pw" ? "이메일" : "비밀번호 재입력");
+    let input1_name = searchIdPwModal === "id" ? "이름" : (searchIdPwModal === "pw" ? "아이디" : "변경할 비밀번호");
+    let input2_name = searchIdPwModal === "id" ? "이메일" : (searchIdPwModal === "pw" ? "이메일" : "비밀번호 재입력");
     let input1_type = searchIdPwModal === "id" ? "text" : (searchIdPwModal === "pw" ? "text" : "password");
     let input2_type = searchIdPwModal === "id" ? "email" : (searchIdPwModal === "pw" ? "email" : "password");
+    let button_name = searchIdPwModal === "id" ? "찾기" : (searchIdPwModal === "pw" ? "찾기" : "변경");
 
     // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
     const closeModalHandler = () => {
@@ -135,17 +136,17 @@ export const SearchIdPwModal = () => {
                         <TableCaption>{title}</TableCaption>
                         <tbody>
                             <tr>
-                                <TableHeaderCell>{input1} <RequiredMark>*</RequiredMark></TableHeaderCell>
+                                <TableHeaderCell>{input1_name} <RequiredMark>*</RequiredMark></TableHeaderCell>
                                 <TableDataCell colSpan={2}>
-                                    <InputField type={input1_type} id="id" placeholder={`가입하신 ${input1}을 입력해주세요`} value={inputs.inputA}
+                                    <InputField type={input1_type} id="id" placeholder={`가입하신 ${input1_name}을 입력해주세요`} value={inputs.inputA}
                                         onChange={(e) => { setInputs((prev) => ({ ...prev, inputA: e.target.value })); }}>
                                     </InputField>
                                 </TableDataCell>
                             </tr>
                             <tr>
-                                <TableHeaderCell>{input2} <RequiredMark>*</RequiredMark></TableHeaderCell>
+                                <TableHeaderCell>{input2_name} <RequiredMark>*</RequiredMark></TableHeaderCell>
                                 <TableDataCell colSpan={3}>
-                                    <InputField type={input2_type} id="pwd" placeholder={`가입하신 ${input2}을 입력해주세요`} value={inputs.inputB}
+                                    <InputField type={input2_type} id="pwd" placeholder={`가입하신 ${input2_name}을 입력해주세요`} value={inputs.inputB}
                                         onChange={(e) => { setInputs((prev) => ({ ...prev, inputB: e.target.value })); }}>
                                     </InputField>
                                 </TableDataCell>
@@ -153,7 +154,7 @@ export const SearchIdPwModal = () => {
                         </tbody>
                     </Table>
                     <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-                        <Button onClick={completeHandler}>찾기</Button>
+                        <Button onClick={completeHandler}>{button_name}</Button>
                         <Button onClick={closeModalHandler} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
                     </div>
                 </ModalStyled>
