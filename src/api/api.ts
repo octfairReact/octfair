@@ -50,7 +50,6 @@ export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   fileDownload: "manage-hire/managehireDownload.do",
   postSave: "/manage-hire/managehireSaveFileForm.do",
-
 };
 export const ScrapURL = {
   getScrapList: "/manage-post/scrapListBody.do",
