@@ -57,6 +57,18 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
   };
 
   const handlerSave = async () => {
+    if (!title) {
+      alert("제목을 입력해주세요.");
+      document.getElementById("title")?.focus();
+      return; // 유효성 검사 실패 시 함수 종료
+    }
+
+    if (!context) {
+      alert("내용을을 입력해주세요.");
+      document.getElementById("context")?.focus();
+      return; // 유효성 검사 실패 시 함수 종료
+    }
+
     const param = {
       title: title,
       context: context,
@@ -74,6 +86,18 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
   };
 
   const handlerUpdate = async () => {
+    if (!title) {
+      alert("제목을 입력해주세요.");
+      document.getElementById("title")?.focus();
+      return; // 유효성 검사 실패 시 함수 종료
+    }
+
+    if (!context) {
+      alert("내용을을 입력해주세요.");
+      document.getElementById("context")?.focus();
+      return; // 유효성 검사 실패 시 함수 종료
+    }
+
     const param = {
       title: title,
       context: context,
@@ -154,6 +178,7 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
                 <td colSpan={3}>
                   <input
                     type="text"
+                    id="title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="제목을 입력하세요"
@@ -166,6 +191,7 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
                 </th>
                 <td colSpan={3}>
                   <textarea
+                    id="context"
                     value={context}
                     onChange={(e) => setContext(e.target.value)}
                     placeholder="내용을 입력하세요"

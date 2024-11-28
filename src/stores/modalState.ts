@@ -35,6 +35,18 @@ export const withdrawModalState = atom<boolean>({
   default: false,
 });
 
+// 회원관리탭의 개인회원수정 모달창에 쓰는 모달창state
+export const updateApplicantModalState = atom<boolean>({
+    key: 'updateApplicantModalState',
+    default: false,
+})
+
+// 회원관리탭의 기업회원수정 모달창에 쓰는 모달창state
+export const updateBizModalState = atom<boolean>({
+    key: 'updateBizModalState',
+    default: false,
+})
+
 export const scrapState = atom<boolean>({
   key: "scrapState",
   default: false,
@@ -47,4 +59,14 @@ export const noticeState = atom<boolean>({
 export const scrapIndexGrop = atom<number[]>({
   key: "scrapIndexGrop",
   default: [],
+});
+
+export const qnaMyListState = atom<string>({
+  key: "qnaMyListState",
+  default: "all",
+});
+
+export const qnaPasswordModalState = atom<boolean>({
+  key: "qnaPasswordModalState",
+  default: false,
 });

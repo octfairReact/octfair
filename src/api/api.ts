@@ -1,5 +1,10 @@
 export const Login = {
-  login: "/loginProc.do",
+  login: "/loginProcBCrypt.do",
+  postSignup: "/registerBCrypt.do",
+  getCheckId: "/check_loginId.do",
+  getSearchId: "/selectFindInfoId.do",
+  getSearchPw: "/selectFindInfoPw.do",
+  putResetPw: "/updateFindPwBCrypt.do",
 };
 
 export const Notice = {
@@ -31,12 +36,8 @@ export const Posts = {
 
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
-<<<<<<< HEAD
   statusUpdate: "/manage-post/statusUpdateBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
-=======
-  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post/managePostDetailBody.do/${postIdx}/${bizIdx}`,
->>>>>>> f4052244656fd46c70bb943eda48588cadccf924
 };
 
 export const Company = {
@@ -55,13 +56,9 @@ export const Resume = {
 
 export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
-  postSave: "/manage-hire/managehireSaveBody.do",
   fileDownload: "manage-hire/managehireDownload.do",
   postSave: "/manage-hire/managehireSaveFileForm.do",
-<<<<<<< HEAD
   postSaveBody: "/manage-hire/managehireSaveBody.do",
-=======
->>>>>>> f4052244656fd46c70bb943eda48588cadccf924
 };
 export const ScrapURL = {
   getScrapList: "/jobs/scrapListBody.do",
@@ -77,12 +74,28 @@ export const Faq = {
   postDelete: "/board/faqDeleteRe.do",
 };
 
+export const Qna = {
+  getList: "/board/qnaListRe.do",
+  getMyList: "/board/qnaListRe.do",
+  postSave: "/board/qnaFileSaveRe.do",
+  getDetail: "/board/qnaDetailFileRe.do",
+  postUpdate: "/board/qnaFileUpdateRe.do",
+  postDelete: "/board/qnaFileDeleteRe.do",
+};
+
 export const ManageUser = {
-  getApplicantList: "/manage-user/applicantListBody.do",
+  getApplicantListBody: "/manage-user/applicantListBody.do",
   getApplicantDetail: "/manage-user/applicantManageDetail.do",
-  updateApplicantInfo: "/manage-user/applicantInfoUpdate.do",
-  resetApplicantPassword: "/manage-user/applicantPwReset.do",
-  getBizList: "/manage-user/bizListBody.do",
+  putApplicantInfo: "/manage-user/applicantInfoUpdate.do",
+  putApplicantPassword: "/manage-user/applicantPwResetBCrypt.do",
+  getBizListBody: "/manage-user/bizListBody.do",
   getBizDetail: "/manage-user/bizManageDetail.do",
   updateBizInfo: "/manage-user/bizInfoUpdate.do",
-};
+}
+
+export const MyPage = {
+  getUserInfo: "/mypage/userDetail.do",
+  putUserInfo: "/mypage/updateUserInfo.do",
+  putUserPw: "/mypage/updatePwBCrypt.do", 
+  deleteUser: "/mypage/deleteUserBCrypt.do",
+}

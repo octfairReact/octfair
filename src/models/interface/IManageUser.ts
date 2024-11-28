@@ -20,6 +20,7 @@ export interface IManageApplicantListResponse {
     applicantCnt: number;
     applicant: IManageApplicant[];
 }
+
 export interface IManageBizListResponse {
     bizCnt: number;
     biz: IManageBiz[];
