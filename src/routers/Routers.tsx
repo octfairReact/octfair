@@ -50,11 +50,14 @@ const routers: RouteObject[] = [
         ],
       },
       {
-        path: "manage-hire",
+        path: "company",
         children: [
-          { path: "post.do", element: <Hire /> },
-          { path: "managehireWritePage.do", element: <HireAdd /> },
-          { path: "applicant.do", element: <Applicant /> },
+          { path: "companyWritePage.do", element: <CompanyWrite /> },
+          { path: "companyUpdatePage.do", element: <CompanyUpdate /> },
+          {
+            path: "companyDetailPage.do/:postIdx/:bizIdx", // :postIdx와 :bizIdx는 URL 파라미터로 취급됩니다.
+            element: <CompanyDetail />,
+          },
         ],
       },
       {
@@ -64,24 +67,20 @@ const routers: RouteObject[] = [
           { path: "scrap.do", element: <Scrap /> },
         ],
       },
-
+      {
+        path: "manage-hire",
+        children: [
+          { path: "post.do", element: <Hire /> },
+          { path: "managehireWritePage.do", element: <HireAdd /> },
+          { path: "applicant.do", element: <Applicant /> },
+        ],
+      },
       {
         path: "manage-post",
         children: [
           { path: "managePostDetailBody.do", element: <ManagePostPage /> },
           { path: "approval.do", element: <Post /> },
           { path: "post.do", element: <Post /> },
-        ],
-      },
-      {
-        path: "company",
-        children: [
-          { path: "companyWritePage.do", element: <CompanyWrite /> },
-          { path: "companyUpdatePage.do", element: <CompanyUpdate /> },
-          {
-            path: "companyDetailPage.do/:postIdx/:bizIdx", // :postIdx와 :bizIdx는 URL 파라미터로 취급됩니다.
-            element: <CompanyDetail />,
-          },
         ],
       },
       {

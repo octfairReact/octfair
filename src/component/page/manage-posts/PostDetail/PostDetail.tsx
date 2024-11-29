@@ -11,8 +11,6 @@ import { JobDetail } from "./JobDetail";
 import { ContentBoxPost } from "../../../common/ContentBox/ContentBoxPost";
 import { IScrap } from "../../../../models/interface/IScrap";
 import { IPostResponse } from "../../../../models/interface/INotice";
-
-
 import axios, { AxiosRequestConfig } from "axios";
 
 export const PostDetail = () => {

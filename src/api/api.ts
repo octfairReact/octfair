@@ -20,7 +20,6 @@ export const Notice = {
 };
 
 export const History = {
-  getListBody: "/apply/historyBody.do",
   searchList: "/apply/searchHistoryBody.do",
   postDelete: "/apply/cancleApplyBody.do",
   getModal: "/apply/previewResumeBody.do",
@@ -70,6 +69,7 @@ export const Resume = {
   certDelete: "/apply/deleteCertBody",
   fileDownload: "/apply/resumeFileDownload",
   fileDelete: "/apply/deleteAttachFile",
+  resumeCopy: "/apply/resumeCopyBody.do",
 };
 
 //채용공고 리스트,등록 - 신효

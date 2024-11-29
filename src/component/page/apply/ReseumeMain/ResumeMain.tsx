@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Resume } from "../../../../api/api";
 import { ResumeContext } from "../../../../api/provider/ResumeProvider";
 import axios, { AxiosRequestConfig } from "axios";
+import { toast } from "react-toastify";
 
 export const ResumeMain = () => {
   const { resIdx, resumeDetail, setResumeDetail } = useContext(ResumeContext);
@@ -141,6 +142,23 @@ export const ResumeMain = () => {
       });
   };
 
+  // 이력서 복사하기 기능
+  const handlerCopy = async (resIdx: number, resumeTitle: string) => {
+    const param = {
+      resIdx,
+    };
+    const postCopy = await postResumeApi<IPostResponse>(Resume.resumeCopy, param);
+
+    if (postCopy && postCopy.data.result === "success") {
+      onSuccess();
+      console.log("이력서 복사 성공");
+      // 복사 성공 메시지에 이력서 이름을 포함하여 표시
+      toast.success(`이력서 "${resumeTitle}"이 성공적으로 복사되었습니다.`);
+    } else {
+      console.error("복사 실패:", postCopy?.data);
+    }
+  };
+
   if (!isLoaded) {
     return null; // 로딩 완료 전까지 아무것도 렌더링하지 않음
   }
@@ -191,14 +209,7 @@ export const ResumeMain = () => {
                     <ResumeStyled>
                       {
                         <>
-                          <Button
-                            style={{
-                              width: "120px",
-                            }}
-                            //onClick={"팀장님 화이팅"}
-                          >
-                            복사하기
-                          </Button>
+                          <Button onClick={() => handlerCopy(resume.resIdx, resume.resTitle)}>복사하기</Button>
                           <Button
                             style={{
                               backgroundColor: "silver",
