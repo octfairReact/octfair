@@ -5,6 +5,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import { useUserInfo } from "../../../hook/useUserInfo";
 import { CustomAlert } from "../../../common/CustomAlert";
+import MenuMain from "../../page/Login/LoginMain/MenuMain";
 
 export const DashBoard = () => {
   const [alertMessage, setAlertMessage] = useState("");
@@ -39,6 +40,7 @@ export const DashBoard = () => {
         <li className="menu-bar">{<LeftMenuBar />}</li>
         <li className="content">
           <Suspense fallback={<h2>Loading....</h2>}>{<Outlet />}</Suspense>
+          <MenuMain />
         </li>
       </ul>
     </DashBoardStyled>
