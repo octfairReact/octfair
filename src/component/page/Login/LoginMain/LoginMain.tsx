@@ -35,6 +35,7 @@ export const LoginMain = () => {
 
       if (data.result === "SUCCESS") {
         setLoginInfo(data);
+        localStorage.setItem("loginInfoState", JSON.stringify(data));
         sessionStorage.setItem("userInfo", JSON.stringify(data));
         navigate("/react");
       } else {

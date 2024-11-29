@@ -3,7 +3,7 @@ import { Login } from "../pages/Login";
 import { DashBoard } from "../component/layout/DashBoard/DashBoard";
 import { NotFound } from "../component/common/NotFound/NotFound";
 import { Notice } from "../pages/Notice";
-import { History } from "../pages/history";
+import { History } from "../pages/History";
 import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
 import { Post } from "../pages/Post";
 import { ManagePostPage } from "../pages/ManagePostPage";
@@ -24,6 +24,15 @@ const routers: RouteObject[] = [
     element: <DashBoard />,
 
     children: [
+      {
+        path: "apply",
+        children: [
+          { path: "history.do", element: <History /> },
+          { path: "resume.do", element: <Resume /> },
+          { path: "resume-new.do", element: <ResumeForm /> },
+          { path: "resume-detail/:resIdx", element: <ResumeForm /> },
+        ],
+      },
       {
         path: "board",
         children: [
@@ -65,15 +74,6 @@ const routers: RouteObject[] = [
           { path: "update.do", element: <MyPageUpdate /> },
           { path: "withdraw.do", element: <MyPageWithdraw /> },
           //:id 이게 키값이 됨
-        ],
-      },
-      {
-        path: "apply",
-        children: [
-          { path: "history.do", element: <History /> },
-          { path: "resume.do", element: <Resume /> },
-          { path: "resume-new.do", element: <ResumeForm /> },
-          { path: "resume-detail/:resIdx", element: <ResumeForm /> },
         ],
       },
     ],
