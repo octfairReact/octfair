@@ -7,8 +7,9 @@ import { loginInfoState } from "../../../../stores/userInfo";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import logo_img from "../../../../assets/logo_img.png";
 import { signupModalState, searchIdPwModalState } from "../../../../stores/modalState";
-import { SignupModal } from "../SignupModal/SignupModal";
-import { SearchIdPwModal } from "../SearchIdPwModal/SearchIdPwModal";
+import { SignupModal } from "../LoginModal/SignupModal";
+import { SearchIdPwModal } from "../LoginModal/SearchIdPwModal";
+import { Login } from "../../../../api/api";
 
 export interface IAccount {
   lgn_Id: string;
@@ -17,10 +18,7 @@ export interface IAccount {
 
 export const LoginMain = () => {
   const setLoginInfo = useSetRecoilState<ILoginInfo>(loginInfoState);
-  const [account, setAccount] = useState<IAccount>({
-    lgn_Id: "",
-    pwd: "",
-  });
+  const [account, setAccount] = useState<IAccount>({ lgn_Id: "", pwd: "" });
   const navigate = useNavigate();
   const [signupModal, setSignupModal] = useRecoilState<boolean>(signupModalState); // false(닫힘) 또는 true(열림)
   const [searchIdPwModal, setSearchIdPwModal] = useRecoilState<string>(searchIdPwModalState); // "close"(닫힘) 또는 "id"(아이디찾기 로 열림) 또는 "pw"(비밀번호찾기 로 열림) 또는 "pw2"(비밀번호재설정 로 열림)
@@ -30,7 +28,7 @@ export const LoginMain = () => {
     param.append("lgn_Id", account.lgn_Id);
     param.append("pwd", account.pwd);
 
-    axios.post("/loginProc.do", param).then((res) => {
+    axios.post(Login.login, param).then((res) => {
       const data = res.data;
 
       if (data.result === "SUCCESS") {
@@ -47,36 +45,23 @@ export const LoginMain = () => {
 
   // Enter키를 누를시 로그인 완료버튼 효과를 작동
   const completeEnterHandler = (event) => {
-    if (event.key === "Enter") loginHandler();
+    if (event.key === "Enter" && signupModal === false && searchIdPwModal === "close")
+      loginHandler();
   };
 
   // 회원가입 버튼 클릭시 회원가입 모달창 팝업
-  const open_SignupModal_Handler = () => {
+  const openSignupModalHandler = () => {
     if (signupModal === false) setSignupModal(true);
   };
 
   // 아이디/비밀번호 찾기 클릭시 찾기 모달창 팝업, 추가적으로 아이디/비밀번호 중 어떤걸 찾을지 prop할 대상을 지정
-  const open_SearchIdModal_Handler = () => {
+  const openSearchIdModalHandler = () => {
     if (searchIdPwModal === "close") setSearchIdPwModal("id");
   };
 
   // 아이디/비밀번호 찾기 클릭시 찾기 모달창 팝업, 추가적으로 아이디/비밀번호 중 어떤걸 찾을지 prop할 대상을 지정
-  const open_SearchPwModal_Handler = () => {
+  const openSearchPwModalHandler = () => {
     if (searchIdPwModal === "close") setSearchIdPwModal("pw");
-  };
-
-  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
-  const close_Modal_Handler = () => {
-    if (signupModal !== false) setSignupModal(false);
-    if (searchIdPwModal !== "close") setSearchIdPwModal("close");
-  };
-
-  // 모달 외부 클릭시 모달창닫기 수행
-  const click_OutOf_Modal_Handler = (event) => {
-    // if (event.target !== event.currentTarget)
-    close_Modal_Handler();
-    console.log(event.target);
-    console.log(event.currentTarget);
   };
 
   return (
@@ -128,21 +113,25 @@ export const LoginMain = () => {
                 </div>
                 <div>
                   <button className="login-button" onClick={loginHandler}>
-                    Login
+                    {" "}
+                    Login{" "}
                   </button>
-                  <button className="signup-button" onClick={open_SignupModal_Handler}>
-                    Sign Up
+                  <button className="signup-button" onClick={openSignupModalHandler}>
+                    {" "}
+                    Sign Up{" "}
                   </button>
                   <SearchIdPwContainer>
-                    <ClickableLabel onClick={open_SearchIdModal_Handler}>
-                      아이디 찾기
+                    <ClickableLabel onClick={openSearchIdModalHandler}>
+                      {" "}
+                      아이디 찾기{" "}
                     </ClickableLabel>
-                    <ClickableLabel onClick={open_SearchPwModal_Handler}>
-                      비밀번호 찾기
+                    <ClickableLabel onClick={openSearchPwModalHandler}>
+                      {" "}
+                      비밀번호 찾기{" "}
                     </ClickableLabel>
                   </SearchIdPwContainer>
-                  {signupModal !== false && <SignupModal onClose={close_Modal_Handler} />}
-                  {searchIdPwModal !== "close" && <SearchIdPwModal onClose={close_Modal_Handler} />}
+                  {signupModal !== false && <SignupModal />}
+                  {searchIdPwModal !== "close" && <SearchIdPwModal />}
                 </div>
               </div>
             </div>

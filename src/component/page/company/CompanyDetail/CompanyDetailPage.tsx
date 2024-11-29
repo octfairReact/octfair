@@ -101,11 +101,15 @@ export const CompanyDetailPage = () => {
             <tbody>
               <tr>
                 {imageUrl ? (
-                  <div>
-                    <img src={imageUrl} alt="preview" />
-                  </div>
+                  <th colSpan={4}>
+                    <div className="align">
+                      <img src={imageUrl} alt="preview" />
+                    </div>
+                  </th>
                 ) : (
-                  <div>로고를 등록해주세요</div>
+                  <td>
+                    <div>로고를 등록해주세요</div>
+                  </td>
                 )}
               </tr>
             </tbody>

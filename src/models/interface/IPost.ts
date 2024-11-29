@@ -6,6 +6,7 @@ export interface IPost {
   expRequired: string;
   endDate: string;
   postDate: string;
+  appStatus: string;
 }
 
 export interface IPostResponse {
@@ -39,22 +40,37 @@ export interface companyDetail {
   bizAddr: string;
   bizContact: string;
   bizCeoName: string;
-
   bizEmpCount: string;
-
   bizLogo: string;
-
   phsycalPath: string;
   logicalPath: string;
   fileSize: number;
   fileExt: string;
+  loginId: string;
 }
 export interface AllDetail {
   bizDetail: companyDetail;
   postDetail: IPostDetail;
 }
+export interface ApplybizDetail {
+  bizName: string;
+  postTitle: string;
+}
+export interface ApplyUserDetail {
+  userIdx: number;
+  userPhone: string;
+  userEmail: string;
+  resumeIdx: number;
+  resumeTitle: string;
+}
+export interface ApplyDetailAll {
+  userResumeList: ApplyUserDetail[];
+  bizPostDetail: ApplybizDetail;
+}
 
 export interface IPostListResponse {
   approvalPostCnt: number;
   approvalList: IPost[];
+  pendingList: IPost[];
+  pendingPostCnt: number;
 }

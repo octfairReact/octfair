@@ -3,11 +3,11 @@ import { MyPageUpdateMain } from "../component/page/MyPage/MyPageMain/MyPageUpda
 
 export const MyPageUpdate = () => {
   return (
-      <>
-        {/* <MyPageUpdateProvider> */}
-          <ContentBox>회원정보수정</ContentBox>
-          <MyPageUpdateMain />
-        {/* </MyPageUpdateProvider> */}
-      </>
-    );
-}
+    <>
+      {/* <MyPageUpdateProvider> */}
+      <ContentBox>회원정보수정</ContentBox>
+      <MyPageUpdateMain />
+      {/* </MyPageUpdateProvider> */}
+    </>
+  );
+};

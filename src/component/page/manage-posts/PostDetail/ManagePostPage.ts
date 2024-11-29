@@ -74,11 +74,16 @@ export const PostDetailStyled = styled.div`
   .job-details-content {
     padding: 10px;
     border-radius: 5px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 18px;
   }
 
   .company-info-content {
     padding: 10px;
     border-radius: 5px;
+    font-size: 18px;
   }
 
   /* 날짜 부분 css */
@@ -117,9 +122,120 @@ export const PostDetailStyled = styled.div`
     margin-top: 10px; /* 값과 레이블 사이의 위쪽 여백 */
     color: red; /* 값 색상 빨간색 */
   }
-  .job-details-content {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
+  .align {
+    text-align: center; /* 내부 요소 가로 중앙 정렬 */
+    margin-bottom: 15px;
   }
+
+  .align img {
+    border-radius: 5px;
+  }
+  strong {
+    font-size: 20px;
+  }
+  .remaining {
+    font-weight: bold; /* 남은 기간 텍스트 강조 */
+    font-size: 1.5em; /* 남은 기간 글자 크기 조정 */
+    margin-bottom: 10px; /* 아래쪽 여백 조정 */
+  }
+
+  button.btn-outline-secondary {
+    background-color: transparent;
+    color: #007bff;
+    border: 1px solid #007bff;
+    padding: 10px 40px;
+    font-size: 13px;
+    text-align: center;
+    border-radius: 5px;
+    margin-right: 20px;
+  }
+
+  button.btn-outline-secondary:hover {
+    background-color: #007bff;
+    color: white;
+  }
+
+  button.btn-warning {
+    background-color: #ffc107;
+    color: black;
+    border: 1px solid #ffc107;
+  }
+
+  button.btn-warning:hover {
+    background-color: #e0a800;
+    color: white;
+  }
+  .action-buttons {
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: flex-end; /* 오른쪽으로 정렬 */
+    gap: 10px; /* 버튼 간의 간격 조절 (원하는 만큼 조정 가능) */
+    margin-top: 10px; /* 위쪽 마진 추가 (필요 시) */
+  }
+  .grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  /* Action buttons */
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .action-buttons .btn {
+    margin: 5px;
+    font-size: 13px;
+    border-radius: 5px;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  /* Action buttons */
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .action-buttons .btn {
+    padding: 10px 40px;
+    font-size: 13px;
+    text-align: center;
+    border-radius: 5px;
+  }
+
+  button.btn-close {
+    background-color: transparent;
+    color: #646362;
+    border: 1px solid #646362;
+    padding: 10px 40px;
+    font-size: 13px;
+    text-align: center;
+    border-radius: 5px;
+  }
+
+  button.btn-close:hover {
+    background-color: #b9b7b6;
+    color: white;
+  }
+
+  // 다운로드 글자 스타일
+  .download-link {
+    color: red; /* 기본 색상: 빨간색 */
+    font-size: 18px; /* 글자 크기 */
+    font-weight: bold; /* 글자 두께 */
+    cursor: pointer; /* 커서가 손 모양으로 변경 */
+    text-decoration: none; /* 밑줄 제거 */
+    margin-left: 10px; /* 첨부파일과 텍스트 간 간격 추가 */
+  }
+  .download-link:hover {
+    color: blue; /* 호버 시 글자 색상 변경 */
+    text-decoration: none; /* 호버 시 밑줄 제거 */
+  }
+
 `;
+
+

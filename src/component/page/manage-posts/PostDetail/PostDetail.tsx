@@ -1,142 +1,162 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ManagePost } from "../../../../api/api";
+import { Hire, ManagePost } from "../../../../api/api";
 import { AllDetail, companyDetail, IPostDetail } from "../../../../models/interface/IPost";
 import { postPostApi } from "../../../../api/postPostApi";
-import { ManagePostPage } from "./../../../../pages/ManagePostPage";
 import { PostDetailStyled } from "./ManagePostPage";
+import { useRecoilState } from "recoil";
+import { ILoginInfo } from "../../../../models/interface/store/userInfo";
+import { loginInfoState } from "../../../../stores/userInfo";
+import { JobDetail } from "./JobDetail";
+import { ContentBoxPost } from "../../../common/ContentBox/ContentBoxPost";
+import { IScrap } from "../../../../models/interface/IScrap";
+import { IPostResponse } from "../../../../models/interface/INotice";
+
+
+import axios, { AxiosRequestConfig } from "axios";
 
 export const PostDetail = () => {
   const location = useLocation();
-  const { postIdx, bizIdx } = location.state || {}; // state가 없을 경우 빈 객체로 기본값 설정
-  const [param, setParam] = useState<{ postIdx: string | number; bizIdx: string | number } | null>(null); // param 상태 초기값 설정
-  const [CDetail, setCDetail] = useState<companyDetail>();
-  const [MDetail, setMDetail] = useState<IPostDetail>();
+  const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
+  const { postIdx, bizIdx } = location.state || {};
+  const [param, setParam] = useState<{ postIdx: string | number; bizIdx: string | number } | null>(null);
+  const [CDetail, setCDetail] = useState<companyDetail | null>(null);
+  const [MDetail, setMDetail] = useState<IPostDetail | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // 로딩 상태 추가
+  const navigate = useNavigate();
 
-  // postIdx와 bizIdx가 설정되었을 때 param 상태를 설정
   useEffect(() => {
     if (postIdx && bizIdx) {
       setParam({ postIdx, bizIdx });
+      fetchPostDetail();
     }
-    fetchPostDetail();
   }, [postIdx, bizIdx]);
 
-  // API URL을 동적으로 생성
-  const apiUrl = postIdx && bizIdx ? ManagePost.getpostDetail(postIdx, bizIdx) : "";
-
+  // API 요청 함수
   const fetchPostDetail = async () => {
-    const param = { postIdx, bizIdx };
-    const response = await postPostApi<AllDetail>(apiUrl, param); // URL을 직접 전달
-    console.log(response.data); // API 응답 처리
-    setCDetail(response.data.bizDetail);
-    setMDetail(response.data.postDetail);
+    if (!postIdx || !bizIdx) return; // 유효하지 않으면 요청하지 않음
+
+    setLoading(true); // 요청 전 로딩 시작
+    const apiUrl = ManagePost.getpostDetail(postIdx, bizIdx);
+    try {
+      const response = await postPostApi<AllDetail>(apiUrl, { postIdx, bizIdx });
+      setCDetail(response.data.bizDetail);
+      setMDetail(response.data.postDetail);
+    } catch (error) {
+      console.error("데이터 로드 중 오류 발생:", error);
+    } finally {
+      setLoading(false); // 로딩 종료
+    }
+  };
+
+  const handleBack = () => {
+    navigate(-1); // -1은 이전 페이지로 이동
+  };
+
+  const statusUpdate = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    // data-status 값을 가져오기
+    const appStatus = event.currentTarget.dataset.status;
+    console.log(appStatus); // "승인"이 출력됩니다.
+
+    const param = { postIdx, appStatus };
+    // status 값을 이용하여 처리
+    const response = await postPostApi<IPostResponse>(ManagePost.statusUpdate, param);
+    console.log(response);
+    if (response.data.result === "success") {
+      alert(`${appStatus}되었습니다.`);
+      handleBack();
+    }
   };
 
   return (
-    <>
-      <PostDetailStyled>
-        {/* Main Content */}
-        <div id="container">
+    <PostDetailStyled>
+      <ContentBoxPost>
+        채용 상세정보
+        {userInfo.loginId && userInfo.loginId === CDetail?.loginId && (
+          <div className="action-buttons">
+            <button className="btn btn-outline-primary">수정</button>
+            <button className="btn btn-outline-danger">삭제</button>
+          </div>
+        )}
+      </ContentBoxPost>
+      <div id="container">
+        <ul>
           <li className="contents">
             <div className="conTitle"></div>
-
-            {/* Job Details Section */}
             <div className="container1">
-              <div className="job-details">{MDetail && CDetail && <JobDetails data={MDetail} Cdata={CDetail} />}</div>
+              <div className="job-details">
+                {MDetail && CDetail && <JobDetail data={MDetail} Cdata={CDetail} />}
+              </div>
               <aside className="company-info">
                 {MDetail && CDetail && <CompanyInfo data={MDetail} Cdata={CDetail} postIdx={postIdx} bizIdx={bizIdx} />}
               </aside>
             </div>
           </li>
-        </div>
-      </PostDetailStyled>
-    </>
-  );
-};
-
-const JobDetails = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
-  return (
-    <PostDetailStyled>
-      <div className="job-details-content">
-        <h2>(주){Cdata.bizName}</h2>
-        <h3>{data.title}</h3>
-        <p>
-          <strong>경력:</strong> {data.expRequired}
-        </p>
-        <p>
-          <strong>급여:</strong> 연봉 {data.salary}만원
-        </p>
-        <p>
-          <strong>모집인원:</strong> {data.openings}명
-        </p>
-        <p>
-          <strong>근무지역:</strong> {data.workLocation}
-        </p>
-
-        {/* 조건부 렌더링 */}
-        {data.duties && (
-          <div className="detail-item full-width duties">
-            <strong>업무:</strong> <br />
-            &emsp;{data.duties}
-          </div>
+        </ul>
+      </div>
+      <div className="date-item">
+        {userInfo.userType === "M" && (
+          <>
+            <button type="button" className="btn btn-outline-secondary" data-status="승인" onClick={statusUpdate}>
+              승인
+            </button>
+            <button type="button" className="btn btn-outline-secondary" data-status="불허" onClick={statusUpdate}>
+              불허
+            </button>
+          </>
         )}
-        {data.posDescription && (
-          <div className="detail-item full-width duties">
-            <strong>포지션 소개:</strong> <br />
-            &emsp;{data.posDescription}
-          </div>
-        )}
-        {data.prefQualifications && (
-          <div className="detail-item full-width duties">
-            <strong>자격요건:</strong> <br />
-            &emsp;{data.prefQualifications}
-          </div>
-        )}
-        {data.prefQualifications && (
-          <div className="detail-item full-width duties">
-            <strong>우대사항:</strong> <br />
-            &emsp;{data.prefQualifications}
-          </div>
-        )}
-        {data.benefits && (
-          <div className="detail-item full-width duties">
-            <strong>혜택 & 복지:</strong> <br />
-            &emsp;{data.benefits}
-          </div>
-        )}
+        <button type="button" id="backToList" name="btn" className="btn btn-close" onClick={handleBack}>
+          뒤로 가기
+        </button>
       </div>
     </PostDetailStyled>
   );
 };
 
+// 회사 정보 및 파일 다운로드 처리 컴포넌트
 const CompanyInfo = ({
   data,
   Cdata,
-  postIdx,
   bizIdx,
+  postIdx,
 }: {
   data: IPostDetail;
   Cdata: companyDetail;
-  postIdx: number;
-  bizIdx: number;
+  bizIdx: string | number;
+  postIdx: string | number;
 }) => {
   const navigate = useNavigate();
 
+  // 회사 상세 페이지로 이동
   const companyDetail = () => {
-    // postIdx와 bizIdx가 각각 존재하는지 확인
-    if (postIdx) {
-      if (bizIdx) {
-        // 두 값이 모두 존재하면 navigate로 이동
-        navigate(`/react/company/companyDetailPage.do/${postIdx}/${bizIdx}`);
-      } else {
-        // bizIdx가 없을 경우 처리 로직
-        console.error("bizIdx 값이 없습니다.");
-        alert("bizIdx 값이 없습니다.");
-      }
-    } else {
-      // postIdx가 없을 경우 처리 로직
-      console.error("postIdx 값이 없습니다.");
-      alert("postIdx 값이 없습니다.");
+    navigate(`/react/company/companyDetailPage.do/${postIdx}/${bizIdx}`);
+  };
+
+  // 파일 다운로드 처리
+  const downloadFile = async () => {
+    const param = {
+      bizIdx,
+      postIdx,
+    };
+
+    const postAction: AxiosRequestConfig = {
+      url: "/manage-hire/managehireDownloadBody.do",
+      method: "post",
+      data: param,
+      responseType: "blob",
+    };
+
+    try {
+      const response = await axios(postAction);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", data.fileName || "downloadedFile");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("파일 다운로드 중 오류 발생:", error);
     }
   };
 
@@ -160,29 +180,25 @@ const CompanyInfo = ({
         <p>
           <strong>대표명:</strong> {Cdata.bizCeoName}
         </p>
-        <button onClick={companyDetail}>기업 정보</button>
+        <button onClick={companyDetail}>기업정보→</button>
       </div>
       <p>
-        <strong>첨부파일:</strong> <a href="#">{data.fileName}</a>
+        <strong>첨부파일:</strong> 
+        <span className="download-link" onClick={downloadFile}>{data.fileName}</span>
       </p>
-      <p>
-        <div className="date">
-          <span className="remaining">남은 기간</span>
-          <div className="date-details">
-            <div className="date-item">
-              <span className="date-item">
-                시작일
-                <br />
-              </span>
-              <span className="date-item">마감일</span>
-            </div>
-            <div className="date-item">
-              <span className="date-item">{data.startDate}</span>
-              <span className="date-item">{data.endDate}</span>
-            </div>
+      <div className="date">
+        <span className="remaining">남은 기간</span>
+        <div className="date-details">
+          <div className="date-item">
+            <span>시작일</span>
+            <span>마감일</span>
+          </div>
+          <div className="date-item">
+            <span>{data.startDate}</span>
+            <span>{data.endDate}</span>
           </div>
         </div>
-      </p>
+      </div>
     </PostDetailStyled>
   );
 };
