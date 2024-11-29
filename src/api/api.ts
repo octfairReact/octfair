@@ -37,12 +37,14 @@ export const Posts = {
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
   statusUpdate: "/manage-post/statusUpdateBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+  getpostDetail: (postIdx: number, bizIdx: number) =>
+    `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
 export const Company = {
   postSave: "/company/companySaveBody.do",
-  getDetail: (postIdx: number, bizIdx: number) => `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
+  getDetail: (postIdx: number, bizIdx: number) =>
+    `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
   getCompanyInfo: "/company/companyUpdatePageRe.do",
   postUpdate: "/company/companyUpdateBody.do",
   postDelete: "/company/companyDeleteRe.do",
@@ -50,8 +52,24 @@ export const Company = {
 
 export const Resume = {
   getListBody: "/apply/resumeListBody.do",
+  getResumeNew: "/apply/resumeNew.do",
   getDetail: "/apply/resumeDetail.do",
-  resumeDelete: "/apply/resumeDelete.do",
+  resumeSave: "/apply/resumeSaveBody.do",
+  resumeDelete: "/apply/resumeDeleteBody.do",
+  getCareerBody: "/apply/careerListBody",
+  careerInsert: "/apply/insertCareerBody",
+  careerDelete: "/apply/deleteCareerBody",
+  getEduBody: "/apply/eduListBody",
+  eduInsert: "/apply/insertEduBody",
+  eduDelete: "/apply/deleteEduBody",
+  getSkillBody: "/apply/skillListBody",
+  skillInsert: "/apply/insertSkillBody",
+  skillDelete: "/apply/deleteSkillBody",
+  getCertBody: "/apply/certListBody",
+  certInsert: "/apply/insertCertBody",
+  certDelete: "/apply/deleteCertBody",
+  fileDownload: "/apply/resumeFileDownload",
+  fileDelete: "/apply/deleteAttachFile",
 };
 
 //채용공고 리스트,등록 - 신효
@@ -71,7 +89,8 @@ export const Applicant = {
 export const ScrapURL = {
   getScrapList: "/jobs/scrapListBody.do",
   getScarpDelete: "/jobs/deleteScrapBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+  getpostDetail: (postIdx: number, bizIdx: number) =>
+    `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
 export const Faq = {

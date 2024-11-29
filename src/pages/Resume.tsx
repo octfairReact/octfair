@@ -1,4 +1,4 @@
-import { ResumeProvider } from "../api/provider/ResumeProvicer";
+import { ResumeProvider } from "../api/provider/ResumeProvider";
 import { ContentBox } from "../component/common/ContentBox/ContentBox";
 import { ResumeMain } from "../component/page/apply/ReseumeMain/ResumeMain";
 
