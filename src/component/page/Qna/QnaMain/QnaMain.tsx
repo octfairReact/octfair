@@ -78,12 +78,12 @@ export const QnaMain = () => {
 
   const onPostSuccess = () => {
     setModal(!modal);
-    // setFaqType(faqType);
-    // if (faqType) {
-    //   searchFaqList(currentPage, faqType);
-    // } else {
-    //   console.log("유저정보 아직2");
-    // }
+    setQnaType(qnaType);
+    if (qnaType) {
+      searchQnaList(currentPage, qnaType);
+    } else {
+      console.log("유저정보 아직2");
+    }
   };
 
   if (!isLoaded || qnaType === undefined) {
@@ -104,8 +104,6 @@ export const QnaMain = () => {
   const handlePasswordSubmit = (submittedPassword: string, index: number) => {
     setPassword(submittedPassword); // 비밀번호 상태 업데이트
     setIndex(index);
-    console.log("패스워드 전달 값", password);
-    console.log("패스워드 전달 값 + index", index);
     setPasswordModal(false); // 비밀번호 모달 닫기
     setModal(!modal);
   };
@@ -135,8 +133,6 @@ export const QnaMain = () => {
             <StyledTh size={50}>제목</StyledTh>
             <StyledTh size={10}>작성자</StyledTh>
             <StyledTh size={20}>등록일</StyledTh>
-            {/* 관리자만 볼 수 있음 */}
-            {userInfo.userType === "M" && <StyledTh size={10}>관리</StyledTh>}
           </tr>
         </thead>
         <tbody>
