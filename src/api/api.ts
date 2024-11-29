@@ -66,7 +66,6 @@ export const Hire = {
 export const Applicant = {
   getPostIdx: "/manage-hire/applicantJson.do",
   gitListBody: "/manage-hire/applicantListBody.do",
-
 };
 
 export const ScrapURL = {
@@ -100,11 +99,11 @@ export const ManageUser = {
   getBizListBody: "/manage-user/bizListBody.do",
   getBizDetail: "/manage-user/bizManageDetail.do",
   putBizInfo: "/manage-user/bizInfoUpdate.do",
-}
+};
 
 export const MyPage = {
   getUserInfo: "/mypage/userDetail.do",
   putUserInfo: "/mypage/updateUserInfo.do",
-  putUserPw: "/mypage/updatePwBCrypt.do", 
+  putUserPw: "/mypage/updatePwBCrypt.do",
   deleteUser: "/mypage/deleteUserBCrypt.do",
-}
+};
