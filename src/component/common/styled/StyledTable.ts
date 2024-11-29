@@ -20,6 +20,10 @@ export const StyledTable = styled.table`
     background-color: #2676bf;
     color: #ddd;
   }
+  th {
+    background-color: #2676bf;
+    color: #ddd;
+  }
 
   /* 테이블 올렸을 때 */
   tbody tr:hover {

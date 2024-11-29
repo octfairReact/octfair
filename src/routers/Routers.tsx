@@ -18,7 +18,10 @@ import { Resume } from "../pages/Resume";
 import { ResumeForm } from "../pages/ResumeForm";
 import { Scrap } from "../pages/Scrap";
 import { FaQ } from "../pages/FaQ";
+import { Applicant } from "../pages/Applicant";
 import { QnA } from "../pages/QnA";
+import { ManageApplicant } from "../pages/ManageApplicant";
+import { ManageBiz } from "../pages/ManageBiz";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -42,6 +45,7 @@ const routers: RouteObject[] = [
         children: [
           { path: "post.do", element: <Hire /> },
           { path: "managehireWritePage.do", element: <HireAdd /> },
+          { path: "applicant.do", element: <Applicant /> },
         ],
       },
       {
@@ -54,7 +58,11 @@ const routers: RouteObject[] = [
 
       {
         path: "manage-post",
-        children: [{ path: "managePostDetailBody.do", element: <ManagePostPage /> }],
+        children: [
+          { path: "managePostDetailBody.do", element: <ManagePostPage /> },
+          { path: "approval.do", element: <Post /> },
+          { path: "post.do", element: <Post /> },
+        ],
       },
       {
         path: "company",
@@ -82,6 +90,13 @@ const routers: RouteObject[] = [
           { path: "resume.do", element: <Resume /> },
           { path: "resume-new.do", element: <ResumeForm /> },
           { path: "resume-detail/:resIdx", element: <ResumeForm /> },
+        ],
+      },
+      {
+        path: "manage-user",
+        children: [
+          { path: "applicant.do", element: <ManageApplicant /> },
+          { path: "biz.do", element: <ManageBiz /> },
         ],
       },
     ],
