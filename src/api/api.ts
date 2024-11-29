@@ -36,8 +36,7 @@ export const Posts = {
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
   statusUpdate: "/manage-post/statusUpdateBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) =>
-    `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post/managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
 export const Company = {
