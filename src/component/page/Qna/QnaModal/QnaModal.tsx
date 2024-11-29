@@ -283,7 +283,7 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                 </th>
                 <td colSpan={3}>
                   <input
-                    type="text"
+                    type="password"
                     className="inputTxt p100"
                     name="password"
                     id="password"
