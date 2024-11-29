@@ -18,6 +18,7 @@ import { Resume } from "../pages/Resume";
 import { ResumeForm } from "../pages/ResumeForm";
 import { Scrap } from "../pages/Scrap";
 import { FaQ } from "../pages/FaQ";
+import { Applicant } from "../pages/Applicant";
 import { QnA } from "../pages/QnA";
 import { ManageApplicant } from "../pages/ManageApplicant";
 import { ManageBiz } from "../pages/ManageBiz";
@@ -44,6 +45,7 @@ const routers: RouteObject[] = [
         children: [
           { path: "post.do", element: <Hire /> },
           { path: "managehireWritePage.do", element: <HireAdd /> },
+          { path: "applicant.do", element: <Applicant /> },
         ],
       },
       {
