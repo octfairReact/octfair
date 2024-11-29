@@ -32,6 +32,15 @@ const routers: RouteObject[] = [
 
     children: [
       {
+        path: "apply",
+        children: [
+          { path: "history.do", element: <History /> },
+          { path: "resume.do", element: <Resume /> },
+          { path: "resume-new.do", element: <ResumeForm /> },
+          { path: "resume-detail/:resIdx", element: <ResumeForm /> },
+        ],
+      },
+      {
         path: "board",
         children: [
           { path: "notice.do", element: <Notice /> },
@@ -81,15 +90,6 @@ const routers: RouteObject[] = [
           { path: "update.do", element: <MyPageUpdate /> },
           { path: "withdraw.do", element: <MyPageWithdraw /> },
           //:id 이게 키값이 됨
-        ],
-      },
-      {
-        path: "apply",
-        children: [
-          { path: "history.do", element: <History /> },
-          { path: "resume.do", element: <Resume /> },
-          { path: "resume-new.do", element: <ResumeForm /> },
-          { path: "resume-detail/:resIdx", element: <ResumeForm /> },
         ],
       },
       {
