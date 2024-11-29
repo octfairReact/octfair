@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { StyledTable, StyledTd, StyledTh } from "../../common/styled/StyledTable";
+import { StyledContainer, StyledRow, StyledTable, StyledTd, StyledTh } from "../../common/styled/StyledTable";
 import axios from "axios";
 import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../stores/userInfo";
@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { IApplicant, IApplicantListResponse, IDetailBiz } from "../../../models/interface/IApplicant";
 import { postApplicantApi } from "../../../api/postApplicant";
 import { Applicant } from "../../../api/api";
+//import '../../../common/styled/Applicant.css';
 
 
 export const ApplicantMain = () => {
@@ -17,16 +18,27 @@ export const ApplicantMain = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [postIdxList, setPostIdxList] = useState<IDetailBiz[]>([]);
     const [applicantList, setApplicantList] = useState<IApplicant[]>([]); //초기화  
-    const [keyword, setKeyword]  = useState<string>("");
+    const [keyword, setKeyword]  = useState<string>("서류심사중");
     const [count, setCount] = useState<number>(0); // 지원자 수
     const [selectedPostIdx, setSelectedPostIdx] = useState<number>();
     const [selectedTitle, setSelectedTitle] = useState<string>("");
 
+    useEffect(() => {
+        getPostIndexList();
+    }, [userInfo.loginId]);
+
+
+    useEffect(() => {
+        if(selectedPostIdx){
+            getApplicantList();            
+            // console.log("postIdx 잘 불러오는지 useEffect 에서 ------------------------------>" + selectedPostIdx);
+        }       
+    }, [selectedPostIdx]);
 
     //지원자 목록 가져오기위한 postIdx 리스트 받아오기
     const getPostIndexList = async () => {
         const userParam = { loginId: userInfo.loginId, };
-        const searchParam = { currentPage: currentPage.toString(), pageSize: "5" };
+        console.log("아이디는 "+userInfo.loginId);
 
         //requestParam 형식 --> encoded
         // await axios.post(Applicant.getListBody + "?loginId=" + encodeURIComponent(userInfo.loginId))
@@ -39,47 +51,32 @@ export const ApplicantMain = () => {
         //const getList = await postApplicantApi<IApplicantListResponse>(Applicant.getListBody, userParam); //왜 작동 안하는지 모르겠음 제네릭..?
 
         if( getList ){
-            setPostIdxList(getList.data.MDetail);    
-        }
-
+            const initialPostIdx:number = getList.data.MDetail[3]?.postIdx;
+            console.log("initialPostIdxpostIdx==========================>" ,initialPostIdx)
+            setPostIdxList(getList.data.MDetail);
+            setSelectedPostIdx(initialPostIdx); // 첫 번째 postIdx 선택  
+            //setSelectedTitle(response.data.MDetail[0].title); // 첫 번째 title 선택  
+            
+        }        
     };
-
-
     
     //지원자 목록 가져오기
-    const getApplicantList = async() => {
-        const param = {loginId: userInfo.loginId, postIdx: selectedPostIdx};
-        //const getList = await axios.post(Applicant.gitListBody, param);
-        console.log("리액트에서 postIdx값있는지=======================>" + selectedPostIdx);
-        const getList = await postApplicantApi<IApplicantListResponse>(Applicant.gitListBody, param);
+    const getApplicantList = async(currentPage?: number) => {   
+        currentPage = currentPage || 1;
 
-        if(getList){
-            setApplicantList(getList.data.list)
-            setCount(getList.data.count)
-        }
-        //console.log("getList------------------------------>" + applicantList[0].title);
+        const param = {loginId: userInfo.loginId, postIdx: selectedPostIdx, keyword: keyword, currentPage: currentPage.toString(), pageSize: "5"};
+        const getList = await postApplicantApi<IApplicantListResponse>(Applicant.gitListBody, param);
+        console.log("getList", getList);
+        setApplicantList(getList.data.list);
+        setCount(getList.data.count);
     }
 
-
-
-    // 첫 렌더링 시 한 번만 데이터를 가져오도록 설정
     useEffect(() => {
-        getPostIndexList(); // 한 번만 실행
-        getApplicantList();
-    }, [userInfo.loginId]); // userInfo.loginId가 변경될 때만 실행
-
-    
-
-
-
-
-     useEffect(() => {
          if (sessionStorage.getItem("userInfo")) {
            setUserInfo(JSON.parse(sessionStorage.getItem("userInfo")!));
            console.log(sessionStorage.getItem("userInfo"));       
          }
        }, []);
-
 
     useEffect(() => {
         if (selectedPostIdx) {
@@ -88,24 +85,31 @@ export const ApplicantMain = () => {
                 setSelectedTitle(selectedApplicant.title); // 제목을 설정
             }
         }
+        console.log("useEffect postIdx로 title 찾는:", postIdxList);
     }, [selectedPostIdx, applicantList]); // selectedPostIdx가 변경될 때마다 실행
 
-    // selectBox에서 선택된 값 처리
-    const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    // 공고제목 selectBox에서 선택된 값 처리
+    const handleTitleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const selectPost = Number(e.target.value);
         setSelectedPostIdx(selectPost); // postIdx 업데이트
+        console.log("핸들러 체인지 시작:", postIdxList);
     };
-
+    // 키워드 selectBox 선택된 값 처리
+    const handleKeywordSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        const selectKeyword = e.target.value;
+        //setKeyword(selectKeyword);
+        console.log("키워드 핸들러 체인지 시작:---->", selectKeyword);
+    }
 
 return(
     <>
     <br/>
         <div style={{ display: "flex", alignItems: "center" ,justifyContent: "space-between", width: "100%"}}>
             <div style={{ marginRight: "20px"}}>
-                <h3>{selectedTitle}</h3>
+                <h2>{selectedTitle}</h2>
             </div>
             <div>
-            <select value={selectedPostIdx} onChange={handleSelectChange}>
+            <select value={selectedPostIdx} onChange={handleTitleSelectChange}>
                 {postIdxList && postIdxList.length > 0 ? (
                     postIdxList.map((applicant) => (
                         <option key={applicant.postIdx} value={applicant.postIdx} >{applicant.title}</option>
@@ -114,17 +118,58 @@ return(
                         <option disabled> 데이터가 없습니다</option>
                 )}
             </select>
-            <select>
+            <select value={keyword} onChange={handleKeywordSelectChange}>
                 <option value={"서류심사중"}>서류심사중</option>
-                <option>면접진행중</option>
-                <option>최종합격</option>
-                <option>탈락</option>
+                <option value={"면접진행중"}>면접진행중</option>
+                <option value={"최종합격"}>최종합격</option>
+                <option value={"탈락"}>탈락</option>
             </select>
             </div>
             
         </div>
+        
+        <div>
+            <h4>지원자 {count}명</h4>
+        </div>
+        <div>
+           
+        <StyledContainer>
+            {applicantList.map((applicant) => (
+                <StyledRow key={applicant.appId}>
+                {/* 왼쪽: 지원자 이름 및 이력서 제목 */}
+                <div className="left">
+                    <span>{applicant.name}</span>
+                    <span>{applicant.resTitle}</span>
+                </div>
 
-   
+                {/* 중앙: 이메일, 전화번호, 학교 이름 */}
+                <div className="center">
+                    <span>이메일: {applicant.email}</span>
+                    <span>전화번호: {applicant.phone}</span>
+                    <span>학교 이름: {applicant.schoolName}</span>
+                </div>
+
+                {/* 오른쪽: 버튼들 */}
+                <div className="right">
+                    <button>지원자 이력서 보기</button>
+                    <div className="decision-buttons">
+                    <button>합격</button>
+                    <button>불합격</button>
+                    </div>
+                </div>
+                </StyledRow>
+        ))}
+        </StyledContainer>
+        
+        
+        
+        
+        
+        </div>
+
+
+
+        
         
     </>
     );
