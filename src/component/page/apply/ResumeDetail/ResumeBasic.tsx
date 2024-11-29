@@ -16,49 +16,129 @@ import {
   FileLabel,
 } from "../styled";
 import { Button } from "../../../common/Button/Button";
-import { ChangeEvent, useContext, useState } from "react";
+import { ChangeEvent, useContext, useState, useEffect, useCallback } from "react";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
-import { ResumeContext } from "../../../../api/provider/ResumeProvicer";
+import { ResumeContext } from "../../../../api/provider/ResumeProvider";
 import { FC } from "react";
-import { IResumeDetail, IDetailResponse } from "../../../../models/interface/IResume";
-import { CareerList } from "./CareerList";
+import {
+  IResumeDetail,
+  IDetailResponse,
+  Career,
+  IPostResponse,
+  defaultResumeDetail,
+} from "../../../../models/interface/IResume";
 import { EduList } from "./EduList";
 import { SkillList } from "./SkillList";
 import { CertificationList } from "./CertificationList";
 import { useNavigate } from "react-router-dom";
+import { postResumeApi } from "../../../../api/postResumeApi";
+import { Resume } from "../../../../api/api";
+import { CareerList } from "./CareerList";
+import axios, { AxiosRequestConfig } from "axios";
 
 export const ResumeBasic = () => {
-  const { resIdx } = useContext(ResumeContext);
+  const { resIdx, resumeDetail, setResumeDetail } = useContext(ResumeContext);
+  console.log("resumeDetail in ResumeBasic:", resumeDetail); // 값 확인
   const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [resTitle, setResTitle] = useState("");
   const [shortIntro, setShortIntro] = useState("");
   const [proLink, setProLink] = useState("");
-  const [personalStatement, setPersonalStatement] = useState("");
+  const [perStatement, setPerStatement] = useState("");
   const [imageUrl, setImageUrl] = useState<string>();
   const [fileData, setFileData] = useState<File>();
-
+  const [fileName, setFileName] = useState<string | undefined>(resumeDetail?.fileName);
+  const [formData, setFormData] = useState<IResumeDetail>(defaultResumeDetail);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (resumeDetail) {
+      setFormData(resumeDetail);
+      setFileName(resumeDetail.fileName || "");
+      console.log("fileName 상태:", fileName);
+    }
+  }, [resumeDetail]);
+
   const handlerFile = (e: ChangeEvent<HTMLInputElement>) => {
     const fileInfo = e.target.files;
-    console.log("파일 인포", fileInfo);
     if (fileInfo?.length > 0) {
-      const fileInfoSplit = fileInfo[0].name.split(".");
-      const fileExtension = fileInfoSplit[1].toLowerCase();
-
-      if (fileExtension === "jpg" || fileExtension === "gif" || fileExtension === "png") {
-        setImageUrl(URL.createObjectURL(fileInfo[0]));
-
-        console.log("미리보기", URL.createObjectURL(fileInfo[0]));
-      } else {
-        setImageUrl("");
-        // 정해진 확장자외 다른 파일이 들어오면 파일네임 스트링값만 나오게
-      }
-
       setFileData(fileInfo[0]);
+      setFileName(fileInfo[0].name);
     }
   };
+
+  const handlerFileDownload = async () => {
+    const param = new URLSearchParams();
+    param.append("resIdx", resIdx.toString());
+
+    const postAction: AxiosRequestConfig = {
+      url: "/apply/resumeFileDownload",
+      method: "post",
+      data: param,
+      responseType: "blob",
+    };
+    await axios(postAction)
+      .then((res) => {
+        console.log("다운로드 데이터 blob", res);
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", resumeDetail?.fileName as string);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch((error) => {});
+  };
+
+  const handlerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handlerSave = async () => {
+    console.log("1");
+    const fileForm = new FormData();
+    console.log("fileForm:::::", fileForm);
+    const textData = {
+      resIdx: resumeDetail.resIdx,
+      resTitle: formData.resTitle || "",
+      shortIntro: formData.shortIntro || "",
+      proLink: formData.proLink || "",
+      perStatement: formData.perStatement || "",
+    };
+    console.log("textData::::::::", textData);
+
+    fileData && fileForm.append("file", fileData);
+    console.log("fileForm:::::::::", fileForm);
+    fileForm.append("text", new Blob([JSON.stringify(textData)], { type: "application/json" }));
+    console.log("fileForm2:::::::::", fileForm);
+    const response = await postResumeApi<IPostResponse>(Resume.resumeSave, fileForm);
+    // const response = await axios.post(Resume.resumeSave, fileForm);
+    console.log("이력서 폼 제출::::::::::::::", fileForm);
+
+    if (response && response.data.result === "success") {
+      alert("이력서가 저장되었습니다.");
+      navigate(`/react/apply/resume.do`);
+    } else {
+      console.error("Failed to save resume:", response?.data);
+    }
+  };
+
+  const handlerFileDelete = useCallback(
+    async (resIdx?: number) => {
+      const param = { resIdx };
+      const response = await postResumeApi<IPostResponse>(Resume.fileDelete, param);
+
+      if (response.data.result === "success") {
+        alert("삭제되었습니다.");
+        setFileData(undefined);
+        setFileName(undefined);
+      }
+    },
+    [resIdx]
+  );
 
   return (
     <>
@@ -68,11 +148,11 @@ export const ResumeBasic = () => {
           <div>
             <input
               style={{ fontSize: "30px", marginBottom: "20px", padding: "5px", width: "1100px" }}
-              id="restitle"
+              id="resTitle"
               type="text"
-              value={resTitle}
+              value={formData.resTitle || ""}
               placeholder="이력서 제목"
-              onChange={(e) => setResTitle(e.target.value)}
+              onChange={handlerChange}
             />
           </div>
           <div>
@@ -82,9 +162,24 @@ export const ResumeBasic = () => {
               value={userInfo.userNm}
               placeholder="이름"
               readOnly
+              style={{ border: "none" }}
             />
-            <ResumeInput id="userEmail" type="text" value="" placeholder="이메일" readOnly />
-            <ResumeInput id="userPhone" type="text" value="" placeholder="연락처" readOnly />
+            <ResumeInput
+              id="userEmail"
+              type="text"
+              value={resumeDetail?.email || ""}
+              placeholder="이메일"
+              readOnly
+              style={{ border: "none" }}
+            />
+            <ResumeInput
+              id="userPhone"
+              type="text"
+              value={resumeDetail?.phone || ""}
+              placeholder="연락처"
+              readOnly
+              style={{ border: "none" }}
+            />
           </div>
         </ResumeDetailBodyBasicInfo>
 
@@ -98,10 +193,10 @@ export const ResumeBasic = () => {
           </ResumeDetailBodyGuide>
           <div>
             <ResumeTextarea
-              id="short_intro"
-              value={shortIntro}
+              id="shortIntro"
+              value={formData.shortIntro || ""}
               placeholder=" 소개글을 입력해주세요."
-              onChange={(e) => setShortIntro(e.target.value)}
+              onChange={handlerChange}
             />
           </div>
         </ResumeDetailBody>
@@ -162,9 +257,9 @@ export const ResumeBasic = () => {
           <div>
             <ResumeInput
               id="proLink"
-              value={proLink}
+              value={formData.proLink || ""}
               placeholder=" https://"
-              onChange={(e) => setProLink(e.target.value)}
+              onChange={handlerChange}
             />
           </div>
         </ResumeDetailBody>
@@ -176,10 +271,10 @@ export const ResumeBasic = () => {
           </ResumeDetailBodyGuide>
           <div>
             <ResumeTextarea
-              id="personalStatement"
-              value={shortIntro}
+              id="perStatement"
+              value={formData.perStatement || ""}
               placeholder=" 자기소개서를 입력해주세요."
-              onChange={(e) => setPersonalStatement(e.target.value)}
+              onChange={handlerChange}
             />
           </div>
         </ResumeDetailBody>
@@ -195,10 +290,26 @@ export const ResumeBasic = () => {
             style={{ display: "none" }}
             onChange={handlerFile}
           />
-          <FileLabel className="img-label" htmlFor="fileInput">
-            파일 첨부하기
-          </FileLabel>
-          <div id="preview"></div>
+          {fileName ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                onClick={handlerFileDownload}
+                style={{ cursor: "pointer", color: "blue", marginRight: "10px", flex: 0.2 }}
+              >
+                {fileName}
+              </div>
+              <ResumeButton
+                onClick={() => handlerFileDelete(resumeDetail.resIdx)}
+                style={{ flex: "0 0 auto", width: "50px" }}
+              >
+                삭제
+              </ResumeButton>
+            </div>
+          ) : (
+            <FileLabel className="img-label" htmlFor="fileInput">
+              파일 첨부하기
+            </FileLabel>
+          )}
         </ResumeDetailBody>
 
         <div style={{ textAlign: "center" }}>
@@ -211,7 +322,7 @@ export const ResumeBasic = () => {
             >
               목록으로
             </Button>
-            <Button>저장하기</Button>
+            <Button onClick={handlerSave}>저장하기</Button>
             <Button
               style={{
                 backgroundColor: "gray",
