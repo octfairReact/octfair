@@ -5,6 +5,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import { useUserInfo } from "../../../hook/useUserInfo";
 import { CustomAlert } from "../../../common/CustomAlert";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const DashBoard = () => {
   const [alertMessage, setAlertMessage] = useState("");
@@ -39,6 +41,8 @@ export const DashBoard = () => {
         <li className="menu-bar">{<LeftMenuBar />}</li>
         <li className="content">
           <Suspense fallback={<h2>Loading....</h2>}>{<Outlet />}</Suspense>
+          {/* 토스트 메시지 기능 적용 */}
+          <ToastContainer/>
         </li>
       </ul>
     </DashBoardStyled>

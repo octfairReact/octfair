@@ -20,7 +20,7 @@ export const Notice = {
 };
 
 export const History = {
-  getListBody: "/apply/historyBody.do",
+  // getListBody: "/apply/historyBody.do",
   searchList: "/apply/searchHistoryBody.do",
   postDelete: "/apply/cancleApplyBody.do",
   getModal: "/apply/previewResumeBody.do",
@@ -52,6 +52,7 @@ export const Resume = {
   getListBody: "/apply/resumeListBody.do",
   getDetail: "/apply/resumeDetail.do",
   resumeDelete: "/apply/resumeDelete.do",
+  resumeCopy: "/apply/resumeCopyBody.do",
 };
 
 export const Hire = {
