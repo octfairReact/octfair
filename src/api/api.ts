@@ -54,12 +54,21 @@ export const Resume = {
   resumeDelete: "/apply/resumeDelete.do",
 };
 
+//채용공고 리스트,등록 - 신효
 export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   fileDownload: "manage-hire/managehireDownload.do",
   postSave: "/manage-hire/managehireSaveFileForm.do",
   postSaveBody: "/manage-hire/managehireSaveBody.do",
 };
+
+//지원자관리 - 신효
+export const Applicant = {
+  getPostIdx: "/manage-hire/applicantJson.do",
+  gitListBody: "/manage-hire/applicantListBody.do",
+
+};
+
 export const ScrapURL = {
   getScrapList: "/jobs/scrapListBody.do",
   getScarpDelete: "/jobs/deleteScrapBody.do",
@@ -90,7 +99,7 @@ export const ManageUser = {
   putApplicantPassword: "/manage-user/applicantPwResetBCrypt.do",
   getBizListBody: "/manage-user/bizListBody.do",
   getBizDetail: "/manage-user/bizManageDetail.do",
-  updateBizInfo: "/manage-user/bizInfoUpdate.do",
+  putBizInfo: "/manage-user/bizInfoUpdate.do",
 }
 
 export const MyPage = {

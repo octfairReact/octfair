@@ -1,7 +1,6 @@
 import axios, { Axios, AxiosResponse } from "axios";
 
-
-export const postHireApi = async <T>(api: string, param: object) => {
+export const postApplicantApi = async <T>(api: string, param: object) => {
   //await 리턴을 promise
   try {
     const result: AxiosResponse<T> = await axios.post(api, param);

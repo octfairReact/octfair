@@ -1,4 +1,3 @@
-import { NoticeProvider } from "../api/provider/NoticeProvider";
 import { ContentBox } from "../component/common/ContentBox/ContentBox";
 import { HireWrite } from "../component/page/Hire/HireWrite";
 
