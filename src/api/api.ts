@@ -1,3 +1,38 @@
+export const Applicant = { //지원자관리 - 신효
+  getPostIdx: "/manage-hire/applicantJson.do",
+  gitListBody: "/manage-hire/applicantListBody.do",
+};
+
+export const Company = {
+  postSave: "/company/companySaveBody.do",
+  getDetail: (postIdx: number, bizIdx: number) =>
+    `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
+  getCompanyInfo: "/company/companyUpdatePageRe.do",
+  postUpdate: "/company/companyUpdateBody.do",
+  postDelete: "/company/companyDeleteRe.do",
+};
+
+export const Faq = {
+  getList: "/board/faqListRe.do",
+  postSave: "/board/faqSaveRe.do",
+  getDetail: "/board/faqDetailRe.do",
+  postUpdate: "/board/faqUpdateRe.do",
+  postDelete: "/board/faqDeleteRe.do",
+};
+
+export const Hire = { //채용공고 리스트,등록 - 신효
+  getListBody: "/manage-hire/managehireListBody.do",
+  fileDownload: "manage-hire/managehireDownload.do",
+  postSave: "/manage-hire/managehireSaveFileForm.do",
+  postSaveBody: "/manage-hire/managehireSaveBody.do",
+};
+
+export const History = {
+  searchList: "/apply/searchHistoryBody.do",
+  postDelete: "/apply/cancleApplyBody.do",
+  getModal: "/apply/previewResumeBody.do",
+};
+
 export const Login = {
   login: "/loginProcBCrypt.do",
   postSignup: "/registerBCrypt.do",
@@ -7,22 +42,36 @@ export const Login = {
   putResetPw: "/updateFindPwBCrypt.do",
 };
 
+export const ManagePost = {
+  getPostList: "/manage-post/readPostListBody.do",
+  statusUpdate: "/manage-post/statusUpdateBody.do",
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post/managePostDetailBody.do/${postIdx}/${bizIdx}`,
+};
+
+export const ManageUser = {
+  getApplicantListBody: "/manage-user/applicantListBody.do",
+  getApplicantDetail: "/manage-user/applicantManageDetail.do",
+  putApplicantInfo: "/manage-user/applicantInfoUpdate.do",
+  putApplicantPassword: "/manage-user/applicantPwResetBCrypt.do",
+  getBizListBody: "/manage-user/bizListBody.do",
+  getBizDetail: "/manage-user/bizManageDetail.do",
+  putBizInfo: "/manage-user/bizInfoUpdate.do",
+};
+
+export const MyPage = {
+  getUserInfo: "/mypage/userDetail.do",
+  putUserInfo: "/mypage/updateUserInfo.do",
+  putUserPw: "/mypage/updatePwBCrypt.do",
+  deleteUser: "/mypage/deleteUserBCrypt.do",
+};
+
 export const Notice = {
   getList: "/board/noticeListJson.do",
   getListBody: "/board/noticeListBody.do",
   getDetail: "/board/noticeDetailBody.do",
-  // postSave: "/board/noticeSaveBody.do",
   postSave: "/board/noticeSaveFileForm.do",
-  //postUpdate: "/board/noticeUpdateJson.do",
   postDelet: "/board/noticeDeleteBody.do",
-  //postUpdate: "/board/noticeUpdateBody.do",
   postUpdate: "/board/noticeUpdateFileForm.do",
-};
-
-export const History = {
-  searchList: "/apply/searchHistoryBody.do",
-  postDelete: "/apply/cancleApplyBody.do",
-  getModal: "/apply/previewResumeBody.do",
 };
 
 export const Posts = {
@@ -33,19 +82,13 @@ export const Posts = {
   getScrapSave: "/jobs/saveScrapBody.do",
 };
 
-export const ManagePost = {
-  getPostList: "/manage-post/readPostListBody.do",
-  statusUpdate: "/manage-post/statusUpdateBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post/managePostDetailBody.do/${postIdx}/${bizIdx}`,
-};
-
-export const Company = {
-  postSave: "/company/companySaveBody.do",
-  getDetail: (postIdx: number, bizIdx: number) =>
-    `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
-  getCompanyInfo: "/company/companyUpdatePageRe.do",
-  postUpdate: "/company/companyUpdateBody.do",
-  postDelete: "/company/companyDeleteRe.do",
+export const Qna = {
+  getList: "/board/qnaListRe.do",
+  getMyList: "/board/qnaListRe.do",
+  postSave: "/board/qnaFileSaveRe.do",
+  getDetail: "/board/qnaDetailFileRe.do",
+  postUpdate: "/board/qnaFileUpdateRe.do",
+  postDelete: "/board/qnaFileDeleteRe.do",
 };
 
 export const Resume = {
@@ -71,57 +114,9 @@ export const Resume = {
   resumeCopy: "/apply/resumeCopyBody.do",
 };
 
-//채용공고 리스트,등록 - 신효
-export const Hire = {
-  getListBody: "/manage-hire/managehireListBody.do",
-  fileDownload: "manage-hire/managehireDownload.do",
-  postSave: "/manage-hire/managehireSaveFileForm.do",
-  postSaveBody: "/manage-hire/managehireSaveBody.do",
-};
-
-//지원자관리 - 신효
-export const Applicant = {
-  getPostIdx: "/manage-hire/applicantJson.do",
-  gitListBody: "/manage-hire/applicantListBody.do",
-};
-
 export const ScrapURL = {
   getScrapList: "/jobs/scrapListBody.do",
   getScarpDelete: "/jobs/deleteScrapBody.do",
   getpostDetail: (postIdx: number, bizIdx: number) =>
     `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
-};
-
-export const Faq = {
-  getList: "/board/faqListRe.do",
-  postSave: "/board/faqSaveRe.do",
-  getDetail: "/board/faqDetailRe.do",
-  postUpdate: "/board/faqUpdateRe.do",
-  postDelete: "/board/faqDeleteRe.do",
-};
-
-export const Qna = {
-  getList: "/board/qnaListRe.do",
-  getMyList: "/board/qnaListRe.do",
-  postSave: "/board/qnaFileSaveRe.do",
-  getDetail: "/board/qnaDetailFileRe.do",
-  postUpdate: "/board/qnaFileUpdateRe.do",
-  postDelete: "/board/qnaFileDeleteRe.do",
-};
-
-export const ManageUser = {
-  getApplicantListBody: "/manage-user/applicantListBody.do",
-  getApplicantDetail: "/manage-user/applicantManageDetail.do",
-  putApplicantInfo: "/manage-user/applicantInfoUpdate.do",
-  putApplicantPassword: "/manage-user/applicantPwResetBCrypt.do",
-  getBizListBody: "/manage-user/bizListBody.do",
-  getBizDetail: "/manage-user/bizManageDetail.do",
-  putBizInfo: "/manage-user/bizInfoUpdate.do",
-};
-
-export const MyPage = {
-  getUserInfo: "/mypage/userDetail.do",
-  putUserInfo: "/mypage/updateUserInfo.do",
-  putUserPw: "/mypage/updatePwBCrypt.do",
-  deleteUser: "/mypage/deleteUserBCrypt.do",
 };
