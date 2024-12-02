@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Container, ImageWrapper, StyledImage, LoadingMessage, ErrorMessage } from './styled';
 import axios from 'axios';
 
-const ScrapingComponent = () => {
-    const [imageUrl, setImageUrl] = useState(null);
+export const ScrapingComponent = () => {
+  const [imageUrl, setImageUrl] = useState<string | 'loading' | 'error'>('loading');
 
-    useEffect(() => {
-        const fetchImage = async () => {
-            try {
-                const response = await axios.get("/dashboard/menu.do");
-                setImageUrl(response.data.imageUrl);
-            } catch (error) {
-                console.error('Error fetching image:', error);
-            }
-        };
+  useEffect(() => {
+    axios.get("/dashboard/menu.do")
+          .then(response => { setImageUrl(response.data.imageUrl); })
+          .catch(error => { setImageUrl('error'); });
+  }, []);
 
-        fetchImage();
-    }, []);
-
-    return (
-        <div>
-            <h1>오늘의 메뉴판</h1>
-            {imageUrl ? <img src={imageUrl} alt="Scraped" /> : <p>Loading...</p>}
-        </div>
-    );
+  return (
+    <Container>
+      <h1>오늘의 메뉴판</h1>
+      {
+        imageUrl === 'loading' ? ( <LoadingMessage>이미지 로딩중 ...</LoadingMessage>
+        ) : (imageUrl === 'error' ? ( <ErrorMessage>이미지 로딩에 실패했습니다.</ErrorMessage>
+        ) : ( <ImageWrapper> <StyledImage src={imageUrl} alt="Scraped" /> </ImageWrapper> 
+        ))
+      }
+    </Container>
+  );
 };
-
-export default ScrapingComponent;
