@@ -84,18 +84,17 @@ const routers: RouteObject[] = [
         ],
       },
       {
-        path: "mypage",
-        children: [
-          { path: "update.do", element: <MyPageUpdate /> },
-          { path: "withdraw.do", element: <MyPageWithdraw /> },
-          //:id 이게 키값이 됨
-        ],
-      },
-      {
         path: "manage-user",
         children: [
           { path: "applicant.do", element: <ManageApplicant /> },
           { path: "biz.do", element: <ManageBiz /> },
+        ],
+      },
+      {
+        path: "mypage",
+        children: [
+          { path: "update.do", element: <MyPageUpdate /> },
+          { path: "withdraw.do", element: <MyPageWithdraw /> },
         ],
       },
     ],

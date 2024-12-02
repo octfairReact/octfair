@@ -10,6 +10,7 @@ import { signupModalState, searchIdPwModalState } from "../../../../stores/modal
 import { SignupModal } from "../LoginModal/SignupModal";
 import { SearchIdPwModal } from "../LoginModal/SearchIdPwModal";
 import { Login } from "../../../../api/api";
+import { toast } from "react-toastify";
 
 export interface IAccount {
   lgn_Id: string;
@@ -24,29 +25,43 @@ export const LoginMain = () => {
   const [searchIdPwModal, setSearchIdPwModal] = useRecoilState<string>(searchIdPwModalState); // "close"(닫힘) 또는 "id"(아이디찾기 로 열림) 또는 "pw"(비밀번호찾기 로 열림) 또는 "pw2"(비밀번호재설정 로 열림)
 
   const loginHandler = () => {
+    // 유효성 검사: 없길래 성찬추가, 없으면 불필요하게 서버요청하게됨
+    if (!account.lgn_Id || !account.pwd) {
+      toast.info("아이디와 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+
     const param = new URLSearchParams();
     param.append("lgn_Id", account.lgn_Id);
     param.append("pwd", account.pwd);
 
-    axios.post(Login.login, param).then((res) => {
-      const data = res.data;
-
-      if (data.result === "SUCCESS") {
-        setLoginInfo(data);
-        localStorage.setItem("loginInfoState", JSON.stringify(data));
-        sessionStorage.setItem("userInfo", JSON.stringify(data));
-        navigate("/react");
-      } else {
-        alert("ID 혹은 비밀번호가 틀립니다");
-        return;
-      }
-    });
+    axios.post(Login.login, param)
+      .then((res) => {
+        const data = res.data;
+        if (data.result === "SUCCESS") {
+          setLoginInfo(data);
+          sessionStorage.setItem("userInfo", JSON.stringify(data));
+          localStorage.setItem("loginInfoState", JSON.stringify(data));
+          toast("로그인 완료!");
+          navigate("/react");
+        } else {
+          toast.warn("ID 혹은 비밀번호가 틀립니다");
+          return;
+        }
+      })
+      .catch((error) => {
+        toast.error("서버통신 실패, 담당자에게 문의하세요!");
+      });
   };
 
-  // Enter키를 누를시 로그인 완료버튼 효과를 작동
-  const completeEnterHandler = (event) => {
+  // Enter=완료, ESC=닫기 작동
+  const pressEnterEscHandler = (event) => {
     if (event.key === "Enter" && signupModal === false && searchIdPwModal === "close")
       loginHandler();
+    else if (event.key == "Escape") {
+      setSignupModal(false);
+      setSearchIdPwModal("close");
+    }
   };
 
   // 회원가입 버튼 클릭시 회원가입 모달창 팝업
@@ -66,7 +81,7 @@ export const LoginMain = () => {
 
   return (
     <>
-      <LoginStyled onKeyDown={completeEnterHandler}>
+      <LoginStyled onKeyDown={pressEnterEscHandler}>
         <div className="login-container">
           <div>
             <div className="login-text">
@@ -112,23 +127,11 @@ export const LoginMain = () => {
                   />
                 </div>
                 <div>
-                  <button className="login-button" onClick={loginHandler}>
-                    {" "}
-                    Login{" "}
-                  </button>
-                  <button className="signup-button" onClick={openSignupModalHandler}>
-                    {" "}
-                    Sign Up{" "}
-                  </button>
-                  <SearchIdPwContainer>
-                    <ClickableLabel onClick={openSearchIdModalHandler}>
-                      {" "}
-                      아이디 찾기{" "}
-                    </ClickableLabel>
-                    <ClickableLabel onClick={openSearchPwModalHandler}>
-                      {" "}
-                      비밀번호 찾기{" "}
-                    </ClickableLabel>
+                  <button className="login-button" onClick={loginHandler}> Login </button>
+                  <button className="signup-button" onClick={openSignupModalHandler}> Sign Up </button>
+                  <SearchIdPwContainer tabIndex={-1} > {/* 'tabIndex={-1}' 의미: '아이디찾기' 텍스트의 포커싱을 없애서 ESC닫기Handler 작동을 가능하게 하는 용도 */}
+                    <ClickableLabel onClick={openSearchIdModalHandler}> 아이디 찾기 </ClickableLabel>
+                    <ClickableLabel onClick={openSearchPwModalHandler}> 비밀번호 찾기 </ClickableLabel>
                   </SearchIdPwContainer>
                   {signupModal !== false && <SignupModal />}
                   {searchIdPwModal !== "close" && <SearchIdPwModal />}
