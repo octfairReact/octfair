@@ -22,6 +22,7 @@ import { Resume } from "../../../../api/api";
 import { Career } from "../../../../models/interface/IResume";
 import { ResumeContext } from "../../../../api/provider/ResumeProvider";
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 interface CareerListDisplayProps {
   careers: Career[];
@@ -31,7 +32,9 @@ interface CareerListDisplayProps {
 }
 
 export const CareerList = () => {
-  const { resIdx } = useContext(ResumeContext);
+  const location = useLocation();
+  const context = useContext(ResumeContext);
+  const resIdx = location.state?.resIdx || context.resIdx || 0;
   const [careers, setCareers] = useState([]);
   const [showTable, setShowTable] = useState<boolean>(false);
   const handlerShowTable = () => {
@@ -39,7 +42,7 @@ export const CareerList = () => {
   };
 
   const initialFormData: Career = {
-    resIdx,
+    resIdx: resIdx || 0,
     company: "",
     startDate: "",
     endDate: "",
@@ -62,9 +65,48 @@ export const CareerList = () => {
   };
 
   const careerAdd = async () => {
+    // 유효성 검사
+    if (!formData.company.trim()) {
+      alert("회사명을 입력해주세요.");
+      return;
+    }
+    if (!formData.startDate.trim()) {
+      alert("입사일을 입력해주세요.");
+      return;
+    }
+    if (!formData.endDate.trim()) {
+      alert("퇴사일을 입력해주세요.");
+      return;
+    }
+    if (!formData.dept.trim()) {
+      alert("근무부서를 입력해주세요.");
+      return;
+    }
+    if (!formData.position.trim()) {
+      alert("직책/직급을 입력해주세요.");
+      return;
+    }
+    if (!formData.reason.trim()) {
+      alert("퇴사사유를 입력해주세요.");
+      return;
+    }
+    if (!formData.crrDesc.trim()) {
+      alert("담당업무를 입력해주세요.");
+      return;
+    }
+
+    // 입학일과 졸업일 비교
+    const startDate = new Date(formData.startDate + "-01");
+    const endDate = new Date(formData.endDate + "-01");
+    if (startDate > endDate) {
+      alert("입사일은 퇴사일보다 미래일 수 없습니다. 다시 선택해주세요.");
+      return;
+    }
+
     try {
       const param = {
         ...formData,
+        resIdx,
         startDate: `${formData.startDate}-01`, // "YYYY-MM" -> "YYYY-MM-DD" (1일로 기본 설정)
         endDate: `${formData.endDate}-01`,
       };
@@ -225,7 +267,10 @@ export const CareerListDisplay: FC<CareerListDisplayProps> = ({
   showTable,
   setShowTable,
 }) => {
-  const { resIdx } = useContext(ResumeContext);
+  const location = useLocation();
+  const context = useContext(ResumeContext);
+
+  const resIdx = location.state?.resIdx || context.resIdx || 0;
 
   const fetchCareerList = useCallback(async (resIdx: number) => {
     try {

@@ -16,7 +16,7 @@ import {
   FileLabel,
 } from "../styled";
 import { Button } from "../../../common/Button/Button";
-import { ChangeEvent, useContext, useState, useEffect, useCallback } from "react";
+import { ChangeEvent, useContext, useState, useEffect, useCallback, SetStateAction } from "react";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
@@ -32,25 +32,50 @@ import {
 import { EduList } from "./EduList";
 import { SkillList } from "./SkillList";
 import { CertificationList } from "./CertificationList";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { postResumeApi } from "../../../../api/postResumeApi";
 import { Resume } from "../../../../api/api";
 import { CareerList } from "./CareerList";
 import axios, { AxiosRequestConfig } from "axios";
+import { modalState } from "../../../../stores/modalState";
+import { HistoryModal } from "../../History/HistoryModal/HistoryModal";
 
 export const ResumeBasic = () => {
-  const { resIdx, resumeDetail, setResumeDetail } = useContext(ResumeContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const context = useContext(ResumeContext);
+
+  const stateResumeDetail = location.state?.resumeDetail;
+  const stateResIdx = location.state?.resIdx;
+
+  const resIdx = stateResIdx || context.resIdx || 0;
+  const resumeDetail = stateResumeDetail || context.resumeDetail || defaultResumeDetail;
+
+  const { setResumeDetail } = context;
+
+  useEffect(() => {
+    if (stateResumeDetail && !context.resumeDetail) {
+      setResumeDetail(stateResumeDetail);
+    }
+  }, [stateResumeDetail, context.resumeDetail, setResumeDetail]);
+
+  console.log("resumeDetail in ResumeBasic:", resumeDetail);
+  //const resIdx = location.state?.resIdx || context.resIdx || 0;
+  //const { resumeDetail, setResumeDetail } = useContext(ResumeContext);
   console.log("resumeDetail in ResumeBasic:", resumeDetail); // 값 확인
   const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
-  const [resTitle, setResTitle] = useState("");
-  const [shortIntro, setShortIntro] = useState("");
-  const [proLink, setProLink] = useState("");
-  const [perStatement, setPerStatement] = useState("");
-  const [imageUrl, setImageUrl] = useState<string>();
+  // const [resTitle, setResTitle] = useState("");
+  // const [shortIntro, setShortIntro] = useState("");
+  // const [proLink, setProLink] = useState("");
+  // const [perStatement, setPerStatement] = useState("");
+  // const [imageUrl, setImageUrl] = useState<string>();
   const [fileData, setFileData] = useState<File>();
   const [fileName, setFileName] = useState<string | undefined>(resumeDetail?.fileName);
   const [formData, setFormData] = useState<IResumeDetail>(defaultResumeDetail);
-  const navigate = useNavigate();
+  const [modal, setModal] = useRecoilState<boolean>(modalState);
+
+  console.log(userInfo);
+  console.log("123123resumeDetail::::::", resumeDetail);
 
   console.log(userInfo);
 
@@ -100,7 +125,6 @@ export const ResumeBasic = () => {
   };
 
   const handlerSave = async () => {
-    console.log("1");
     const fileForm = new FormData();
     console.log("fileForm:::::", fileForm);
     const textData = {
@@ -116,7 +140,6 @@ export const ResumeBasic = () => {
     console.log("textData::::::::", textData);
 
     fileData && fileForm.append("file", fileData);
-    console.log("fileForm:::::::::", fileForm);
     fileForm.append("text", new Blob([JSON.stringify(textData)], { type: "application/json" }));
     console.log("fileForm2:::::::::", fileForm);
     const response = await postResumeApi<IPostResponse>(Resume.resumeSave, fileForm);
@@ -145,6 +168,12 @@ export const ResumeBasic = () => {
     [resIdx]
   );
 
+  const handlerModal = (resIdx: number) => {
+    if (!modal) {
+      setModal(true);
+      console.log(`Modal opened with resIdx: ${resIdx}`);
+    }
+  };
   return (
     <>
       <StyledTable>
@@ -320,12 +349,32 @@ export const ResumeBasic = () => {
               style={{
                 backgroundColor: "gray",
               }}
+              onClick={() => handlerModal(resumeDetail.resIdx)}
             >
               미리보기
             </Button>
           </InputBtnGroup>
         </div>
       </StyledTable>
+      {modal && (
+        <HistoryModal
+          resIdx={resIdx}
+          index={0}
+          setModal={setModal}
+          resumeInfo={{
+            userNm: "",
+            email: "",
+            phone: "",
+            resTitle: "",
+            shortIntro: "",
+            perStatement: "",
+          }}
+          careerInfo={[]}
+          eduInfo={[]}
+          skillInfo={[]}
+          certInfo={[]}
+        />
+      )}
     </>
   );
 };
