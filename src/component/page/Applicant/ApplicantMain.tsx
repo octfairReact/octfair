@@ -5,7 +5,7 @@ import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../stores/userInfo";
 import { useRecoilState } from "recoil";
 import { useParams } from "react-router-dom";
-import { IApplicant, IApplicantListResponse, IDetailBiz } from "../../../models/interface/IApplicant";
+import { IApplicant, IApplicantListResponse, IApplicantPostResponse, IDetailBiz } from "../../../models/interface/IApplicant";
 import { postApplicantApi } from "../../../api/postApplicant";
 import { Applicant } from "../../../api/api";
 //import '../../../common/styled/Applicant.css';
@@ -22,18 +22,20 @@ export const ApplicantMain = () => {
     const [count, setCount] = useState<number>(0); // 지원자 수
     const [selectedPostIdx, setSelectedPostIdx] = useState<number>();
     const [selectedTitle, setSelectedTitle] = useState<string>("");
-
+    const [message, setMessage] = useState<string>("");
     useEffect(() => {
         getPostIndexList();
     }, [userInfo.loginId]);
 
 
+    //지원자 목록 불러오기 -> selectBox 선택에 따라서
     useEffect(() => {
         if(selectedPostIdx){
-            getApplicantList();            
+            getApplicantList();
+            setMessage(""); //메세지 초기화            
             // console.log("postIdx 잘 불러오는지 useEffect 에서 ------------------------------>" + selectedPostIdx);
         }       
-    }, [selectedPostIdx]);
+    }, [selectedPostIdx, keyword]); //공고제목, 
 
     //지원자 목록 가져오기위한 postIdx 리스트 받아오기
     const getPostIndexList = async () => {
@@ -66,9 +68,20 @@ export const ApplicantMain = () => {
 
         const param = {loginId: userInfo.loginId, postIdx: selectedPostIdx, keyword: keyword, currentPage: currentPage.toString(), pageSize: "5"};
         const getList = await postApplicantApi<IApplicantListResponse>(Applicant.gitListBody, param);
-        console.log("getList", getList);
-        setApplicantList(getList.data.list);
-        setCount(getList.data.count);
+        
+        if(getList.data.list && getList.data.list.length > 0) {
+            //리스트가 있을 경우
+            setApplicantList(getList.data.list);
+            setCount(getList.data.count);
+        }else {
+            //리스트가 없을 경우
+            setApplicantList([]);
+            setCount(getList.data.count);
+            setMessage("지원자가 없습니다")
+            
+        }
+       
+        
     }
 
     useEffect(() => {
@@ -95,10 +108,20 @@ export const ApplicantMain = () => {
         console.log("핸들러 체인지 시작:", postIdxList);
     };
     // 키워드 selectBox 선택된 값 처리
-    const handleKeywordSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const handleKeywordSelectChange = async (e: ChangeEvent<HTMLSelectElement>) => {
         const selectKeyword = e.target.value;
-        //setKeyword(selectKeyword);
-        console.log("키워드 핸들러 체인지 시작:---->", selectKeyword);
+        setKeyword(selectKeyword);
+
+        
+        // const param = {
+        //     keyword: keyword, 
+        //     loginId: userInfo.loginId, 
+        //     postIdx: selectedPostIdx} ;
+        
+        //const update = await postApplicantApi<IApplicantPostResponse>(Applicant.postUpdate, param );    
+        //if(update && update.data.result === "success")
+        //console.log("키워드 핸들러 체인지 시작:---->", update);
+        
     }
 
 return(
@@ -134,10 +157,12 @@ return(
         <div>
            
         <StyledContainer>
+        {message && <span>{message}</span>}    
             {applicantList.map((applicant) => (
                 <StyledRow key={applicant.appId}>
                 {/* 왼쪽: 지원자 이름 및 이력서 제목 */}
                 <div className="left">
+                   
                     <span>{applicant.name}</span>
                     <span>{applicant.resTitle}</span>
                 </div>

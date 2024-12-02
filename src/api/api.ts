@@ -66,6 +66,8 @@ export const Hire = {
 export const Applicant = {
   getPostIdx: "/manage-hire/applicantJson.do",
   gitListBody: "/manage-hire/applicantListBody.do",
+  postUpdate: "/manage-hire/statusUpdate.do",
+  
 
 };
 
