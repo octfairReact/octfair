@@ -52,6 +52,8 @@ export const ResumeBasic = () => {
   const [formData, setFormData] = useState<IResumeDetail>(defaultResumeDetail);
   const navigate = useNavigate();
 
+  console.log(userInfo);
+
   useEffect(() => {
     if (resumeDetail) {
       setFormData(resumeDetail);
@@ -103,10 +105,13 @@ export const ResumeBasic = () => {
     console.log("fileForm:::::", fileForm);
     const textData = {
       resIdx: resumeDetail.resIdx,
-      resTitle: formData.resTitle || "",
-      shortIntro: formData.shortIntro || "",
-      proLink: formData.proLink || "",
-      perStatement: formData.perStatement || "",
+      res_title: formData.resTitle || "",
+      short_intro: formData.shortIntro || "",
+      pfo_link: formData.proLink || "",
+      per_statement: formData.perStatement || "",
+      loginId: userInfo.loginId,
+      userNm: userInfo.userNm,
+      userType: userInfo.userType,
     };
     console.log("textData::::::::", textData);
 
@@ -205,11 +210,10 @@ export const ResumeBasic = () => {
           <ResumeDetailBodyHeader>경력</ResumeDetailBodyHeader>
           <ResumeDetailBodyGuide>
             <p>
-              • 담당하신 업무 중 우선순위가 높은 업무를 선별하여 최신순으로 작성해주세요. <br />•
-              신입의 경우, 직무와 관련된 대외활동, 인턴, 계약직 경력 등이 있다면 작성해주세요.{" "}
-              <br />
-              • 업무 또는 활동 시 담당했던 역할과 과정, 성과에 대해 자세히 작성해주세요. <br />•
-              현재 재직중이면 퇴사일을 해당월로 입력해주세요.
+              • 담당하신 업무 중 우선순위가 높은 업무를 선별하여 최신순으로 작성해주세요. <br />• 신입의 경우, 직무와
+              관련된 대외활동, 인턴, 계약직 경력 등이 있다면 작성해주세요. <br />
+              • 업무 또는 활동 시 담당했던 역할과 과정, 성과에 대해 자세히 작성해주세요. <br />• 현재 재직중이면
+              퇴사일을 해당월로 입력해주세요.
             </p>
           </ResumeDetailBodyGuide>
           <CareerList />
@@ -227,8 +231,8 @@ export const ResumeBasic = () => {
           <ResumeDetailBodyHeader>스킬</ResumeDetailBodyHeader>
           <ResumeDetailBodyGuide>
             <p>
-              • 개발 스택, 디자인 툴, 마케팅 툴 등 가지고 있는 직무와 관련된 스킬을 추가해보세요.{" "}
-              <br />• 데이터 분석 툴이나 협업 툴 등의 사용해본 경험이 있으신 툴들도 추가해보세요.
+              • 개발 스택, 디자인 툴, 마케팅 툴 등 가지고 있는 직무와 관련된 스킬을 추가해보세요. <br />• 데이터 분석
+              툴이나 협업 툴 등의 사용해본 경험이 있으신 툴들도 추가해보세요.
             </p>
           </ResumeDetailBodyGuide>
           <SkillList />
@@ -238,9 +242,8 @@ export const ResumeBasic = () => {
           <ResumeDetailBodyHeader>자격증 및 외국어</ResumeDetailBodyHeader>
           <ResumeDetailBodyGuide>
             <p>
-              • 직무 관련 자격증, 외국어 자격증이나 수료한 교육 등이 있다면 간략히 작성해주세요.{" "}
-              <br />• 지원하는 회사에서 요구하는 경우가 아니라면 운전면허증과 같은 자격증은 생략하는
-              것이 좋습니다!
+              • 직무 관련 자격증, 외국어 자격증이나 수료한 교육 등이 있다면 간략히 작성해주세요. <br />• 지원하는
+              회사에서 요구하는 경우가 아니라면 운전면허증과 같은 자격증은 생략하는 것이 좋습니다!
             </p>
           </ResumeDetailBodyGuide>
           <CertificationList />
@@ -250,17 +253,12 @@ export const ResumeBasic = () => {
           <ResumeDetailBodyHeader>링크</ResumeDetailBodyHeader>
           <ResumeDetailBodyGuide>
             <p>
-              • 깃허브, 노션으로 작성한 포트폴리오, 구글 드라이브 파일 등 업무 성과를 보여줄 수 있는
-              링크가 있다면 작성해주세요.
+              • 깃허브, 노션으로 작성한 포트폴리오, 구글 드라이브 파일 등 업무 성과를 보여줄 수 있는 링크가 있다면
+              작성해주세요.
             </p>
           </ResumeDetailBodyGuide>
           <div>
-            <ResumeInput
-              id="proLink"
-              value={formData.proLink || ""}
-              placeholder=" https://"
-              onChange={handlerChange}
-            />
+            <ResumeInput id="proLink" value={formData.proLink || ""} placeholder=" https://" onChange={handlerChange} />
           </div>
         </ResumeDetailBody>
 
@@ -284,12 +282,7 @@ export const ResumeBasic = () => {
           <ResumeDetailBodyGuide>
             <p>• 포트폴리오, 경력기술서 등 첨부파일이 있다면 등록해주세요.</p>
           </ResumeDetailBodyGuide>
-          <ResumeInput
-            type="file"
-            id="fileInput"
-            style={{ display: "none" }}
-            onChange={handlerFile}
-          />
+          <ResumeInput type="file" id="fileInput" style={{ display: "none" }} onChange={handlerFile} />
           {fileName ? (
             <div style={{ display: "flex", alignItems: "center" }}>
               <div

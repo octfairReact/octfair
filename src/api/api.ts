@@ -41,8 +41,7 @@ export const ManagePost = {
 
 export const Company = {
   postSave: "/company/companySaveBody.do",
-  getDetail: (postIdx: number, bizIdx: number) =>
-    `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
+  getDetail: (postIdx: number, bizIdx: number) => `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
   getCompanyInfo: "/company/companyUpdatePageRe.do",
   postUpdate: "/company/companyUpdateBody.do",
   postDelete: "/company/companyDeleteRe.do",
@@ -88,8 +87,7 @@ export const Applicant = {
 export const ScrapURL = {
   getScrapList: "/jobs/scrapListBody.do",
   getScarpDelete: "/jobs/deleteScrapBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) =>
-    `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
 export const Faq = {
@@ -102,11 +100,11 @@ export const Faq = {
 
 export const Qna = {
   getList: "/board/qnaListRe.do",
-  getMyList: "/board/qnaListRe.do",
   postSave: "/board/qnaFileSaveRe.do",
   getDetail: "/board/qnaDetailFileRe.do",
   postUpdate: "/board/qnaFileUpdateRe.do",
   postDelete: "/board/qnaFileDeleteRe.do",
+  checkPassword: "/board/checkPassword.do",
 };
 
 export const ManageUser = {

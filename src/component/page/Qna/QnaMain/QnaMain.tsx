@@ -8,7 +8,7 @@ import { PageNavigateStyled } from "../../../common/pageNavigation/styled";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { QnaModal } from "../QnaModal/QnaModal";
 import { modalState, qnaMyListState, qnaPasswordModalState } from "../../../../stores/modalState";
-import { IQnaAns, IQnaListResponse } from "../../../../models/interface/IQna";
+import { IPasswordCheck, IPasswordCheckResponse, IQnaAns, IQnaListResponse } from "../../../../models/interface/IQna";
 import { postQnaApi } from "../../../../api/postQnaApi";
 import { Qna } from "../../../../api/api";
 import { QnaContext } from "../../../../api/provider/QnaProvider";
@@ -78,12 +78,12 @@ export const QnaMain = () => {
 
   const onPostSuccess = () => {
     setModal(!modal);
-    // setFaqType(faqType);
-    // if (faqType) {
-    //   searchFaqList(currentPage, faqType);
-    // } else {
-    //   console.log("유저정보 아직2");
-    // }
+    setQnaType(qnaType);
+    if (qnaType) {
+      searchQnaList(currentPage, qnaType);
+    } else {
+      console.log("유저정보 아직2");
+    }
   };
 
   if (!isLoaded || qnaType === undefined) {
@@ -100,14 +100,39 @@ export const QnaMain = () => {
     setIndex(qnaIdx);
   };
 
-  // 비밀번호 모달에서 비밀번호를 전달받고, 상태 업데이트
-  const handlePasswordSubmit = (submittedPassword: string, index: number) => {
-    setPassword(submittedPassword); // 비밀번호 상태 업데이트
-    setIndex(index);
-    console.log("패스워드 전달 값", password);
-    console.log("패스워드 전달 값 + index", index);
-    setPasswordModal(false); // 비밀번호 모달 닫기
-    setModal(!modal);
+  // // 비밀번호 모달에서 비밀번호를 전달받고, 상태 업데이트
+  // const handlePasswordSubmit = (submittedPassword: string, index: number) => {
+  //   setPassword(submittedPassword); // 비밀번호 상태 업데이트
+  //   setIndex(index);
+  //   setPasswordModal(false); // 비밀번호 모달 닫기
+  //   setModal(!modal);
+  // };
+
+  // 비밀번호 체크
+  const handlePasswordSubmit = async (submittedPassword: string, index: number) => {
+    const param = {
+      qnaSeq: index,
+      password: submittedPassword,
+    };
+
+    try {
+      const passwordCheckRe = await postQnaApi<IPasswordCheck>(Qna.checkPassword, param); // 서버로 비밀번호 확인 요청
+
+      if (passwordCheckRe?.data?.result === "success") {
+        setPassword(passwordCheckRe.data.password);
+        setIndex(passwordCheckRe.data.qnaSeq); // 글 번호 저장
+        console.log("리턴된 패스워드", passwordCheckRe.data.password);
+        setPasswordModal(false); // 비밀번호 입력 모달 닫기
+        setModal(!modal);
+      } else {
+        alert("비밀번호가 일치하지 않습니다.");
+        setPasswordModal(false); // 비밀번호 입력 모달 닫기
+      }
+    } catch (error) {
+      console.error("비밀번호 확인 요청 실패:", error);
+      alert("비밀번호 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setPasswordModal(false); // 비밀번호 입력 모달 닫기
+    }
   };
 
   return (
@@ -135,8 +160,6 @@ export const QnaMain = () => {
             <StyledTh size={50}>제목</StyledTh>
             <StyledTh size={10}>작성자</StyledTh>
             <StyledTh size={20}>등록일</StyledTh>
-            {/* 관리자만 볼 수 있음 */}
-            {userInfo.userType === "M" && <StyledTh size={10}>관리</StyledTh>}
           </tr>
         </thead>
         <tbody>
