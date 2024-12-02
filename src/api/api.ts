@@ -72,6 +72,7 @@ export const Posts = {
   getPost: "/jobs/posts.do",
   getScrap: "/jobs/scrap.do",
   applyUserResumeDetail: "/jobs/applyUserResumeDetailBody.do",
+
   applyBizPostDetail: "/jobs/applyBizPostDetailBody.do",
   getScrapSave: "/jobs/saveScrapBody.do",
   saveApplyBody: "/jobs/saveApplyBody.do",
@@ -84,6 +85,7 @@ export const Resume = {
 export const ScrapURL = {
   getScrapList: "/jobs/scrapListBody.do",
   getScarpDelete: "/jobs/deleteScrapBody.do",
+  getScarpUpdate: "/jobs/updateScrapBody.do",
 
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };

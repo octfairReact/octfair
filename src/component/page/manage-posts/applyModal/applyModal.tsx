@@ -84,7 +84,7 @@ export const ApplyModal: FC<IApplyModalProps> = ({ onSuccess, indexGroup }) => {
       postIdx: indexGroup[0],
       bizIdx: indexGroup[1],
       loginId: loginId,
-      resumeIdx: selectedValue.resumeIdx,
+      resIdx: selectedValue.resumeIdx,
       userIdx: selectedValue.userIdx,
     };
     console.log("param : ", param);

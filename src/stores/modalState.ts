@@ -60,6 +60,10 @@ export const scrapIndexGrop = atom<number[]>({
   key: "scrapIndexGrop",
   default: [],
 });
+export const postIndexGrop = atom<number[]>({
+  key: "postIndexGrop",
+  default: [],
+});
 
 export const qnaMyListState = atom<string>({
   key: "qnaMyListState",
