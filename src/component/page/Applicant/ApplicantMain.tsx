@@ -15,6 +15,7 @@ export const ApplicantMain = () => {
     // const [applicants, setApplicants]  = useState([]);
     // const [companyList, setCompanyList] = useState([]);
     const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
+    //const [userId, setUserId] = useState<string>(""); //지원자ID
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [postIdxList, setPostIdxList] = useState<IDetailBiz[]>([]);
     const [applicantList, setApplicantList] = useState<IApplicant[]>([]); //초기화  
@@ -80,17 +81,16 @@ export const ApplicantMain = () => {
             setMessage("지원자가 없습니다")
             
         }
-       
-        
+             
     }
-
+    //loginId
     useEffect(() => {
          if (sessionStorage.getItem("userInfo")) {
            setUserInfo(JSON.parse(sessionStorage.getItem("userInfo")!));
            console.log(sessionStorage.getItem("userInfo"));       
          }
        }, []);
-
+    
     useEffect(() => {
         if (selectedPostIdx) {
             const selectedApplicant = postIdxList.find(applicant => applicant.postIdx === selectedPostIdx);
@@ -111,17 +111,21 @@ export const ApplicantMain = () => {
     const handleKeywordSelectChange = async (e: ChangeEvent<HTMLSelectElement>) => {
         const selectKeyword = e.target.value;
         setKeyword(selectKeyword);
+    }
 
-        
-        // const param = {
-        //     keyword: keyword, 
-        //     loginId: userInfo.loginId, 
-        //     postIdx: selectedPostIdx} ;
-        
-        //const update = await postApplicantApi<IApplicantPostResponse>(Applicant.postUpdate, param );    
-        //if(update && update.data.result === "success")
-        //console.log("키워드 핸들러 체인지 시작:---->", update);
-        
+    //이력서 조회 버튼
+    const handleViewChange = async (loginId: string) => {
+        const param = {loginId: loginId, postIdx: selectedPostIdx}
+        const viewChange = await postApplicantApi<IApplicantPostResponse>(Applicant.viewUpdate, param);
+
+        if(viewChange && viewChange.data.result === "success"){
+            alert("성공");
+            await getApplicantList();
+        }else{
+            console.error("Failed to viewUpdate:", viewChange?.data);
+        }
+
+
     }
 
 return(
@@ -176,11 +180,13 @@ return(
 
                 {/* 오른쪽: 버튼들 */}
                 <div className="right">
-                    <button>지원자 이력서 보기</button>
-                    <div className="decision-buttons">
-                    <button>합격</button>
-                    <button>불합격</button>
+                    <button onClick={() => handleViewChange(applicant.loginId)}>지원자 이력서 보기</button>
+                    {applicant.viewed === 1 && ( // 이력서 조회해야 viewed가 1로 변하고 합/불 버튼이 활성화
+                    <div className="decision-buttons">                  
+                        <button >합격</button>
+                        <button>불합격</button>                  
                     </div>
+                )}
                 </div>
                 </StyledRow>
         ))}
