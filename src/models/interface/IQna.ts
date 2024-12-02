@@ -40,3 +40,12 @@ export interface IQnaListResponse {
   qnaCnt: number;
   qna: IQnaAns[];
 }
+
+export interface IPasswordCheck extends IPostResponse {
+  qnaSeq: number;
+  password: string;
+}
+
+export interface IPasswordCheckResponse extends IPasswordCheck {
+  detail: IQnaDetail;
+}
