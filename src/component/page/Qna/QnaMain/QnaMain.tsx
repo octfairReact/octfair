@@ -110,6 +110,9 @@ export const QnaMain = () => {
       password: submittedPassword,
     };
 
+    // 비밀번호 확인 시작 전 로딩 상태 설정
+    setIsLoaded(false);
+
     try {
       const passwordCheckRe = await postQnaApi<IPasswordCheck>(Qna.checkPassword, param); // 서버로 비밀번호 확인 요청
 
@@ -126,6 +129,9 @@ export const QnaMain = () => {
       console.error("비밀번호 확인 요청 실패:", error);
       alert("비밀번호 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
       setPasswordModal(false); // 비밀번호 입력 모달 닫기
+    } finally {
+      // 요청이 완료된 후 로딩 상태 해제
+      setIsLoaded(true);
     }
   };
 

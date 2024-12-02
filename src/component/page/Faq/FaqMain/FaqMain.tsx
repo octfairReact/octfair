@@ -170,7 +170,10 @@ export const FaqMain = () => {
                 {/* 클릭된 FAQ의 내용 표시 */}
                 {showContext === faq.faq_idx && (
                   <tr>
-                    <td colSpan={5} style={{ backgroundColor: "#D7D7D7" }}>
+                    <td
+                      colSpan={userInfo.userType === "M" ? 6 : 5}
+                      style={{ backgroundColor: "#D7D7D7", height: "100px" }}
+                    >
                       {faq.content || "내용이 없습니다."}
                     </td>
                   </tr>
@@ -187,7 +190,10 @@ export const FaqMain = () => {
       <PageNavigateStyled>
         <PageNavigate
           totalItemsCount={faqCnt}
-          onChange={searchFaqList}
+          onChange={(page) => {
+            setCurrentPage(page); // 페이지 번호 변경(클릭시)
+            searchFaqList(page, faqType); // 페이지 변경 시 목록을 다시 로드
+          }}
           activePage={cPage}
           itemsCountPerPage={5}
         ></PageNavigate>
