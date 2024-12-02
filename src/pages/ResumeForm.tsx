@@ -13,9 +13,9 @@ import { ILoginInfo } from "../models/interface/store/userInfo";
 
 export const ResumeForm = () => {
   const { resIdx } = useParams<{ resIdx: string }>();
-
-  //console.log("ResumeMain -> ResumeForm으로 받은 resIdx:", { resIdx });
-
+  // const location = useLocation();
+  // const context = useContext(ResumeContext);
+  // const resIdx = location.state?.resIdx || context.resIdx || 0;
   return (
     <ResumeProvider resIdx={resIdx ? parseInt(resIdx, 10) : undefined}>
       <ResumeContent />
@@ -41,7 +41,7 @@ const ResumeContent = () => {
 
   return (
     <div>
-      <ContentBox>새 이력서 작성</ContentBox>
+      <ContentBox>이력서 작성/수정</ContentBox>
       <ResumeBasic />
     </div>
   );

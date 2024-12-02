@@ -20,7 +20,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
 
 export const ResumeMain = () => {
-  const { resIdx, resumeDetail, setResumeDetail } = useContext(ResumeContext);
+  const { resIdx, resumeDetail, setResumeDetail, setResIdx } = useContext(ResumeContext);
   const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [resumeList, setResumeList] = useState<IResume[]>();
   const navigate = useNavigate();
@@ -83,8 +83,10 @@ export const ResumeMain = () => {
       //IDetailResponse는 큰 상자, result는 상자 안에 담긴 작은 물건이라고 생각하면 상자 전체(IDetailResponse)를 쓸 필요 없이, 그 안에 담긴 물건(result)만 꺼내서 사용하겠다는 의미
       const resumeDetail: IResumeDetail = response.data.result;
       const createNewResume = response.data.createNewResume;
+      const newResIdx = resumeDetail.resIdx;
 
       setResumeDetail(resumeDetail);
+      setResIdx(newResIdx);
       console.log("새 이력서 작성 시 최종 데이터 보내기 전", resumeDetail);
       console.log(createNewResume);
 
@@ -92,6 +94,7 @@ export const ResumeMain = () => {
         state: {
           resumeDetail,
           createNewResume: response.data.createNewResume || null,
+          resIdx: newResIdx,
         },
       });
     }

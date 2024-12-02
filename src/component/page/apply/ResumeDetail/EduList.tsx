@@ -21,6 +21,7 @@ import { ResumeContext } from "../../../../api/provider/ResumeProvider";
 import { postResumeApi } from "../../../../api/postResumeApi";
 import { Resume } from "../../../../api/api";
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 interface EduListDisplayProps {
   educations: Education[];
@@ -30,15 +31,17 @@ interface EduListDisplayProps {
 }
 
 export const EduList = () => {
-  const { resIdx } = useContext(ResumeContext);
+  const location = useLocation();
+  const context = useContext(ResumeContext);
+  const resIdx = location.state?.resIdx || context.resIdx || 0;
   const [showTable, setShowTable] = useState(false);
-  const [educations, setEducations] = useState([]);
+  const [educations, setEducations] = useState<Education[]>([]);
   const handlerShowTable = () => {
     setShowTable(true);
   };
 
   const initialFormData: Education = {
-    resIdx,
+    resIdx: resIdx || 0,
     eduLevel: "",
     schoolName: "",
     major: "",
@@ -54,6 +57,11 @@ export const EduList = () => {
   ) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value })); // 업데이트 해주깅
+
+    // 학력 구분이 고등학교일 경우 전공을 초기화
+    if (id === "eduLevel" && value === "고등학교") {
+      setFormData((prev) => ({ ...prev, major: "" }));
+    }
   };
 
   const handlerCancle = () => {
@@ -62,12 +70,47 @@ export const EduList = () => {
   };
 
   const eduAdd = async () => {
+    if (!formData.eduLevel.trim()) {
+      alert("학력구분을 선택해주세요.");
+      return;
+    }
+    if (!formData.schoolName.trim()) {
+      alert("학교명을 입력해주세요.");
+      return;
+    }
+    if (formData.eduLevel !== "고등학교" && !formData.major.trim()) {
+      alert("전공명을 입력해주세요.");
+      return;
+    }
+    if (!formData.admDate.trim()) {
+      alert("입학일을 입력해주세요.");
+      return;
+    }
+    if (!formData.grdDate.trim()) {
+      alert("졸업일을 입력해주세요.");
+      return;
+    }
+    if (!formData.grdStatus.trim()) {
+      alert("졸업여부를 선택해주세요.");
+      return;
+    }
+
+    // 입학일과 졸업일 비교
+    const admDate = new Date(formData.admDate + "-01");
+    const grdDate = new Date(formData.grdDate + "-01");
+    if (admDate > grdDate) {
+      alert("입학일은 졸업일보다 미래일 수 없습니다. 다시 선택해주세요.");
+      return;
+    }
+
     try {
       const param = {
         ...formData,
+        resIdx,
         admDate: `${formData.admDate}-01`, // YYYY-MM -> YYYY-MM-DD (1일로 기본 설정 why? DB랑 맞추느라;;)
         grdDate: `${formData.grdDate}-01`,
       };
+      console.log("전달할 데이터:", param);
       const response = await postResumeApi<IPostResponse>(Resume.eduInsert, param);
 
       if (response.data.result === "success") {
@@ -125,6 +168,8 @@ export const EduList = () => {
                       placeholder="전공명"
                       required
                       onChange={handlerChange}
+                      value={formData.major} // 상태 관리
+                      disabled={formData.eduLevel === "고등학교"} // 고등학교일 경우 비활성화
                     />
                   </td>
                 </tr>
@@ -199,7 +244,10 @@ export const EduListDisplay: FC<EduListDisplayProps> = ({
   showTable,
   setShowTable,
 }) => {
-  const { resIdx } = useContext(ResumeContext);
+  const location = useLocation();
+  const context = useContext(ResumeContext);
+
+  const resIdx = location.state?.resIdx || context.resIdx || 0;
 
   const fetchEduList = useCallback(async (resIdx: number) => {
     try {
