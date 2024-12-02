@@ -16,7 +16,7 @@ export const Notice = {
   //postUpdate: "/board/noticeUpdateJson.do",
   postDelet: "/board/noticeDeleteBody.do",
   //postUpdate: "/board/noticeUpdateBody.do",
-  postUpdate: "/board/noticeUpdateFileForm.do",
+  postUpdate: "/board/noticeFileUpdateForm.do",
 };
 
 export const History = {
