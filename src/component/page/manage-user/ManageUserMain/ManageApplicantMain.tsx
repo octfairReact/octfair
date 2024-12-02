@@ -9,10 +9,15 @@ import { Button } from "../../../common/Button/Button";
 import { ManageUser } from "../../../../api/api";
 import { postManageUserApi } from "../../../../api/postManageUserApi";
 import { ManageUserContext } from "../../../../api/provider/ManageUserProvider";
+import { toast } from "react-toastify";
 
 export const ManageApplicantMain = () => {
   // 모달에 쓰이는 변수
+<<<<<<< HEAD
   const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(modalState);
+=======
+  const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(updateApplicantModalState);
+>>>>>>> ecc898fec89530a201340b22431fdf63dc16f9ad
   const [id, setId] = useState<string>();
 
   // 리스트(표)에 쓰이는 변수

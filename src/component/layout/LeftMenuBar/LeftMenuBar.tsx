@@ -6,9 +6,10 @@ import { loginInfoState } from '../../../stores/userInfo';
 import { LeftMenuBarStyled, StyledLink } from './styled';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import { MainPage } from '../../page/chat/ChatPage';
 
 export const LeftMenuBar = () => {
-    const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
+    const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
     const navigate = useNavigate();
 
     const handlerClick = (menuId: string, e: React.MouseEvent<HTMLDivElement>) => {
@@ -42,7 +43,9 @@ export const LeftMenuBar = () => {
     };
 
     const handlerLogout = () => {
+        setUserInfo({});
         sessionStorage.setItem('userInfo', '');
+        localStorage.setItem("loginInfoState", '');
         navigate('/');
     };
 
@@ -87,6 +90,10 @@ export const LeftMenuBar = () => {
                     );
                 })}
             </ul>
+
+            {/* chat 테스트중 */}
+            {/* <MainPage/> */}
+            
         </LeftMenuBarStyled>
     );
 };

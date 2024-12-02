@@ -6,6 +6,8 @@ import { loginInfoState } from "../../../../stores/userInfo";
 import { modalState } from "../../../../stores/modalState";
 import { MyPageUpdatePasswordModal } from "../MyPageModal/MyPageUpdatePasswordModal";
 import { useNavigate } from "react-router-dom";
+import { MyPage } from "../../../../api/api";
+import { toast } from "react-toastify";
 import {
   Table,
   TableCaption,
@@ -37,7 +39,7 @@ export interface UpdateInput {
 }
 
 export const MyPageUpdateMain = () => {
-  const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(modalState);
+  const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(updatePasswordModalState);
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [bizIdx, setBizIdx] = useState<number>();
   const [updateInput, setUpdateInput] = useState<UpdateInput>({
