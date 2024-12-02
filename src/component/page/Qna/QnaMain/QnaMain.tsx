@@ -13,6 +13,7 @@ import { postQnaApi } from "../../../../api/postQnaApi";
 import { Qna } from "../../../../api/api";
 import { QnaContext } from "../../../../api/provider/QnaProvider";
 import { QnaPassword } from "../QnaModal/QnaPassword";
+import { HistoryModalStyled } from "../../History/HistoryModal/styled";
 
 export const QnaMain = () => {
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
@@ -22,12 +23,12 @@ export const QnaMain = () => {
   const [qPage, setQPage] = useState<number>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [qnaList, setQnaList] = useState<IQnaAns[]>();
-  const [isLoaded, setIsLoaded] = useState(false); //로딩 상태 관리. 조회 결과 나오기전까지 랜더링 안되게
   const { searchKeyWord } = useContext(QnaContext);
   const [qnaMyList, setQnaMyList] = useRecoilState<string>(qnaMyListState);
   const [index, setIndex] = useState<number>();
   const [passwordmodal, setPasswordModal] = useRecoilState<boolean>(qnaPasswordModalState);
   const [password, setPassword] = useState<string>(""); // 비밀번호 상태 관리
+  const [isLoaded, setIsLoaded] = useState(false); //로딩 상태 관리. 조회 결과 나오기전까지 랜더링 안되게
 
   useEffect(() => {
     if (userInfo && userInfo.userType) {
@@ -38,8 +39,6 @@ export const QnaMain = () => {
       }
     }
   }, [userInfo]);
-
-  console.log("qnaType", qnaType);
 
   useEffect(() => {
     if (qnaType && searchKeyWord) {
@@ -62,7 +61,7 @@ export const QnaMain = () => {
     const searchList = await postQnaApi<IQnaListResponse>(Qna.getList, searchParam);
 
     if (searchList) {
-      console.log("뭐들어와?", searchList.data.qna);
+      //console.log("뭐들어와?", searchList.data.qna);
       setQnaList(searchList.data.qna);
       setQnaCnt(searchList.data.qnaCnt);
       setQPage(currentPage);
@@ -85,10 +84,6 @@ export const QnaMain = () => {
       console.log("유저정보 아직2");
     }
   };
-
-  if (!isLoaded || qnaType === undefined) {
-    return null; // 로딩 완료 전까지 아무것도 렌더링하지 않음
-  }
 
   const handlerModal = (qnaIdx: number) => {
     setModal(!modal);
@@ -121,7 +116,6 @@ export const QnaMain = () => {
       if (passwordCheckRe?.data?.result === "success") {
         setPassword(passwordCheckRe.data.password);
         setIndex(passwordCheckRe.data.qnaSeq); // 글 번호 저장
-        console.log("리턴된 패스워드", passwordCheckRe.data.password);
         setPasswordModal(false); // 비밀번호 입력 모달 닫기
         setModal(!modal);
       } else {
@@ -135,6 +129,16 @@ export const QnaMain = () => {
     }
   };
 
+  if (!isLoaded || qnaType === undefined) {
+    return (
+      <HistoryModalStyled>
+        <div className="loading-container">
+          <p>데이터를 불러오는 중입니다...</p>
+        </div>
+      </HistoryModalStyled>
+    );
+  }
+  console.log("qnaType", qnaType);
   return (
     <>
       <QnaMainStyled>
@@ -212,7 +216,11 @@ export const QnaMain = () => {
       <PageNavigateStyled>
         <PageNavigate
           totalItemsCount={qnaCnt}
-          onChange={searchQnaList}
+          // onChange={searchQnaList}
+          onChange={(page) => {
+            setCurrentPage(page); // 페이지 번호 변경(클릭시)
+            searchQnaList(page, qnaType, qnaMyList); // 페이지 변경 시 목록을 다시 로드
+          }}
           activePage={qPage}
           itemsCountPerPage={5}
         ></PageNavigate>
