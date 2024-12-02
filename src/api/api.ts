@@ -37,14 +37,12 @@ export const Posts = {
 export const ManagePost = {
   getPostList: "/manage-post/readPostListBody.do",
   statusUpdate: "/manage-post/statusUpdateBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) =>
-    `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
 export const Company = {
   postSave: "/company/companySaveBody.do",
-  getDetail: (postIdx: number, bizIdx: number) =>
-    `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
+  getDetail: (postIdx: number, bizIdx: number) => `/company/companyDetailPageRe.do/${postIdx}/${bizIdx}`,
   getCompanyInfo: "/company/companyUpdatePageRe.do",
   postUpdate: "/company/companyUpdateBody.do",
   postDelete: "/company/companyDeleteRe.do",
@@ -89,8 +87,7 @@ export const Applicant = {
 export const ScrapURL = {
   getScrapList: "/jobs/scrapListBody.do",
   getScarpDelete: "/jobs/deleteScrapBody.do",
-  getpostDetail: (postIdx: number, bizIdx: number) =>
-    `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
+  getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
 
 export const Faq = {
@@ -107,6 +104,7 @@ export const Qna = {
   getDetail: "/board/qnaDetailFileRe.do",
   postUpdate: "/board/qnaFileUpdateRe.do",
   postDelete: "/board/qnaFileDeleteRe.do",
+  checkPassword: "/board/checkPassword.do",
 };
 
 export const ManageUser = {
