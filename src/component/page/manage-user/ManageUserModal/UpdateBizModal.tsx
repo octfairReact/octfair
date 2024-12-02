@@ -12,6 +12,7 @@ import {
   TableHeaderCell,
   TableDataCell,
   InputField,
+  SelectBox,
   RequiredMark,
   Button,
 } from "./styled";
@@ -193,17 +194,28 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({refreshUserListHandle
               <tr>
                 <TableHeaderCell>사원수 <RequiredMark>*</RequiredMark></TableHeaderCell>
                 <TableDataCell colSpan={3}>
-                  <InputField type="text" id="bizEmpCount" value={userData.bizEmpCount}
-                    onChange={(e) => {  setUserData((prev) => ({ ...prev, bizEmpCount: e.target.value })); }}>
-                  </InputField>
+                  <SelectBox name="bizEmpCount" id="bizEmpCount" value={userData.bizEmpCount}
+                    onChange={(e) => { setUserData((prev) => ({ ...prev, bizEmpCount: e.target.value })); }}>
+                    <option value="" disabled>선택</option>
+                    <option value="10명 이하">10명 이하</option>
+                    <option value="50명 이하">50명 이하</option>
+                    <option value="100명 이하">100명 이하</option>
+                    <option value="1000명 이하">1000명 이하</option>
+                    <option value="1000명 이상">1000명 이상</option>
+                  </SelectBox>
                 </TableDataCell>
               </tr>
               <tr>
                 <TableHeaderCell>매출액 <RequiredMark>*</RequiredMark></TableHeaderCell>
                 <TableDataCell colSpan={3}>
-                  <InputField type="text" id="bizRevenue" value={userData.bizRevenue}
-                    onChange={(e) => {  setUserData((prev) => ({ ...prev, bizRevenue: e.target.value })); }}>
-                  </InputField>
+                  <SelectBox name="bizRevenue" id="bizRevenue" value={userData.bizRevenue}
+                    onChange={(e) => { setUserData((prev) => ({ ...prev, bizRevenue: e.target.value })); }}>
+                    <option value="" disabled>선택</option>
+                    <option value="10억 이하">10억 이하</option>
+                    <option value="100억 이하">100억 이하</option>
+                    <option value="1000억 이하">1000억 이하</option>
+                    <option value="1000억 이상">1000억 이상</option>
+                  </SelectBox>
                 </TableDataCell>
               </tr>
               <tr>

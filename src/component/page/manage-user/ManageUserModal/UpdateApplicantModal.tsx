@@ -139,6 +139,7 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
     // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
     const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     const phoneRules = /^[0-9]([-]?[0-9])*$/;
+    const zipCodeRules = /^[0-9]*$/;
 
     if (isProblem === false) {
       if (new Date(userData.regdate) < new Date(userData.birthday)) {
@@ -152,6 +153,9 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
         isProblem = true;
       } else if (!emailRules.test(userData.email)) {
         toast.info("이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다.")
+        isProblem = true;
+      } else if (!zipCodeRules.test(userData.zipCode)) {
+        toast.info("우편번호 형식을 확인해주세요. 숫자만 가능합니다.");
         isProblem = true;
       }
     }
@@ -240,7 +244,7 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
             <tbody>
               <tr>
                 <TableHeaderCell>회원유형 <RequiredMark>*</RequiredMark></TableHeaderCell>
-                <TableDataCell>
+                <TableDataCell colSpan={3}>
                   <SelectBox name="userType" id="userType" value={userData.userType}
                     onChange={(e) => { setUserData((prev) => ({ ...prev, userType: e.target.value })); }}>
                     <option value="" disabled>선택</option>
@@ -259,19 +263,21 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
               </tr>
               <tr>
                 <TableHeaderCell>비밀번호 <RequiredMark>*</RequiredMark></TableHeaderCell>
-                <TableDataCell>
+                <TableDataCell colSpan={3}>
                   <Button onClick={resetPasswordHandler}>초기화</Button>
                 </TableDataCell>
               </tr>
               <tr>
                 <TableHeaderCell>이름 <RequiredMark>*</RequiredMark></TableHeaderCell>
-                <TableDataCell>
+                <TableDataCell colSpan={3}>
                   <InputField type="text" id="name" value={userData.name}
                     onChange={(e) => { setUserData((prev) => ({ ...prev, name: e.target.value })); }}>
                   </InputField>
                 </TableDataCell>
+              </tr>
+              <tr>
                 <TableHeaderCell>성별 <RequiredMark>*</RequiredMark></TableHeaderCell>
-                <TableDataCell>
+                <TableDataCell colSpan={3}>
                   <SelectBox name="sex" id="sex" value={userData.sex}
                     onChange={(e) => { setUserData((prev) => ({ ...prev, sex: e.target.value })); }}>
                     <option value="" disabled>선택</option>
@@ -314,7 +320,7 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
               </tr>
               <tr>
                 <TableHeaderCell>활성화 <RequiredMark>*</RequiredMark></TableHeaderCell>
-                <TableDataCell>
+                <TableDataCell colSpan={3}>
                   <SelectBox name="userType" id="statusYn" value={userData.statusYn}
                     onChange={(e) => { setUserData((prev) => ({ ...prev, statusYn: e.target.value })); }}>
                     <option value="" disabled>선택</option>

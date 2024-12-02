@@ -153,16 +153,13 @@ export const NoticeContainer = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: bold;
   color: #d32f2f;  // 주의, 경고를 나타내는 빨간색
   padding: 20px;
   background-color: #fff3f3;  // 연한 빨간색 배경
   border: 1px solid #d32f2f;   // 경고 색상으로 테두리
   border-radius: 8px;
-  width: 80%;
-  max-width: 600px;
-  margin: 0 auto;
 `;
 
 export const CautionText = styled.p`

@@ -41,6 +41,7 @@ export interface UpdateInput {
 export const MyPageUpdateMain = () => {
   const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(updatePasswordModalState);
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
+  const [userType, setUserType] = useState<string>();
   const [bizIdx, setBizIdx] = useState<number>();
   const [updateInput, setUpdateInput] = useState<UpdateInput>({
     // 기본값
@@ -72,6 +73,7 @@ export const MyPageUpdateMain = () => {
     axios.get(MyPage.getUserInfo + "?loginId=" + userInfo.loginId)
       .then((res) => {
         let prevData = res.data.detail;
+        setUserType(prevData.userType);
         setBizIdx(res.data.chkRegBiz.bizIdx);
         setUpdateInput({
           loginId: userInfo.loginId, // 아이디 칸은 읽기전용
@@ -121,6 +123,7 @@ export const MyPageUpdateMain = () => {
     // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
     const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     const phoneRules = /^[0-9]([-]?[0-9])*$/;
+    const zipCodeRules = /^[0-9]*$/;
 
     if (isProblem === false) {
       if (new Date(updateInput.birthday) > new Date()) {
@@ -131,6 +134,9 @@ export const MyPageUpdateMain = () => {
         isProblem = true;
       } else if (!emailRules.test(updateInput.email)) {
         toast.info("이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다.")
+        isProblem = true;
+      } else if (!zipCodeRules.test(updateInput.zipCode)) {
+        toast.info("우편번호 형식을 확인해주세요. 숫자만 가능합니다.");
         isProblem = true;
       }
     }
@@ -224,17 +230,21 @@ export const MyPageUpdateMain = () => {
           </tr>
           <tr>
             <TableHeaderCell>비밀번호 <RequiredMark>*</RequiredMark></TableHeaderCell>
-            <Button onClick={updatePasswordHandler}>수정</Button>
+            <TableDataCell colSpan={3}>
+              <Button onClick={updatePasswordHandler}>수정</Button>
+            </TableDataCell>
           </tr>
           <tr>
             <TableHeaderCell>이름 <RequiredMark>*</RequiredMark></TableHeaderCell>
-            <TableDataCell>
+            <TableDataCell colSpan={3}>
               <InputField type="text" id="name" value={updateInput.name}
                 onChange={(e) => { setUpdateInput((prev) => ({ ...prev, name: e.target.value })); }}>
               </InputField>
             </TableDataCell>
+          </tr>
+          <tr>
             <TableHeaderCell>성별 <RequiredMark>*</RequiredMark></TableHeaderCell>
-            <TableDataCell>
+            <TableDataCell colSpan={3}>
               <SelectBox name="sex" id="sex" value={updateInput.sex}
                 onChange={(e) => { setUpdateInput((prev) => ({ ...prev, sex: e.target.value })); }}>
                 <option value="" disabled>선택</option>
@@ -267,8 +277,8 @@ export const MyPageUpdateMain = () => {
               </InputField>
             </TableDataCell>
           </tr>
-          { bizIdx >= 0 && ( // bizIdx: 0이상이면 기업회원이기에 기업정보 칸 동적생성, 0이상 중에서도 0이면 등록 1이상이면 수정
-            <tr>
+          { userType === 'B' && ( // userType: A면 개인회원, B면 기업회원, 즉 기업회원만 보이도록
+            <tr>                  {/* bizIdx: 0이면 등록 1이상이면 수정 */}
               <TableHeaderCell>기업정보 <RequiredMark>*</RequiredMark></TableHeaderCell>
               <TableDataCell colSpan={3}>
                 { bizIdx === 0 && ( <Button onClick={createBizHandler}>등록</Button> )}

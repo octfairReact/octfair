@@ -65,18 +65,18 @@ export const MyPageUpdatePasswordModal = () => {
       return false;
     });
     
-    // // 2. 양식검사: password 입력창에 대하여 지켜야할 정규식패턴 검사
-    // const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+    // 2. 양식검사: password 입력창에 대하여 지켜야할 정규식패턴 검사
+    const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 
-    // if (isProblem === false) {
-    //   if (!passwordRules.test(password.newPassword)) {// .test()는 정규식패턴에 맞으면 true를 반환
-    //     toast.info("비밀번호는 숫자,영문자,특수문자 조합으로 8~15자리여야 합니다.");
-    //     isProblem = true;
-    //   } else if (password.newPassword !== password.checkPassword) {
-    //     toast.info("비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다.")
-    //     isProblem = true;
-    //   }
-    // }
+    if (isProblem === false) {
+      if (!passwordRules.test(password.newPasswd)) {// .test()는 정규식패턴에 맞으면 true를 반환
+        toast.info("비밀번호는 숫자,영문자,특수문자 조합으로 8~15자리여야 합니다.");
+        isProblem = true;
+      } else if (password.newPasswd !== password.newPasswdConfirm) {
+        toast.info("비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다.")
+        isProblem = true;
+      }
+    }
 
     // 3. 데이터전송: 비번수정 입력정보 문제없음! 서버로 Update요청!
     if (isProblem === false) {

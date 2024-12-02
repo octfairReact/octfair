@@ -123,22 +123,26 @@ export const SignupModal = () => {
     const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
     const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     const phoneRules = /^[0-9]([-]?[0-9])*$/;
+    const zipCodeRules = /^[0-9]*$/;
 
     if (isProblem === false) {
       if (!passwordRules.test(signupInput.password)) {// .test()는 정규식패턴에 맞으면 true를 반환
         toast.info("비밀번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다.");
         isProblem = true;
       } else if (signupInput.password !== signupInput.passwordOk) {
-        toast.info("비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다.")
+        toast.info("비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다.");
         isProblem = true;
       } else if (new Date(signupInput.birthday) > new Date()) {
         toast.info("생년월일은 미래의 날짜일 수 없습니다.");
         isProblem = true;
       } else if (!phoneRules.test(signupInput.phone)) {
-        toast.info("전화번호는 숫자로 시작해야하며 중간에만 '-'를 쓰실수는 있습니다.");
+        toast.info("전화번호는 숫자여야하며 중간에만 '-'를 쓰실수는 있습니다.");
         isProblem = true;
       } else if (!emailRules.test(signupInput.email)) {
-        toast.info("이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다.")
+        toast.info("이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다.");
+        isProblem = true;
+      } else if (!zipCodeRules.test(signupInput.zipCode)) {
+        toast.info("우편번호 형식을 확인해주세요. 숫자만 가능합니다.");
         isProblem = true;
       }
     }
@@ -324,7 +328,7 @@ export const SignupModal = () => {
               <tr>
                 <TableHeaderCell>우편번호 <RequiredMark>*</RequiredMark></TableHeaderCell>
                 <TableDataCell colSpan={2}>
-                  <InputField type="text" id="zipCode" value={signupInput.zipCode}
+                  <InputField type="text" id="zipCode" placeholder="숫자만 입력" value={signupInput.zipCode}
                     onChange={(e) => { setSignupInput((prev) => ({ ...prev, zipCode: e.target.value })); }}>
                   </InputField>
                 </TableDataCell>

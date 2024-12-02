@@ -55,11 +55,11 @@ export const MyPageWithdrawModal = () => {
     //   }
     // }
 
-    // 3. 탈퇴의사 재확인
+    // 3. 탈퇴의사 재확인 하는 confirm확인창
     const isConfirmed = window.confirm("회원탈퇴 후 복구가 불가능합니다. 정말 탈퇴하시겠습니까?");
     if (!isConfirmed) return;
 
-    // 3. 데이터 전송: 회원탈퇴 입력정보 문제없음! 서버로 Delete요청!
+    // 4. 데이터 전송: 회원탈퇴 입력정보 문제없음! 서버로 Delete요청!
     if (isProblem === false) {
       axios.get(MyPage.deleteUser + "?password=" + encodeURIComponent(password))
         .then((res) => {
@@ -68,7 +68,7 @@ export const MyPageWithdrawModal = () => {
             closeModalHandler();
             navigate("/");
           } else {
-            toast.warn("회원탈퇴 실패, 담당자에게 문의하세요!");
+            toast.warn("입력하신 비밀번호가 일치하지 않습니다.");
           }
         })
         .catch((error) => {

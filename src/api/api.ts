@@ -52,7 +52,7 @@ export const ManageUser = {
   getApplicantListBody: "/manage-user/applicantListBody.do",
   getApplicantDetail: "/manage-user/applicantManageDetail.do",
   putApplicantInfo: "/manage-user/applicantInfoUpdate.do",
-  putApplicantPassword: "/manage-user/applicantPwResetBCrypt.do",
+  putApplicantPassword: "/manage-user/applicantPwReset.do",
   getBizListBody: "/manage-user/bizListBody.do",
   getBizDetail: "/manage-user/bizManageDetail.do",
   putBizInfo: "/manage-user/bizInfoUpdate.do",
