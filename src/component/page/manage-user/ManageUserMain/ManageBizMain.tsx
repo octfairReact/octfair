@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { IManageBiz, IManageBizListResponse } from "../../../../models/interface/IManageUser";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../stores/modalState";
+import { modalState, updateBizModalState } from "../../../../stores/modalState";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { UpdateBizModal } from "../ManageUserModal/UpdateBizModal";
 import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
@@ -33,7 +33,7 @@ export const ManageBizMain = () => {
   const searchUserList = async (currentPage?: number) => {
     currentPage = currentPage || 1;
     const searchParam = { ...searchKeyWord, currentPage: currentPage.toString(), pageSize: "5" };
-    const searchList = await postManageUserApi<IManageBizListResponse>(ManageUser.getBizList, searchParam);
+    const searchList = await postManageUserApi<IManageBizListResponse>(ManageUser.getBizListBody, searchParam);
 
     if (searchList) {
       setUserList(searchList.data.biz);

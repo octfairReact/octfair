@@ -39,7 +39,7 @@ export interface UpdateInput {
 }
 
 export const MyPageUpdateMain = () => {
-  const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(updatePasswordModalState);
+  const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(modalState);
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [bizIdx, setBizIdx] = useState<number>();
   const [updateInput, setUpdateInput] = useState<UpdateInput>({

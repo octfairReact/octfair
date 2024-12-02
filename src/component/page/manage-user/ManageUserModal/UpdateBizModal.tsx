@@ -101,11 +101,6 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({ refreshUserListHandl
       }
       return false;
     });
-
-    // 2. 양식검사: pwd/email 입력창에 대하여 지켜야할 정규식패턴 검사
-    const phoneRules = /^[0-9]([-]?[0-9])*$/;
-
-    // 2. 양식검사: pwd/email 입력창에 대하여 지켜야할 정규식패턴 검사
     const phoneRules = /^[0-9]([-]?[0-9])*$/;
 
     if (isProblem === false) {
@@ -128,7 +123,7 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({ refreshUserListHandl
       // 쿼리 앞에 '?' 붙이고 쿼리key/value쌍 사이마다 '&' 붙이기
       const queryString = query.length > 0 ? `?${query.join(`&`)}` : "";
 
-      axios.get(ManageUser.updateBizInfo + queryString).then((res) => {
+      axios.get(ManageUser.putBizInfo + queryString).then((res) => {
         if (res.data.result.toUpperCase() === "SUCCESS") {
           alert("회원수정이 완료되었습니다!");
           closeModalHandler();

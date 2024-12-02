@@ -122,10 +122,6 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({ refreshUserLis
     const phoneRules = /^[0-9]([-]?[0-9])*$/;
     const zipCodeRules = /^[0-9]*$/;
 
-    // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
-    const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    const phoneRules = /^[0-9]([-]?[0-9])*$/;
-
     if (isProblem === false) {
       if (new Date(userData.regdate) < new Date(userData.birthday)) {
         alert("가입일이 생일 이전일 수 없습니다.");
@@ -154,7 +150,7 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({ refreshUserLis
       // 쿼리 앞에 '?' 붙이고 쿼리key/value쌍 사이마다 '&' 붙이기
       const queryString = query.length > 0 ? `?${query.join(`&`)}` : "";
 
-      axios.get(ManageUser.updateApplicantInfo + queryString).then((res) => {
+      axios.get(ManageUser.putApplicantInfo + queryString).then((res) => {
         if (res.data.result.toUpperCase() === "SUCCESS") {
           alert("회원수정이 완료되었습니다!");
           closeModalHandler();
@@ -197,7 +193,7 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({ refreshUserLis
   }, []);
 
   const resetPasswordHandler = () => {
-    axios.get(ManageUser.resetApplicantPassword + "?loginId=" + userId).then((res) => {
+    axios.get(ManageUser.putApplicantPassword + "?loginId=" + userId).then((res) => {
       if (res.data.result.toUpperCase() === "SUCCESS") {
         alert("비밀번호가 1234로 초기화 완료되었습니다!");
         closeModalHandler();
