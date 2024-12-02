@@ -187,7 +187,10 @@ export const FaqMain = () => {
       <PageNavigateStyled>
         <PageNavigate
           totalItemsCount={faqCnt}
-          onChange={searchFaqList}
+          onChange={(page) => {
+            setCurrentPage(page); // 페이지 번호 변경(클릭시)
+            searchFaqList(page, faqType); // 페이지 변경 시 목록을 다시 로드
+          }}
           activePage={cPage}
           itemsCountPerPage={5}
         ></PageNavigate>
