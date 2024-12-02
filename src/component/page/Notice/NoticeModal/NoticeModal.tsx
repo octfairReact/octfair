@@ -134,7 +134,7 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
     const fileForm = new FormData();
     const textData = {
       title: title.current.value,
-      context: context.current.value,
+      content: context.current.value,
       noticeSeq,
     };
     fileData && fileForm.append("file", fileData);
@@ -143,9 +143,7 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
     fileForm.forEach((value, key) => {
       console.log(key, value);
     });
-
     const update = await postNoticeApi<IPostResponse>(Notice.postUpdate, fileForm);
-
     if (update && update.data.result === "success") {
       onSuccess();
     } else {
