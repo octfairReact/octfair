@@ -28,7 +28,7 @@ export const CancelModal = ({ appId, postTitle, closeModal, handlerCancel }: Can
           {`' 지원을 취소하시겠습니까?`}
         </p>
         <div className="modal-buttons">
-          <button className="cancel-button" onClick={closeModal}>창 닫기</button>
+          <button className="cancel-button" onClick={closeModal}>닫기</button>
           <button className="delete-button" onClick={confirmCancel}>지원취소</button>
         </div>
       </div>
