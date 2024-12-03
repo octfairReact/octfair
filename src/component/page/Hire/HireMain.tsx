@@ -81,7 +81,7 @@ export const HireMain = () => {
             })
           ) : (
             <tr>
-              <StyledTd colSpan={3}>데이터가 없습니다.</StyledTd>
+              <StyledTd colSpan={5}>데이터가 없습니다.</StyledTd>
             </tr>
           )}
         </tbody>
