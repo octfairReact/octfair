@@ -21,6 +21,7 @@ import { ResumeContext } from "../../../../api/provider/ResumeProvider";
 import { postResumeApi } from "../../../../api/postResumeApi";
 import { Resume } from "../../../../api/api";
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 interface CertListDisplayProps {
   certifications: Certification[];
@@ -30,7 +31,9 @@ interface CertListDisplayProps {
 }
 
 export const CertificationList = () => {
-  const { resIdx } = useContext(ResumeContext);
+  const location = useLocation();
+  const context = useContext(ResumeContext);
+  const resIdx = location.state?.resIdx || context.resIdx || 0;
   const [certifications, setCertifications] = useState([]);
   const [showTable, setShowTable] = useState(false);
   const handlerShowTable = () => {
@@ -38,7 +41,7 @@ export const CertificationList = () => {
   };
 
   const initialFormData: Certification = {
-    resIdx,
+    resIdx: resIdx || 0,
     certName: "",
     grade: "",
     issuer: "",
@@ -60,9 +63,26 @@ export const CertificationList = () => {
   };
 
   const certAdd = async () => {
+    if (!formData.certName.trim()) {
+      alert("자격증명을 입력해주세요.");
+      return;
+    }
+    if (!formData.grade.trim()) {
+      alert("등급을 입력해주세요.");
+      return;
+    }
+    if (!formData.issuer.trim()) {
+      alert("발행처를 입력해주세요.");
+      return;
+    }
+    if (!formData.acqDate.trim()) {
+      alert("취득일자를 입력해주세요.");
+      return;
+    }
     try {
       const param = {
         ...formData,
+        resIdx,
         acqDate: `${formData.acqDate}-01`, // "YYYY-MM" -> "YYYY-MM-DD" (1일로 기본 설정)
       };
       const response = await postResumeApi<IPostResponse>(Resume.certInsert, param);
@@ -162,7 +182,10 @@ export const CertListDisplay: FC<CertListDisplayProps> = ({
   showTable,
   setShowTable,
 }) => {
-  const { resIdx } = useContext(ResumeContext);
+  const location = useLocation();
+  const context = useContext(ResumeContext);
+
+  const resIdx = location.state?.resIdx || context.resIdx || 0;
 
   const fetchCertificationList = useCallback(async (resIdx: number) => {
     try {

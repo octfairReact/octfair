@@ -21,6 +21,7 @@ import { ResumeContext } from "../../../../api/provider/ResumeProvider";
 import { postResumeApi } from "../../../../api/postResumeApi";
 import { Resume } from "../../../../api/api";
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 interface SkillListDisplayProps {
   skills: Skill[];
@@ -30,7 +31,9 @@ interface SkillListDisplayProps {
 }
 
 export const SkillList = () => {
-  const { resIdx } = useContext(ResumeContext);
+  const location = useLocation();
+  const context = useContext(ResumeContext);
+  const resIdx = location.state?.resIdx || context.resIdx || 0;
   const [showTable, setShowTable] = useState(false);
   const [skills, setSkills] = useState([]);
   const handlerShowTable = () => {
@@ -38,7 +41,7 @@ export const SkillList = () => {
   };
 
   const initialFormData: Skill = {
-    resIdx,
+    resIdx: resIdx || 0,
     skillName: "",
     skillDetail: "",
   };
@@ -56,14 +59,28 @@ export const SkillList = () => {
   };
 
   const skillAdd = async () => {
+    // 유효성 검사
+    if (!formData.skillName.trim()) {
+      alert("스킬명을 입력해주세요.");
+      return;
+    }
+    if (!formData.skillDetail.trim()) {
+      alert("스킬 상세 내용을 입력해주세요.");
+      return;
+    }
+
     try {
       const param = {
         ...formData,
+        resIdx,
       };
+      console.log("전송할 데이터:", param);
+
       const response = await postResumeApi<IPostResponse>(Resume.skillInsert, param);
 
       if (response.data.result === "success") {
         setSkills((prev) => [...prev, { ...param, skillIdx: response.data.skillIdx }]);
+        console.log(response.data.skillIdx);
         handlerCancle();
       }
     } catch (error) {
@@ -143,7 +160,10 @@ export const SkillListDisplay: FC<SkillListDisplayProps> = ({
   showTable,
   setShowTable,
 }) => {
-  const { resIdx } = useContext(ResumeContext);
+  const location = useLocation();
+  const context = useContext(ResumeContext);
+
+  const resIdx = location.state?.resIdx || context.resIdx || 0;
 
   const fetchSkillList = useCallback(async (resIdx: number) => {
     try {
@@ -161,6 +181,7 @@ export const SkillListDisplay: FC<SkillListDisplayProps> = ({
   const handlerDelete = useCallback(
     async (skillIdx?: number) => {
       const param = { resIdx, skillIdx };
+      console.log(param);
       try {
         const response = await postResumeApi<{ result: string }>(Resume.skillDelete, param);
         if (response.data.result === "success") {
