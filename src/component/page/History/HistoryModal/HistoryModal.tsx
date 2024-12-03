@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IHistoryModal, ICertInfo } from "../../../../models/interface/IHistory";
 import { History } from "../../../../api/api";
 import { postHistoryApi } from "../../../../api/postHistoryApi";
 import { HistoryModalStyled } from "./styled";
 import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
+import axios, { AxiosRequestConfig } from "axios";
 
 // HistoryModal 컴포넌트
 export const HistoryModal = ({
   index, // 해당 이력서의 고유 인덱스
   setModal, // 모달 상태를 변경하는 함수 (모달 닫기)
-  resumeInfo = { userNm: '', email: '', phone: '', perStatement: '', resTitle: '', shortIntro: ''}, // 기본 이력서 정보
+  resumeInfo = { userNm: '', email: '', phone: '', perStatement: '', resTitle: '', shortIntro: '', proLink: '', fileName: ''}, // 기본 이력서 정보
   careerInfo = [], // 경력 정보
   eduInfo = [], // 학력 정보
   skillInfo = [], // 기본 스킬 정보
@@ -77,6 +78,44 @@ export const HistoryModal = ({
     );
   }
 
+  // 파일 다운로드 처리
+  const downloadFile = async () => {
+    const param = new URLSearchParams();
+    param.append("resIdx", resIdx.toString());
+ 
+    const postAction: AxiosRequestConfig = {
+      url: "/apply/resumeFileDownload.do",
+      method: "post",
+      data: param,
+      responseType: "blob",
+    };
+    await axios(postAction)
+      .then((res) => {
+        // 응답 데이터 확인: blob 형태로 반환되는 파일 데이터
+        console.log("다운로드 데이터 blob", res);
+
+        // Blob 데이터를 URL로 변환
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+
+        // <a> 태그를 생성하여 파일 다운로드 기능 구현
+        const link = document.createElement("a");
+        link.href = url; // Blob URL을 다운로드 링크로 설정
+        link.setAttribute("download", getResumeInfo?.fileName as string);
+        // 다운로드 시 저장할 파일 이름을 설정 (as string: 타입 단언)
+
+        // 생성한 <a> 태그를 DOM에 추가한 후 클릭하여 다운로드 실행
+        document.body.appendChild(link);
+        link.click();
+
+        // 다운로드가 완료되면 DOM에서 <a> 태그 제거 (효율성 및 메모리 관리)
+        link.remove();
+      })
+      .catch((error) => {
+        // 에러 처리: 다운로드 실패 시 로그 출력
+        console.error("파일 다운로드 중 오류 발생", error);
+      });
+  };
+
   // 로딩이 끝난 후, 모달에서 이력서의 상세 정보를 표시
   return (
     <HistoryModalStyled>
@@ -85,64 +124,136 @@ export const HistoryModal = ({
         {/* 이력서 제목이 있으면 표시, 없으면 "정보 없음" 표시 */}
         <h2>{getResumeInfo.resTitle ? getResumeInfo.resTitle : "정보 없음"}</h2>
 
-        {/* 이력서 소개 내용 (shortIntro) */}
+
+        {/* 1. 이력서 소개 내용 (shortIntro) */}
         <table>
           <tbody>
             <tr>
-              <p className="no-align">
-                {getResumeInfo.shortIntro ? getResumeInfo.shortIntro : "정보 없음"}
+              <p className="no-align">이름 : &nbsp;
+                {getResumeInfo.userNm ? getResumeInfo.userNm : "정보 없음"}
+              </p>
+              <p className="no-align">이메일 : &nbsp;
+                {getResumeInfo.email ? getResumeInfo.email : "정보 없음"}
+              </p>
+              <p className="no-align">전화번호 : &nbsp;
+                {getResumeInfo.phone ? getResumeInfo.phone : "정보 없음"}
               </p>
             </tr>
+
+            {/* 인트로 */}
+            {getResumeInfo.shortIntro && (
+              <tr>
+                <td>
+                  <p className="no-align">
+                    {getResumeInfo.shortIntro}
+                  </p>
+                </td>
+              </tr>
+            )}
+
+            {(getResumeInfo.proLink || getResumeInfo.fileName) && (
+              <tr>
+                <td>
+                  {/* 깃링크 */}
+                  {getResumeInfo.proLink && (
+                    <p className="no-align">
+                      링크 : 
+                      <a href={getResumeInfo.proLink} target="_blank" className="proLink">
+                        {getResumeInfo.proLink}
+                      </a>
+                    </p>
+                  )}
+
+                  {/* 첨부파일 */}
+                  {getResumeInfo.fileName && (
+                    <p>
+                      첨부파일 : &nbsp;
+                      <span className="download-link" onClick={downloadFile}>
+                        {getResumeInfo.fileName}
+                      </span>
+                    </p>
+                  )}
+                </td>
+              </tr>
+            )}
+
           </tbody>
         </table>
 
-        {/* 경력 정보 */}
-        <table className="cert-table">
-          <thead>
-            <tr>
-              <th colSpan={2}>경력</th>
-            </tr>
-          </thead>
-          <tbody>
-            {getCareerInfo.length > 0 ? (
-              getCareerInfo.map((career, idx) => (
-                <tr key={idx}>
+        {/* 2. 경력 정보 */}
+        {getCareerInfo.length > 0 ? (
+          <table className="cert-table">
+            <thead>
+              <tr>
+                <th colSpan={4}>경력</th>
+              </tr>
+            </thead>
+            <tbody>
+            {getCareerInfo.map((career, idx) => (
+              <React.Fragment key={idx}>
+                <tr>
+                  <td>{career.startDate}&nbsp;~&nbsp;{career.endDate}</td>
                   <td>{career.company}</td>
+                  <td>{career.dept}</td>
                   <td>{career.position}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={2}>경력 정보가 없습니다.</td>
-              </tr>
-            )}
+                <tr>
+                  <td colSpan={4}>{career.crrDesc}</td>
+                </tr>
+              </React.Fragment>
+            ))}
           </tbody>
-        </table>
+          </table>
+        ): (
+          <></>
+        )}
 
-        {/* 학력 정보 */}
+        {/* 3. 학력 정보 */}
+        {getEducationInfo.length > 0 ? (
         <table className="cert-table">
           <thead>
             <tr>
-              <th colSpan={2}>학력</th>
+              <th colSpan={4}>학력</th>
             </tr>
           </thead>
           <tbody>
-            {getEducationInfo.length > 0 ? (
-              getEducationInfo.map((education, idx) => (
+              {getEducationInfo.map((education, idx) => (
                 <tr key={idx}>
+                  <td>{education.grdStatus}</td>
                   <td>{education.schoolName}</td>
                   <td>{education.major}</td>
+                  <td>{education.admDate}&nbsp;~&nbsp;{education.grdDate}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={2}>학력 정보가 없습니다.</td>
-              </tr>
-            )}
+              ))}
           </tbody>
         </table>
+        ) : (
+          <></>
+        )}
 
-        {/* 자격증 및 외국어 정보 */}
+        {/* 4. 스킬 정보 */}
+        {getSkillInfo.length > 0 ? (
+        <table className="cert-table">
+          <thead>
+            <tr>
+              <th colSpan={2}>스킬</th>
+            </tr>
+          </thead>
+          <tbody>
+              {getSkillInfo.map((skillInfo, idx) => (
+                <tr key={idx}>
+                  <td>{skillInfo.skillName}</td>
+                  <td>{skillInfo.skillDetail}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        ) : (
+          <></>
+        )}
+
+        {/* 5. 자격증 및 외국어 정보 */}
+        {getCertInfo.length > 0 ? (
         <table className="cert-table">
           <thead>
             <tr>
@@ -150,25 +261,22 @@ export const HistoryModal = ({
             </tr>
           </thead>
           <tbody>
-            {/* 자격증 정보가 있으면 표시, 없으면 "정보 없음" 표시 */}
-            {getCertInfo.length > 0 ? (
-              getCertInfo.map((cert: ICertInfo, idx) => (
+              {getCertInfo.map((cert: ICertInfo, idx) => (
                 <tr key={idx}>
                   <td>{cert.certName}</td>
                   <td>{cert.grade}</td>
                   <td>{cert.issuer}</td>
                   <td>{cert.acqDate}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={4}>자격증 및 외국어 정보가 없습니다.</td>
-              </tr>
-            )}
+              ))}
           </tbody>
         </table>
+        ) : (
+          <></>
+        )}
 
-        {/* 자기소개서 */}
+        {/* 6. 자기소개서 */}
+        {getResumeInfo.perStatement ? (
         <table>
           <thead>
             <tr>
@@ -176,18 +284,14 @@ export const HistoryModal = ({
             </tr>
           </thead>
           <tbody>
-            {/* 자기소개서가 있으면 표시, 없으면 "정보 없음" 표시 */}
-            {getResumeInfo.perStatement ? (
               <tr>
                 <td>{getResumeInfo.perStatement}</td>
               </tr>
-            ) : (
-              <tr>
-                <td>자기소개서 정보가 없습니다.</td>
-              </tr>
-            )}
           </tbody>
         </table>
+        ) : (
+          <></>
+        )}
 
         {/* 버튼 컨테이너: 닫기 및 인쇄 버튼 */}
         <div className="button-container">

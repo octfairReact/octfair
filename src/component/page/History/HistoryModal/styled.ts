@@ -125,4 +125,21 @@ export const HistoryModalStyled = styled.div`
   .no-align {
     text-align: left;
   }
+
+  // 포트폴리오 css
+  .proLink {
+      text-decoration: none;
+  }
+  .proLink:hover {
+        text-decoration: underline; /* 언더라인 추가 */
+  }
+
+  // 첨부파일 다운로드 css
+  .download-link {
+    color: blue; /* 링크 색상 */
+    cursor: pointer; /* 마우스 커서가 손가락 모양으로 바뀜 */
+  }
+  .download-link:hover {
+      text-decoration: underline; /* 언더라인 추가 */
+  }
 `;

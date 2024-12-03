@@ -368,6 +368,8 @@ export const ResumeBasic = () => {
             resTitle: "",
             shortIntro: "",
             perStatement: "",
+            proLink: "",
+            fileName: "",
           }}
           careerInfo={[]}
           eduInfo={[]}
