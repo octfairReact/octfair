@@ -72,6 +72,7 @@ export const HistoryMain = () => {
 
     // 지원 내역 조회 API 호출
     const searchHistoryList = async (currentPage?: number) => {
+        currentPage = currentPage || 1;
         const searchParam = {
             ...searchKeyWord,
             currentPage: currentPage.toString(),
@@ -79,7 +80,7 @@ export const HistoryMain = () => {
         };
 
         const searchList = await postHistoryApi<IHistoryResponse>(History.searchList, searchParam);
-
+        console.log(searchList);
         if (searchList) {
             setHistoryList(searchList.data.history);
             setHistoryCnt(searchList.data.historyCnt);
