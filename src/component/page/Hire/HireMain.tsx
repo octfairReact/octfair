@@ -61,7 +61,7 @@ export const HireMain = () => {
                 <StyledTh size={20}>공고제목</StyledTh>
                 <StyledTh size={20}>경력여부</StyledTh>
                 <StyledTh size={20}>게시일</StyledTh>
-                <StyledTh size={20}>채용기간</StyledTh>
+                <StyledTh size={30}>채용기간</StyledTh>
                 <StyledTh size={20}>승인여부</StyledTh>
               </tr>
             </thead>
@@ -74,7 +74,7 @@ export const HireMain = () => {
                   <StyledTd>{hire.title}</StyledTd>
                   <StyledTd>{hire.expRequired}</StyledTd>              
                   <StyledTd>{hire.postDate}</StyledTd>
-                  <StyledTd>{hire.startDate} ~ {hire.endDate}</StyledTd>
+                  <StyledTd>{hire.startDate.slice(0,10)} ~ {hire.endDate.slice(0,10)}</StyledTd>
                   <StyledTd>{hire.appStatus}</StyledTd>
                 </tr>
               );
