@@ -85,10 +85,23 @@ export const HistoryModal = ({
         {/* 이력서 제목이 있으면 표시, 없으면 "정보 없음" 표시 */}
         <h2>{getResumeInfo.resTitle ? getResumeInfo.resTitle : "정보 없음"}</h2>
 
-        {/* 이력서 소개 내용 (shortIntro) */}
+
+        {/* 1. 이력서 소개 내용 (shortIntro) */}
         <table>
           <tbody>
             <tr>
+              <p className="no-align">이름 : &nbsp;
+                {getResumeInfo.userNm ? getResumeInfo.userNm : "정보 없음"}
+              </p>
+              <p className="no-align">이메일 : &nbsp;
+                {getResumeInfo.email ? getResumeInfo.email : "정보 없음"}
+              </p>
+              <p className="no-align">전화번호 : &nbsp;
+                {getResumeInfo.phone ? getResumeInfo.phone : "정보 없음"}
+              </p>
+
+              <hr/>
+
               <p className="no-align">
                 {getResumeInfo.shortIntro ? getResumeInfo.shortIntro : "정보 없음"}
               </p>
@@ -96,7 +109,7 @@ export const HistoryModal = ({
           </tbody>
         </table>
 
-        {/* 경력 정보 */}
+        {/* 2. 경력 정보 */}
         <table className="cert-table">
           <thead>
             <tr>
@@ -119,7 +132,7 @@ export const HistoryModal = ({
           </tbody>
         </table>
 
-        {/* 학력 정보 */}
+        {/* 3. 학력 정보 */}
         <table className="cert-table">
           <thead>
             <tr>
@@ -127,6 +140,7 @@ export const HistoryModal = ({
             </tr>
           </thead>
           <tbody>
+            {/* 학력 정보가 있으면 표시, 없으면 "정보 없음" 표시 */}
             {getEducationInfo.length > 0 ? (
               getEducationInfo.map((education, idx) => (
                 <tr key={idx}>
@@ -142,7 +156,31 @@ export const HistoryModal = ({
           </tbody>
         </table>
 
-        {/* 자격증 및 외국어 정보 */}
+        {/* 4. 스킬 정보 */}
+        <table className="cert-table">
+          <thead>
+            <tr>
+              <th colSpan={2}>스킬</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* 스킬 정보가 있으면 표시, 없으면 "정보 없음" 표시 */}
+            {getSkillInfo.length > 0 ? (
+              getSkillInfo.map((skillInfo, idx) => (
+                <tr key={idx}>
+                  <td>{skillInfo.skillName}</td>
+                  <td>{skillInfo.skillDetail}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={2}>학력 정보가 없습니다.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+
+        {/* 5. 자격증 및 외국어 정보 */}
         <table className="cert-table">
           <thead>
             <tr>
@@ -168,7 +206,7 @@ export const HistoryModal = ({
           </tbody>
         </table>
 
-        {/* 자기소개서 */}
+        {/* 6. 자기소개서 */}
         <table>
           <thead>
             <tr>
