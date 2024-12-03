@@ -15,6 +15,7 @@ export const QnaPassword: FC<QnaPasswordProps> = ({ onPasswordSubmit, qnaIdx }) 
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value); // 비밀번호 상태 업데이트
+    console.log("현재 비밀번호 입력값:", password); // 실시간으로 입력값 콘솔 출력
   };
 
   const submitPassword = () => {
@@ -38,13 +39,13 @@ export const QnaPassword: FC<QnaPasswordProps> = ({ onPasswordSubmit, qnaIdx }) 
           </div>
           <div className="passinput">
             <input
-              type="password"
+              type="text"
               id="passwordInput"
               name="passwordInput"
               value={password}
               onChange={handlePasswordChange}
               placeholder="비밀번호"
-              className="inputTxt p100"
+              className="inputTxt password"
             />
             <div className="btn_areaC mt30">
               <button onClick={submitPassword} className="btn blue">

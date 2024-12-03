@@ -13,6 +13,7 @@ interface ButtonProps {
 }
 
 export const StyledButton = styled.button<ButtonProps>`
+  margin-top: 10px;
   font-size: 15px;
   width: 100px;
   padding: 10px;

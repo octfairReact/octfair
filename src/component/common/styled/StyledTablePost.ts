@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-export const StyledTable = styled.table`
+export const StyledTablePost = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin: 5px 0px 0px 0px;
+  margin: 50px 0px 0px 0px;
   font-size: 18px;
   text-align: left;
   table-layout: fixed;

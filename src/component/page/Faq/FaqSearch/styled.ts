@@ -4,8 +4,9 @@ export const FaqSearchStyled = styled.div`
   margin-bottom: 10px;
   display: flex;
   flex-wrap: wrap; /* 아이템들이 넘치면 다음 줄로 넘어가도록 설정 */
-  justify-content: flex-start; /* 왼쪽 정렬 */
+  justify-content: flex-end;
   gap: 10px; /* 버튼과 input 요소들 사이의 간격을 설정 */
+  margin-right: 5px;
 
   .input-box {
     display: flex;

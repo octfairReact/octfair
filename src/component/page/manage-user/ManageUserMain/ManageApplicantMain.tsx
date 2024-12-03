@@ -9,6 +9,7 @@ import { Button } from "../../../common/Button/Button";
 import { ManageUser } from "../../../../api/api";
 import { postManageUserApi } from "../../../../api/postManageUserApi";
 import { ManageUserContext } from "../../../../api/provider/ManageUserProvider";
+import { toast } from "react-toastify";
 
 export const ManageApplicantMain = () => {
   // 모달에 쓰이는 변수

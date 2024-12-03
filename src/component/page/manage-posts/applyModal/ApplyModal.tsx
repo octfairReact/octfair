@@ -43,10 +43,6 @@ export const ApplyModal: FC<IApplyModalProps> = ({ onSuccess, indexGroup }) => {
     // }, [bizDetail, userResumeList]);
   }, [modal]);
 
-  const handleApply = () => {
-    console.log("입사지원 완료");
-  };
-
   const handleClose = () => {
     setModal(!modal);
   };
@@ -90,7 +86,6 @@ export const ApplyModal: FC<IApplyModalProps> = ({ onSuccess, indexGroup }) => {
     console.log("param : ", param);
 
     const applyPostSave = await postPostApi<IPostResponse>(Posts.saveApplyBody, param);
-    console.log("데이트 잘와??");
     console.log(applyPostSave);
     if (applyPostSave.data.result == "success") {
       alert("이력서를 넣었습니다.");

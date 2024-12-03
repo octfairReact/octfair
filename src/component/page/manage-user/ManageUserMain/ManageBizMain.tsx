@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { IManageBiz, IManageBizListResponse } from "../../../../models/interface/IManageUser";
 import { useRecoilState } from "recoil";
-import { updateBizModalState } from "../../../../stores/modalState";
+import { modalState, updateBizModalState } from "../../../../stores/modalState";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { UpdateBizModal } from "../ManageUserModal/UpdateBizModal";
 import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
@@ -9,6 +9,7 @@ import { Button } from "../../../common/Button/Button";
 import { ManageUser } from "../../../../api/api";
 import { postManageUserApi } from "../../../../api/postManageUserApi";
 import { ManageUserContext } from "../../../../api/provider/ManageUserProvider";
+import { toast } from "react-toastify";
 
 export const ManageBizMain = () => {
   // 모달에 쓰이는 변수

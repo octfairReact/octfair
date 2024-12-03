@@ -3,6 +3,7 @@ import { modalState } from "../../../../stores/modalState";
 import { FC, useEffect, useState } from "react";
 import axios from "axios";
 import { ManageUser } from "../../../../api/api";
+import { toast } from "react-toastify";
 import {
   ModalOverlay,
   ModalStyled,
@@ -29,6 +30,7 @@ export interface UserData {
   bizIntro: string; // 회사소개
 }
 
+// 이 파일의 컴포넌트인 모달의 Props
 export interface IUpdateUserModalProps {
   refreshUserListHandler: () => void;
   userId: number;
@@ -99,8 +101,6 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({ refreshUserListHandl
       }
       return false;
     });
-
-    // 2. 양식검사: pwd/email 입력창에 대하여 지켜야할 정규식패턴 검사
     const phoneRules = /^[0-9]([-]?[0-9])*$/;
 
     if (isProblem === false) {

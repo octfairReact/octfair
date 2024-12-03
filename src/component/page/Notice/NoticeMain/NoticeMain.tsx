@@ -13,6 +13,7 @@ import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { NoticeContext } from "../../../../api/provider/NoticeProvider";
 import { start } from "repl";
 import { PageNavigateStyled } from "../../../common/pageNavigation/styled";
+import { HistoryModalStyled } from "../../History/HistoryModal/styled";
 
 export const NoticeMain = () => {
   const { search } = useLocation();
@@ -25,6 +26,7 @@ export const NoticeMain = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [cPage, setCPage] = useState<number>();
   const [IsNotice, setIsNotice] = useRecoilState<boolean>(noticeState);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const { searchKeyWord } = useContext(NoticeContext);
   // 혼자 페이징 처리
@@ -92,6 +94,7 @@ export const NoticeMain = () => {
       setNoticeCnt(searchList.data.noticeCnt);
       setCPage(currentPage);
     }
+    setIsLoaded(true);
   };
 
   // const handlerModal = () => {
@@ -124,10 +127,28 @@ export const NoticeMain = () => {
     navigate(`${noticeIdx}`);
   };
 
+  if (!isLoaded) {
+    return (
+      <HistoryModalStyled>
+        <div className="loading-container">
+          <p>데이터를 불러오는 중입니다...</p>
+        </div>
+      </HistoryModalStyled>
+    );
+  }
+
   return (
     <>
-      총 갯수 : {noticeCnt}
-      현재 페이지 : {cPage}
+      <div>
+        <div>
+          <strong>총 갯수 :</strong> {noticeCnt}
+        </div>
+        <div>
+          {" "}
+          <strong>현재 페이지 : :</strong> {cPage}
+        </div>
+      </div>
+
       <StyledTable>
         <thead>
           <tr>

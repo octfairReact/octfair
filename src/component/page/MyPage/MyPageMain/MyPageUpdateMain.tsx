@@ -3,10 +3,11 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
-import { updatePasswordModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { MyPageUpdatePasswordModal } from "../MyPageModal/MyPageUpdatePasswordModal";
 import { useNavigate } from "react-router-dom";
 import { MyPage } from "../../../../api/api";
+import { toast } from "react-toastify";
 import {
   Table,
   TableCaption,
@@ -38,7 +39,7 @@ export interface UpdateInput {
 }
 
 export const MyPageUpdateMain = () => {
-  const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(updatePasswordModalState);
+  const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(modalState);
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [bizIdx, setBizIdx] = useState<number>();
   const [updateInput, setUpdateInput] = useState<UpdateInput>({
@@ -57,7 +58,7 @@ export const MyPageUpdateMain = () => {
 
   // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
   useEffect(() => {
-    axios.get(MyPage.getUserInfo + "?loginId=" + userInfo.loginId).then((res) => {
+    axios.get("/mypage/userDetail.do?loginId=" + userInfo.loginId).then((res) => {
       let prevData = res.data.detail;
       setBizIdx(res.data.chkRegBiz.bizIdx);
       setUpdateInput({
@@ -121,7 +122,6 @@ export const MyPageUpdateMain = () => {
     // 3. 데이터전송: 회원수정 입력정보 문제없음! 서버로 Update요청!
     if (isProblem === false) {
       const query: string[] = [];
-
       Object.entries(updateInput).forEach(([key, value]) => {
         query.push(`${key}=${encodeURIComponent(value)}`);
       });
@@ -129,7 +129,7 @@ export const MyPageUpdateMain = () => {
       // 쿼리 앞에 '?' 붙이고 쿼리key/value쌍 사이마다 '&' 붙이기
       const queryString = query.length > 0 ? `?${query.join(`&`)}` : "";
 
-      axios.get(MyPage.putUserInfo + queryString).then((res) => {
+      axios.get("/mypage/updateUserInfo.do" + queryString).then((res) => {
         if (res.data.result.toUpperCase() === "SUCCESS") {
           alert("회원수정이 완료되었습니다!");
         } else {

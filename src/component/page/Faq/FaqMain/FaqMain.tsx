@@ -13,6 +13,7 @@ import { loginInfoState } from "../../../../stores/userInfo";
 import { FaqMainStyled, StyledButton } from "./styled";
 import { FaqModal } from "../FaqModal/FaqModal";
 import { modalState } from "../../../../stores/modalState";
+import { HistoryModalStyled } from "../../History/HistoryModal/styled";
 
 export const FaqMain = () => {
   // const { search } = useLocation();
@@ -105,7 +106,13 @@ export const FaqMain = () => {
   };
 
   if (!isLoaded || faqType === undefined) {
-    return null; // 로딩 완료 전까지 아무것도 렌더링하지 않음
+    return (
+      <HistoryModalStyled>
+        <div className="loading-container">
+          <p>데이터를 불러오는 중입니다...</p>
+        </div>
+      </HistoryModalStyled>
+    );
   }
 
   return (
@@ -163,7 +170,10 @@ export const FaqMain = () => {
                 {/* 클릭된 FAQ의 내용 표시 */}
                 {showContext === faq.faq_idx && (
                   <tr>
-                    <td colSpan={5} style={{ backgroundColor: "#f9f9f9" }}>
+                    <td
+                      colSpan={userInfo.userType === "M" ? 6 : 5}
+                      style={{ backgroundColor: "#D7D7D7", height: "100px" }}
+                    >
                       {faq.content || "내용이 없습니다."}
                     </td>
                   </tr>
@@ -180,7 +190,10 @@ export const FaqMain = () => {
       <PageNavigateStyled>
         <PageNavigate
           totalItemsCount={faqCnt}
-          onChange={searchFaqList}
+          onChange={(page) => {
+            setCurrentPage(page); // 페이지 번호 변경(클릭시)
+            searchFaqList(page, faqType); // 페이지 변경 시 목록을 다시 로드
+          }}
           activePage={cPage}
           itemsCountPerPage={5}
         ></PageNavigate>

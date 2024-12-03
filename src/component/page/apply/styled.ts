@@ -10,6 +10,9 @@ export const ResumeStyled = styled.div`
     margin-right: 5px;
     border-radius: 4px;
     border: 1px solid #ccc;
+    display: flex;
+    justify-content: center; /* 가로 중앙 */
+    align-items: center; /* 세로 중앙 */
 
     position: relative;
     top: -40px;

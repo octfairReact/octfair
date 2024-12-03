@@ -15,6 +15,7 @@ import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTa
 import { Portal } from "../../../common/portal/Portal";
 import { ApplyModal } from "../applyModal/ApplyModal";
 import { postFaqApi } from "./../../../../api/postFaqApi";
+import { StyledTablePost } from "../../../common/styled/StyledTablePost";
 
 export const ScrapMain = () => {
   const { search } = useLocation();
@@ -109,7 +110,7 @@ export const ScrapMain = () => {
 
   return (
     <>
-      <StyledTable>
+      <StyledTablePost>
         <thead>
           <tr>
             <StyledTh size={5}></StyledTh>
@@ -165,7 +166,7 @@ export const ScrapMain = () => {
             </tr>
           )}
         </tbody>
-      </StyledTable>
+      </StyledTablePost>
       {modal && (
         <Portal>
           <ApplyModal onSuccess={onPostSuccess} indexGroup={index} />

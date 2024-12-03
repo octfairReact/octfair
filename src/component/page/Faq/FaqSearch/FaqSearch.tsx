@@ -25,12 +25,22 @@ export const FaqSearch = () => {
     setModal(!modal);
   };
 
+  // 엔터 키 입력 처리 함수
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handlerSearch(); // Enter 키가 눌리면 검색 실행
+    }
+  };
+
   return (
     <>
       <FaqSearchStyled>
         <div className="input-box">
           <label>제목</label>
-          <input onChange={(e) => setSearchValue({ ...searchValue, searchTitle: e.target.value })}></input>
+          <input
+            onChange={(e) => setSearchValue({ ...searchValue, searchTitle: e.target.value })}
+            onKeyDown={handleKeyDown} // 엔터 키 이벤트 추가
+          ></input>
           <label>기간</label>
           <input type="date" onChange={(e) => setSearchValue({ ...searchValue, searchStDate: e.target.value })}></input>
           <label>
