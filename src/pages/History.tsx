@@ -10,6 +10,7 @@ export const History = () => {
         <ContentBox>
           <span>입사지원 내역</span>
         </ContentBox>
+        {/* 지원내역 검색 기능 */}
         <HistorySearch />
 
         {/* 지원내역 테이블 출력 */}
