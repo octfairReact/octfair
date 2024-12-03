@@ -216,7 +216,7 @@ export const HistoryMain = () => {
                 <HistoryModal
                     index={index}
                     setModal={setModal}
-                    resumeInfo={{ userNm: '', email: '', phone: '', resTitle: '', shortIntro: '', perStatement: '' }}
+                    resumeInfo={{ userNm: '', email: '', phone: '', resTitle: '', shortIntro: '', perStatement: '', proLink: '', fileName: ''}}
                     careerInfo={[]}
                     eduInfo={[]}
                     skillInfo={[]}

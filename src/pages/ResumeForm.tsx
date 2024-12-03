@@ -10,6 +10,7 @@ import { IResumeDetail, IDetailResponse } from "../models/interface/IResume";
 import { useRecoilState } from "recoil";
 import { loginInfoState } from "../stores/userInfo";
 import { ILoginInfo } from "../models/interface/store/userInfo";
+import { ReloadButton } from "../component/common/ContentBox/ReloadButton";
 
 export const ResumeForm = () => {
   const { resIdx } = useParams<{ resIdx: string }>();
@@ -41,6 +42,7 @@ const ResumeContent = () => {
 
   return (
     <div>
+      <ReloadButton></ReloadButton>
       <ContentBox>이력서 작성/수정</ContentBox>
       <ResumeBasic />
     </div>

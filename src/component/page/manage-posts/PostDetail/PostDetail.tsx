@@ -70,12 +70,12 @@ export const PostDetail = () => {
     <PostDetailStyled>
       <ContentBoxPost>
         채용 상세정보
-        {userInfo.loginId && userInfo.loginId === CDetail?.loginId && (
+        {/* {userInfo.loginId && userInfo.loginId === CDetail?.loginId && (
           <div className="action-buttons">
             <button className="btn btn-outline-primary">수정</button>
             <button className="btn btn-outline-danger">삭제</button>
           </div>
-        )}
+        )} */}
       </ContentBoxPost>
       <div id="container">
         <ul>
@@ -188,12 +188,12 @@ const CompanyInfo = ({
         <span className="remaining">남은 기간</span>
         <div className="date-details">
           <div className="date-item">
-            <span>시작일</span>
+            {/* <span>시작일</span> */}
             <span>마감일</span>
           </div>
           <div className="date-item">
             <span>{data.startDate}</span>
-            <span>{data.endDate}</span>
+            <span>{data.endDate}시</span>
           </div>
         </div>
       </div>
