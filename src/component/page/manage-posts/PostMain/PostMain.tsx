@@ -98,7 +98,7 @@ export const PostMain = () => {
                 <StyledTd>{post.title}</StyledTd>
                 <StyledTd>{post.workLocation}</StyledTd>
                 <StyledTd>{post.expRequired}</StyledTd>
-                <StyledTd>{post.endDate}</StyledTd>
+                <StyledTd>{post.endDate}시</StyledTd>
                 <StyledTd>{new Date(post.postDate).toISOString().substring(0, 10)}</StyledTd>
                 {userInfo.userType === "M" && <StyledTd>{post.appStatus}</StyledTd>}
               </tr>
