@@ -4,12 +4,13 @@ import { History } from "../../../../api/api";
 import { postHistoryApi } from "../../../../api/postHistoryApi";
 import { HistoryModalStyled } from "./styled";
 import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
+import axios, { AxiosRequestConfig } from "axios";
 
 // HistoryModal 컴포넌트
 export const HistoryModal = ({
   index, // 해당 이력서의 고유 인덱스
   setModal, // 모달 상태를 변경하는 함수 (모달 닫기)
-  resumeInfo = { userNm: '', email: '', phone: '', perStatement: '', resTitle: '', shortIntro: ''}, // 기본 이력서 정보
+  resumeInfo = { userNm: '', email: '', phone: '', perStatement: '', resTitle: '', shortIntro: '', proLink: '', fileName: ''}, // 기본 이력서 정보
   careerInfo = [], // 경력 정보
   eduInfo = [], // 학력 정보
   skillInfo = [], // 기본 스킬 정보
@@ -77,6 +78,44 @@ export const HistoryModal = ({
     );
   }
 
+  // 파일 다운로드 처리
+  const downloadFile = async () => {
+    const param = new URLSearchParams();
+    param.append("resIdx", resIdx.toString());
+ 
+    const postAction: AxiosRequestConfig = {
+      url: "/apply/resumeFileDownload.do",
+      method: "post",
+      data: param,
+      responseType: "blob",
+    };
+    await axios(postAction)
+      .then((res) => {
+        // 응답 데이터 확인: blob 형태로 반환되는 파일 데이터
+        console.log("다운로드 데이터 blob", res);
+
+        // Blob 데이터를 URL로 변환
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+
+        // <a> 태그를 생성하여 파일 다운로드 기능 구현
+        const link = document.createElement("a");
+        link.href = url; // Blob URL을 다운로드 링크로 설정
+        link.setAttribute("download", getResumeInfo?.fileName as string);
+        // 다운로드 시 저장할 파일 이름을 설정 (as string: 타입 단언)
+
+        // 생성한 <a> 태그를 DOM에 추가한 후 클릭하여 다운로드 실행
+        document.body.appendChild(link);
+        link.click();
+
+        // 다운로드가 완료되면 DOM에서 <a> 태그 제거 (효율성 및 메모리 관리)
+        link.remove();
+      })
+      .catch((error) => {
+        // 에러 처리: 다운로드 실패 시 로그 출력
+        console.error("파일 다운로드 중 오류 발생", error);
+      });
+  };
+
   // 로딩이 끝난 후, 모달에서 이력서의 상세 정보를 표시
   return (
     <HistoryModalStyled>
@@ -100,15 +139,44 @@ export const HistoryModal = ({
                 {getResumeInfo.phone ? getResumeInfo.phone : "정보 없음"}
               </p>
             </tr>
+
+            {/* 인트로 */}
             {getResumeInfo.shortIntro && (
               <tr>
-                <td colSpan={1}>
+                <td>
                   <p className="no-align">
                     {getResumeInfo.shortIntro}
                   </p>
                 </td>
               </tr>
             )}
+
+            {(getResumeInfo.proLink || getResumeInfo.fileName) && (
+              <tr>
+                <td>
+                  {/* 깃링크 */}
+                  {getResumeInfo.proLink && (
+                    <p className="no-align">
+                      링크 : 
+                      <a href={getResumeInfo.proLink} target="_blank" className="proLink">
+                        {getResumeInfo.proLink}
+                      </a>
+                    </p>
+                  )}
+
+                  {/* 첨부파일 */}
+                  {getResumeInfo.fileName && (
+                    <p>
+                      첨부파일 : &nbsp;
+                      <span className="download-link" onClick={downloadFile}>
+                        {getResumeInfo.fileName}
+                      </span>
+                    </p>
+                  )}
+                </td>
+              </tr>
+            )}
+
           </tbody>
         </table>
 
