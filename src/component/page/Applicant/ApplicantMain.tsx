@@ -312,7 +312,7 @@ return(
           totalItemsCount={count}
           onChange={getApplicantList}
           activePage={cPage}
-          itemsCountPerPage={5}
+          itemsCountPerPage={3}
         ></PageNavigate>
       </ApplicantPageNavigateStyled>
 
