@@ -29,7 +29,7 @@ export interface IHistoryResponse {
 export interface IHistoryModal {
     index: number | null;
     setModal: React.Dispatch<React.SetStateAction<boolean>>;
-    resumeInfo: { userNm: string; email: string; phone: string; resTitle: string; shortIntro: string; perStatement: string;};
+    resumeInfo: { userNm: string; email: string; phone: string; resTitle: string; shortIntro: string; perStatement: string; proLink: string; fileName: String};
     careerInfo: ICareerInfo[];
     eduInfo: IEduInfo[];
     skillInfo: ISkillInfo[];
@@ -43,14 +43,23 @@ export interface IResumeInfo {
     resTitle: string;
     shortIntro: string;
     perStatement?: string;
+    proLink: string;
+    fileName: string;
 }
 export interface ICareerInfo {
     company: string;
+    dept: string;
     position: string;
+    startDate: string;
+    endDate: string;
+    crrDesc: string;
 }
 export interface IEduInfo {
     schoolName: string;
     major: string;
+    grdStatus: String;
+    admDate: String;
+    grdDate: String;
 }
 export interface ISkillInfo {
     skillName: string;

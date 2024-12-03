@@ -42,6 +42,13 @@ export const HireMain = () => {
        
     };
 
+    const handlerDetail = (postIdx: number,bizIdx:number) => {
+      console.log(postIdx)
+      navigate(`/react/manage-post/managePostDetailBody.do`, {
+        state: { postIdx,bizIdx },
+      });
+    };
+
 
     return (
         <>
@@ -59,22 +66,22 @@ export const HireMain = () => {
               </tr>
             </thead>
             <tbody>
-              
+            
               {hireList?.length > 0 ? (
                 hireList?.map((hire) => {
               return (
-                <tr key={hire.postIdx} >
+                <tr key={hire.postIdx} onClick={() => handlerDetail(hire.postIdx,hire.bizIdx)}>
                   <StyledTd>{hire.title}</StyledTd>
                   <StyledTd>{hire.expRequired}</StyledTd>              
                   <StyledTd>{hire.postDate}</StyledTd>
-                  <StyledTd>{hire.endDate}</StyledTd>
+                  <StyledTd>{hire.startDate} ~ {hire.endDate}</StyledTd>
                   <StyledTd>{hire.appStatus}</StyledTd>
                 </tr>
               );
             })
           ) : (
             <tr>
-              <StyledTd colSpan={3}>데이터가 없습니다.</StyledTd>
+              <StyledTd colSpan={5}>데이터가 없습니다.</StyledTd>
             </tr>
           )}
         </tbody>
