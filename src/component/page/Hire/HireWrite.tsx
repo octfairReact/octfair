@@ -226,7 +226,7 @@ export const HireWrite = () => {
   <StyledTableHire>
     <thead>
       <tr>
-        <th>채용제목</th>
+        <th>채용제목<span className="font_red">*</span></th>
         <td colSpan={3}>
           <input
             type="text"
@@ -237,7 +237,7 @@ export const HireWrite = () => {
         </td>
       </tr>
       <tr>
-        <th>경력 여부</th>
+        <th>경력 여부<span className="font_red">*</span></th>
         <td>
           <div className="checkbox-group" style={{ display: "flex", gap: "8px" }}>
             {checkBox.map((checkbox) => (
@@ -270,7 +270,7 @@ export const HireWrite = () => {
         </td>
       </tr>
       <tr>
-        <th>급여</th>
+        <th>급여<span className="font_red">*</span></th>
         <td>
           <input
             type="text"
@@ -280,7 +280,7 @@ export const HireWrite = () => {
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
-        <th>모집인원</th>
+        <th>모집인원<span className="font_red">*</span></th>
         <td>
           <input
             type="text"
@@ -291,7 +291,7 @@ export const HireWrite = () => {
         </td>
       </tr>
       <tr>
-        <th>근무지역</th>
+        <th>근무지역<span className="font_red">*</span></th>
         <td>
           <input
             type="text"
@@ -300,7 +300,7 @@ export const HireWrite = () => {
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
-        <th>포지션 설명</th>
+        <th>포지션 설명<span className="font_red">*</span></th>
         <td>
           <input
             type="text"
@@ -311,7 +311,7 @@ export const HireWrite = () => {
         </td>
       </tr>
       <tr>
-        <th>채용기간</th>
+        <th>채용기간<span className="font_red">*</span></th>
         <td colSpan={3} className="date">
             <Calendar
               label="시작 날짜"
@@ -324,7 +324,7 @@ export const HireWrite = () => {
         </td>
       </tr>
       <tr>
-        <th>채용절차</th>
+        <th>채용절차<span className="font_red">*</span></th>
         <td colSpan={3}>
           <div className="recruit-process-wrapper" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <input
@@ -332,7 +332,7 @@ export const HireWrite = () => {
               value={recruitProcess}
               onChange={(e) => setRecruitProcess(e.target.value)}
               placeholder="과정을 하나씩 적은 후 절차등록 버튼을 눌러주세요"
-              style={{ flex: 1, padding: "8px" }}
+              style={{ flex: 1, padding: "8px", width: "500px"}}
             />
             <button onClick={handleClick} style={{ padding: "8px 16px" }}>
               절차등록
@@ -341,13 +341,13 @@ export const HireWrite = () => {
               초기화
             </button>
           </div>
-          <label className="recruit-process-list" style={{ marginTop: "8px", display: "block" }}>
+          <label className="recruit-process-list" style={{ marginTop: "8px", display: "block" , width: "500px"}}>
             {recruitProcessList.join(" - ")}
           </label>
         </td>
       </tr>
       <tr>
-        <th>자격조건</th>
+        <th>자격조건<span className="font_red">*</span></th>
         <td colSpan={3}>
           <input
             type="text"
@@ -404,22 +404,3 @@ export const HireWrite = () => {
 </>
   );
 };
-
-function onSuccess() {
-  throw new Error("Function not implemented.");
-}
-function setStartDate(date: any) {
-  throw new Error("Function not implemented.");
-}
-
-function setEndDate(date: any) {
-  throw new Error("Function not implemented.");
-}
-
-function setIsChecked(checked: any) {
-  throw new Error("Function not implemented.");
-}
-
-function sendDataToServer(checked: any) {
-  throw new Error("Function not implemented.");
-}

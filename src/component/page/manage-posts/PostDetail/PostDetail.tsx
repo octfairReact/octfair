@@ -188,12 +188,12 @@ const CompanyInfo = ({
         <span className="remaining">남은 기간</span>
         <div className="date-details">
           <div className="date-item">
-            <span>시작일</span>
+            {/* <span>시작일</span> */}
             <span>마감일</span>
           </div>
           <div className="date-item">
             <span>{data.startDate}</span>
-            <span>{data.endDate}</span>
+            <span>{data.endDate}시</span>
           </div>
         </div>
       </div>
