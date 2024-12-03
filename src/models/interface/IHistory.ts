@@ -46,11 +46,18 @@ export interface IResumeInfo {
 }
 export interface ICareerInfo {
     company: string;
+    dept: string;
     position: string;
+    startDate: string;
+    endDate: string;
+    crrDesc: string;
 }
 export interface IEduInfo {
     schoolName: string;
     major: string;
+    grdStatus: String;
+    admDate: String;
+    grdDate: String;
 }
 export interface ISkillInfo {
     skillName: string;

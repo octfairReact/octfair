@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IHistoryModal, ICertInfo } from "../../../../models/interface/IHistory";
 import { History } from "../../../../api/api";
 import { postHistoryApi } from "../../../../api/postHistoryApi";
@@ -99,64 +99,72 @@ export const HistoryModal = ({
               <p className="no-align">전화번호 : &nbsp;
                 {getResumeInfo.phone ? getResumeInfo.phone : "정보 없음"}
               </p>
-
-              <hr/>
-
-              <p className="no-align">
-                {getResumeInfo.shortIntro ? getResumeInfo.shortIntro : "정보 없음"}
-              </p>
             </tr>
+            {getResumeInfo.shortIntro && (
+              <tr>
+                <td colSpan={1}>
+                  <p className="no-align">
+                    {getResumeInfo.shortIntro}
+                  </p>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
 
         {/* 2. 경력 정보 */}
-        <table className="cert-table">
-          <thead>
-            <tr>
-              <th colSpan={2}>경력</th>
-            </tr>
-          </thead>
-          <tbody>
-            {getCareerInfo.length > 0 ? (
-              getCareerInfo.map((career, idx) => (
-                <tr key={idx}>
+        {getCareerInfo.length > 0 ? (
+          <table className="cert-table">
+            <thead>
+              <tr>
+                <th colSpan={4}>경력</th>
+              </tr>
+            </thead>
+            <tbody>
+            {getCareerInfo.map((career, idx) => (
+              <React.Fragment key={idx}>
+                <tr>
+                  <td>{career.startDate}&nbsp;~&nbsp;{career.endDate}</td>
                   <td>{career.company}</td>
+                  <td>{career.dept}</td>
                   <td>{career.position}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={2}>경력 정보가 없습니다.</td>
-              </tr>
-            )}
+                <tr>
+                  <td colSpan={4}>{career.crrDesc}</td>
+                </tr>
+              </React.Fragment>
+            ))}
           </tbody>
-        </table>
+          </table>
+        ): (
+          <></>
+        )}
 
         {/* 3. 학력 정보 */}
+        {getEducationInfo.length > 0 ? (
         <table className="cert-table">
           <thead>
             <tr>
-              <th colSpan={2}>학력</th>
+              <th colSpan={4}>학력</th>
             </tr>
           </thead>
           <tbody>
-            {/* 학력 정보가 있으면 표시, 없으면 "정보 없음" 표시 */}
-            {getEducationInfo.length > 0 ? (
-              getEducationInfo.map((education, idx) => (
+              {getEducationInfo.map((education, idx) => (
                 <tr key={idx}>
+                  <td>{education.grdStatus}</td>
                   <td>{education.schoolName}</td>
                   <td>{education.major}</td>
+                  <td>{education.admDate}&nbsp;~&nbsp;{education.grdDate}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={2}>학력 정보가 없습니다.</td>
-              </tr>
-            )}
+              ))}
           </tbody>
         </table>
+        ) : (
+          <></>
+        )}
 
         {/* 4. 스킬 정보 */}
+        {getSkillInfo.length > 0 ? (
         <table className="cert-table">
           <thead>
             <tr>
@@ -164,23 +172,20 @@ export const HistoryModal = ({
             </tr>
           </thead>
           <tbody>
-            {/* 스킬 정보가 있으면 표시, 없으면 "정보 없음" 표시 */}
-            {getSkillInfo.length > 0 ? (
-              getSkillInfo.map((skillInfo, idx) => (
+              {getSkillInfo.map((skillInfo, idx) => (
                 <tr key={idx}>
                   <td>{skillInfo.skillName}</td>
                   <td>{skillInfo.skillDetail}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={2}>학력 정보가 없습니다.</td>
-              </tr>
-            )}
+              ))}
           </tbody>
         </table>
+        ) : (
+          <></>
+        )}
 
         {/* 5. 자격증 및 외국어 정보 */}
+        {getCertInfo.length > 0 ? (
         <table className="cert-table">
           <thead>
             <tr>
@@ -188,25 +193,22 @@ export const HistoryModal = ({
             </tr>
           </thead>
           <tbody>
-            {/* 자격증 정보가 있으면 표시, 없으면 "정보 없음" 표시 */}
-            {getCertInfo.length > 0 ? (
-              getCertInfo.map((cert: ICertInfo, idx) => (
+              {getCertInfo.map((cert: ICertInfo, idx) => (
                 <tr key={idx}>
                   <td>{cert.certName}</td>
                   <td>{cert.grade}</td>
                   <td>{cert.issuer}</td>
                   <td>{cert.acqDate}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={4}>자격증 및 외국어 정보가 없습니다.</td>
-              </tr>
-            )}
+              ))}
           </tbody>
         </table>
+        ) : (
+          <></>
+        )}
 
         {/* 6. 자기소개서 */}
+        {getResumeInfo.perStatement ? (
         <table>
           <thead>
             <tr>
@@ -214,18 +216,14 @@ export const HistoryModal = ({
             </tr>
           </thead>
           <tbody>
-            {/* 자기소개서가 있으면 표시, 없으면 "정보 없음" 표시 */}
-            {getResumeInfo.perStatement ? (
               <tr>
                 <td>{getResumeInfo.perStatement}</td>
               </tr>
-            ) : (
-              <tr>
-                <td>자기소개서 정보가 없습니다.</td>
-              </tr>
-            )}
           </tbody>
         </table>
+        ) : (
+          <></>
+        )}
 
         {/* 버튼 컨테이너: 닫기 및 인쇄 버튼 */}
         <div className="button-container">
