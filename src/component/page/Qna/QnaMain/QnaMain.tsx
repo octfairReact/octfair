@@ -8,12 +8,7 @@ import { PageNavigateStyled } from "../../../common/pageNavigation/styled";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { QnaModal } from "../QnaModal/QnaModal";
 import { modalState, qnaMyListState, qnaPasswordModalState } from "../../../../stores/modalState";
-import {
-  IPasswordCheck,
-  IPasswordCheckResponse,
-  IQnaAns,
-  IQnaListResponse,
-} from "../../../../models/interface/IQna";
+import { IPasswordCheck, IPasswordCheckResponse, IQnaAns, IQnaListResponse } from "../../../../models/interface/IQna";
 import { postQnaApi } from "../../../../api/postQnaApi";
 import { Qna } from "../../../../api/api";
 import { QnaContext } from "../../../../api/provider/QnaProvider";
@@ -238,14 +233,7 @@ export const QnaMain = () => {
       </PageNavigateStyled>
 
       {/* 모달 컴포넌트 */}
-      {modal && (
-        <QnaModal
-          onSuccess={onPostSuccess}
-          qnaSeq={index}
-          setQnaSeq={setIndex}
-          qnaPassword={password}
-        />
-      )}
+      {modal && <QnaModal onSuccess={onPostSuccess} qnaSeq={index} setQnaSeq={setIndex} qnaPassword={password} />}
       {passwordmodal && <QnaPassword onPasswordSubmit={handlePasswordSubmit} qnaIdx={index} />}
     </>
   );

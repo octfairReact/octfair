@@ -76,18 +76,20 @@ export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   fileDownload: "manage-hire/managehireDownload.do",
   postSave: "/manage-hire/managehireSaveFileForm.do",
-  postSaveBody: "/manage-hire/managehireSaveBody.do",
 };
 
 //지원자관리 - 신효
 export const Applicant = {
   getPostIdx: "/manage-hire/applicantJson.do",
   gitListBody: "/manage-hire/applicantListBody.do",
+  statusUpdate: "/manage-hire/statusUpdateBody.do",
+  viewUpdate: "/manage-hire/viewUpdateBody.do",
 };
 
 export const ScrapURL = {
   getScrapList: "/jobs/scrapListBody.do",
   getScarpDelete: "/jobs/deleteScrapBody.do",
+  getScarpUpdate: "/jobs/updateScrapBody.do",
 
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };
