@@ -1,5 +1,6 @@
 import { PostProvider } from "../api/provider/PostProvider";
 import { ContentBox } from "../component/common/ContentBox/ContentBox";
+import { ReloadButton } from "../component/common/ContentBox/ReloadButton";
 import { PostMain } from "../component/page/manage-posts/PostMain/PostMain";
 import { PostSearch } from "../component/page/manage-posts/PostSearch/PostSearch";
 import { useLocation } from "react-router-dom";
@@ -28,6 +29,7 @@ export const Post = () => {
 
   return (
     <PostProvider>
+      <ReloadButton></ReloadButton>
       <ContentBox>
         {/* PageTitle 컴포넌트를 호출하여 제목 렌더링 */}
         <PageTitle />
