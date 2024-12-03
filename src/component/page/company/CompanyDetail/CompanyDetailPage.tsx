@@ -45,14 +45,7 @@ export const CompanyDetailPage = () => {
   console.log("방문객 유저타입 확인", userInfo.userType);
 
   const goToManageHire = () => {
-    const userType = userInfo.userType;
-
-    if (userType === "B") {
-      navigate(`/react/manage-hire/managehireDetail.do/${postIdx}/${bizIdx}`);
-    } else if (userType === "M" || userType === "A") {
-      navigate(`/react/manage-post/${postIdx}/${bizIdx}`);
-    } else {
-    }
+    window.history.back(); // 뒤로가기
   };
 
   return (

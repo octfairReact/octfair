@@ -32,36 +32,21 @@ const routers: RouteObject[] = [
 
     children: [
       {
+        path: "apply",
+        children: [
+          { path: "history.do", element: <History /> },
+          { path: "resume.do", element: <Resume /> },
+          { path: "resume-new.do", element: <ResumeForm /> },
+          { path: "resume-detail/:resIdx", element: <ResumeForm /> },
+        ],
+      },
+      {
         path: "board",
         children: [
           { path: "notice.do", element: <Notice /> },
           { path: "notice.do/:noticeIdx", element: <NoticeRouter /> },
           { path: "faq.do", element: <FaQ /> },
           { path: "qna.do", element: <QnA /> },
-        ],
-      },
-      {
-        path: "manage-hire",
-        children: [
-          { path: "post.do", element: <Hire /> },
-          { path: "managehireWritePage.do", element: <HireAdd /> },
-          { path: "applicant.do", element: <Applicant /> },
-        ],
-      },
-      {
-        path: "jobs",
-        children: [
-          { path: "posts.do", element: <Post /> },
-          { path: "scrap.do", element: <Scrap /> },
-        ],
-      },
-
-      {
-        path: "manage-post",
-        children: [
-          { path: "managePostDetailBody.do", element: <ManagePostPage /> },
-          { path: "approval.do", element: <Post /> },
-          { path: "post.do", element: <Post /> },
         ],
       },
       {
@@ -76,20 +61,26 @@ const routers: RouteObject[] = [
         ],
       },
       {
-        path: "mypage",
+        path: "jobs",
         children: [
-          { path: "update.do", element: <MyPageUpdate /> },
-          { path: "withdraw.do", element: <MyPageWithdraw /> },
-          //:id 이게 키값이 됨
+          { path: "posts.do", element: <Post /> },
+          { path: "scrap.do", element: <Scrap /> },
         ],
       },
       {
-        path: "apply",
+        path: "manage-hire",
         children: [
-          { path: "history.do", element: <History /> },
-          { path: "resume.do", element: <Resume /> },
-          { path: "resume-new.do", element: <ResumeForm /> },
-          { path: "resume-detail/:resIdx", element: <ResumeForm /> },
+          { path: "post.do", element: <Hire /> },
+          { path: "managehireWritePage.do", element: <HireAdd /> },
+          { path: "applicant.do", element: <Applicant /> },
+        ],
+      },
+      {
+        path: "manage-post",
+        children: [
+          { path: "managePostDetailBody.do", element: <ManagePostPage /> },
+          { path: "approval.do", element: <Post /> },
+          { path: "post.do", element: <Post /> },
         ],
       },
       {
@@ -97,6 +88,13 @@ const routers: RouteObject[] = [
         children: [
           { path: "applicant.do", element: <ManageApplicant /> },
           { path: "biz.do", element: <ManageBiz /> },
+        ],
+      },
+      {
+        path: "mypage",
+        children: [
+          { path: "update.do", element: <MyPageUpdate /> },
+          { path: "withdraw.do", element: <MyPageWithdraw /> },
         ],
       },
     ],

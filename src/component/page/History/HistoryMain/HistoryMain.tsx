@@ -9,8 +9,9 @@ import { useRecoilState } from 'recoil';
 import { modalState } from '../../../../stores/modalState';
 import { HistoryModal } from '../HistoryModal/HistoryModal';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CancelButton, DisabledButton, HistoryMainStyled, StyledHoverText } from './styled';
+import { CancelButton, DisabledButton, StyledHoverText } from './styled';   // 스타일 적용
 import { CancelModal } from '../CancelModal/CancelModal';
+import { toast } from 'react-toastify';
 
 export const HistoryMain = () => {
     const { search } = useLocation();       // URL 쿼리 파라미터에서 검색 정보 가져오기
@@ -37,7 +38,6 @@ export const HistoryMain = () => {
     const [cancelAppId, setCancelAppId] = useState<number | null>(null);
     const [cancelPostTitle, setCancelPostTitle] = useState<string>('');
     const [cancelModalVisible, setCancelModalVisible] = useState<boolean>(false);
-
 
     // 이력서 모달 열기
     const handlerModal = (appId: number, resIdx: number) => {
@@ -93,7 +93,8 @@ export const HistoryMain = () => {
         try {
             const deleteResponse = await postHistoryApi<IHistoryResponse>(History.postDelete, paramMap);
             if (deleteResponse) {
-                alert(`${postTitle} 지원 내역이 취소되었습니다.`);
+
+                toast.success(`${postTitle} 지원 내역이 취소되었습니다.`);
                 searchHistoryList(currentPage);         // 삭제 후 리스트 갱신
                 closeCancelModal();                     // 모달 닫기
             } else {
@@ -106,7 +107,8 @@ export const HistoryMain = () => {
 
     // 상세 페이지로 이동
     const handlerDetail = (appId: number, bizIdx: number) => {
-        navigate(`/react/company/companyDetailPage.do/${appId}/${bizIdx}`);
+        const url = `/react/company/companyDetailPage.do/${appId}/${bizIdx}`;
+        window.open(url, '_blank');
     };
 
     // 공고 페이지로 이동

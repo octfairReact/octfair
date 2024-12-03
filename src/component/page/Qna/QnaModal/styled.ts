@@ -29,11 +29,14 @@ export const QnaModalStyled = styled.div`
   }
 
   .passinput input {
-    width: 100px; // 원하는 너비로 설정
-    height: 35px; // 원하는 높이로 설정
-    font-size: 14px; // 폰트 크기 조정
-    padding: 5px; // 패딩 조정 (너비에 영향을 미침)
-    border-radius: 4px; // 테두리 반경 (옵션)
+    width: 100%;
+    background-color: #f9f9f9;
+    color: black; /* 텍스트 색상도 흰색으로 설정 */
+    height: 35px; /* 원하는 높이로 설정 */
+    font-size: 14px; /* 폰트 크기 조정 */
+    padding: 5px; /* 패딩 조정 (너비에 영향을 미침) */
+    border-radius: 4px; /* 테두리 반경 (옵션) */
+    -webkit-text-security: disc; /* 입력된 텍스트를 점으로 보이게 함 (Webkit 기반 브라우저에서 작동) */
   }
 
   .modal-container {

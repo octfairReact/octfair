@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0px 0px 0px;
+  margin: 5px 0px 0px 0px;
   font-size: 18px;
   text-align: left;
   table-layout: fixed;
@@ -17,12 +17,12 @@ export const StyledTable = styled.table`
   }
 
   th {
-    background-color: #2676bf;
-    color: #ddd;
+    background-color: #dce1e6;
+    color: #333333;
   }
   th {
-    background-color: #2676bf;
-    color: #ddd;
+    background-color: #dce1e6;
+    color: #333333;
   }
 
   /* 테이블 올렸을 때 */
@@ -57,7 +57,7 @@ export const StyledTable = styled.table`
 `;
 
 export const StyledTh = styled.th<{ size?: number }>`
-  background-color: #f4f4f4;
+  background-color: #7d99b3;
   padding: 12px;
   border: 1px solid #ddd;
   width: ${(props) => props.size}%;
