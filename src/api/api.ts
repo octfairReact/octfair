@@ -85,9 +85,6 @@ export const Applicant = {
   gitListBody: "/manage-hire/applicantListBody.do",
   statusUpdate: "/manage-hire/statusUpdateBody.do",
   viewUpdate: "/manage-hire/viewUpdateBody.do",
-  
-  
-
 };
 
 export const ScrapURL = {
