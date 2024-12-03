@@ -13,7 +13,7 @@ export interface IApplicant extends IDetailBiz {
     name: string; //회원이름
     email: string;//회원 이메일
     phone: string;
-    stauts: string; //지원현황
+    status: string; //지원현황
     resIdx: number; //이력서
     hirProcess: string; 
     resTitle: string; //지원자 이력서제목
