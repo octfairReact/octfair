@@ -11,8 +11,6 @@ import { JobDetail } from "./JobDetail";
 import { ContentBoxPost } from "../../../common/ContentBox/ContentBoxPost";
 import { IScrap } from "../../../../models/interface/IScrap";
 import { IPostResponse } from "../../../../models/interface/INotice";
-
-
 import axios, { AxiosRequestConfig } from "axios";
 
 export const PostDetail = () => {
@@ -84,9 +82,7 @@ export const PostDetail = () => {
           <li className="contents">
             <div className="conTitle"></div>
             <div className="container1">
-              <div className="job-details">
-                {MDetail && CDetail && <JobDetail data={MDetail} Cdata={CDetail} />}
-              </div>
+              <div className="job-details">{MDetail && CDetail && <JobDetail data={MDetail} Cdata={CDetail} />}</div>
               <aside className="company-info">
                 {MDetail && CDetail && <CompanyInfo data={MDetail} Cdata={CDetail} postIdx={postIdx} bizIdx={bizIdx} />}
               </aside>
@@ -183,8 +179,10 @@ const CompanyInfo = ({
         <button onClick={companyDetail}>기업정보→</button>
       </div>
       <p>
-        <strong>첨부파일:</strong> 
-        <span className="download-link" onClick={downloadFile}>{data.fileName}</span>
+        <strong>첨부파일:</strong>
+        <span className="download-link" onClick={downloadFile}>
+          {data.fileName}
+        </span>
       </p>
       <div className="date">
         <span className="remaining">남은 기간</span>

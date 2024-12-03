@@ -9,6 +9,7 @@ import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTa
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
+import { StyledTablePost } from "../../../common/styled/StyledTablePost";
 
 interface PostData {
   list: IPost[];
@@ -77,7 +78,7 @@ export const PostMain = () => {
 
   return (
     <>
-      <StyledTable>
+      <StyledTablePost>
         <thead>
           <tr>
             <StyledTh size={5}>번호</StyledTh>
@@ -108,7 +109,7 @@ export const PostMain = () => {
             </tr>
           )}
         </tbody>
-      </StyledTable>
+      </StyledTablePost>
       <PageNavigate
         totalItemsCount={postData.count}
         onChange={searchPostList}

@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
 export const LeftMenuBar = () => {
-    const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
+    const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
     const navigate = useNavigate();
 
     const handlerClick = (menuId: string, e: React.MouseEvent<HTMLDivElement>) => {
@@ -42,7 +42,9 @@ export const LeftMenuBar = () => {
     };
 
     const handlerLogout = () => {
+        setUserInfo({});
         sessionStorage.setItem('userInfo', '');
+        localStorage.setItem("loginInfoState", '');
         navigate('/');
     };
 
@@ -87,6 +89,7 @@ export const LeftMenuBar = () => {
                     );
                 })}
             </ul>
+
         </LeftMenuBarStyled>
     );
 };

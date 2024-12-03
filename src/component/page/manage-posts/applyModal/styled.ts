@@ -5,7 +5,6 @@ export const ApplyModalStyled = styled.div`
   height: 100%;
   position: fixed;
   display: flex;
-  flex-flow: row wrep;
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
@@ -32,6 +31,8 @@ export const ApplyModalStyled = styled.div`
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     position: relative;
     width: 900px;
+    max-height: 80vh; /* 화면 높이의 80%로 제한 */
+    overflow-y: auto; /* 스크롤 활성화 */
   }
 
   img {
@@ -63,6 +64,7 @@ export const ApplyModalStyled = styled.div`
     text-align: right;
     margin-top: 10px;
   }
+
   button {
     background-color: #3bb2ea;
     border: none;

@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-export const StyledTable = styled.table`
+export const StyledTablePost = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin: 5px 0px 0px 0px;
+  margin: 50px 0px 0px 0px;
   font-size: 18px;
   text-align: left;
   table-layout: fixed;
@@ -66,75 +66,4 @@ export const StyledTh = styled.th<{ size?: number }>`
 export const StyledTd = styled.td`
   padding: 12px;
   border: 1px solid #ddd;
-`;
-
-
-export const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-export const StyledRow = styled.div`
-display: flex;
-justify-content: space-between;
-align-items: flex-start;
-padding: 1rem;
-border: 1px solid #ddd;
-border-radius: 8px;
-background-color: #f9f9f9;
-
-.left {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-weight: bold;
-  margin-right: 6rem; /* 왼쪽과 중앙 사이 간격 조정 */
-}
-
-.center {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  button {
-    margin-bottom: 0.5rem;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #0056b3;
-    }
-  }
-
-  .decision-buttons {
-    display: flex;
-    gap: 0.5rem;
-
-    button {
-      background-color: #28a745;
-
-      &:nth-child(2) {
-        background-color: #dc3545;
-      }
-
-      &:hover {
-        opacity: 0.8;
-      }
-    }
-  }
-}
 `;

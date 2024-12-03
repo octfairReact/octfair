@@ -3,7 +3,7 @@ import { Button } from "../../../common/Button/Button";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { modalState, noticeState, scrapIndexGrop, scrapState } from "../../../../stores/modalState";
+import { modalState, noticeState, postIndexGrop, scrapIndexGrop, scrapState } from "../../../../stores/modalState";
 import { NoticeContext } from "../../../../api/provider/NoticeProvider";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
@@ -22,6 +22,8 @@ export const NoticeSearch = () => {
   const [notice, setNotice] = useRecoilState<boolean>(noticeState);
   const scrapIndexes = useRecoilValue(scrapIndexGrop);
   const setScrapIndexes = useSetRecoilState(scrapIndexGrop);
+  const postIndexes = useRecoilValue(postIndexGrop);
+  const setPostIndexes = useSetRecoilState(postIndexGrop);
 
   const [searchValue, setSearchValue] = useState<{ searchTitle: string; searchStDate: string; searchEdDate: string }>({
     searchTitle: "",
@@ -72,22 +74,47 @@ export const NoticeSearch = () => {
     setModal(!modal);
   };
 
+  // NoticeSearch 컴포넌트
   const deleteScrap = async () => {
-    console.log("scraIndex: ", scrapIndexes);
-    const Param = {
+    console.log("scrapIndex: ", scrapIndexes);
+    console.log("postIndex: ", postIndexes);
+    const postParam = {
+      postIndexes,
+    };
+    const scrapParam = {
       scrapIndexes,
     };
 
-    const deleteScrap = await postNoticeApi<IScrapResponse>(ScrapURL.getScarpDelete, Param);
-    console.log(deleteScrap);
-    setScrapIndexes([]);
-    if (deleteScrap && deleteScrap.data.result === "success") {
-      alert("삭제되었습니다.");
-    } else {
-      alert("실패 했습니다.");
+    if (postIndexes.length > 0) {
+      console.log("업데이트 작업 시작");
+      const updateScrap = await postNoticeApi<IScrapResponse>(ScrapURL.getScarpUpdate, postParam);
+      if (updateScrap && updateScrap.data.result === "success") {
+        console.log("수정되었습니다.");
+      } else {
+        alert("수정실패 했습니다.");
+        return;
+      }
+      console.log("업데이트 완료");
+    }
+
+    if (scrapIndexes.length > 0) {
+      console.log("삭제 작업 시작");
+      const deleteScrap = await postNoticeApi<IScrapResponse>(ScrapURL.getScarpDelete, scrapParam);
+      if (deleteScrap && deleteScrap.data.result === "success") {
+        alert("삭제되었습니다.");
+        // 검색 결과 다시 로드
+        setScrapIndexes([]); // 새로 고침을 위한 상태 초기화
+        setSearchKeyWord({
+          searchTitle: "",
+          searchStDate: "",
+          searchEdDate: "",
+        }); // 상태 초기화
+      } else {
+        alert("삭제실패 했습니다.");
+      }
+      console.log("삭제 완료");
     }
   };
-
   return (
     <NoticeSearchStyled>
       {/*NoticeSearchStyled = 라이브러리(Styled 컴포넌드/ 패키지json에 있음) */}

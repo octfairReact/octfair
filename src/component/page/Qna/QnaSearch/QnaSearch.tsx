@@ -31,6 +31,13 @@ export const QnaSearch = () => {
     setQnaMyList(requestType);
   };
 
+  // 엔터 키 입력 처리 함수
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handlerSearch(); // Enter 키가 눌리면 검색 실행
+    }
+  };
+
   return (
     <>
       <QnaSearchStyled>
@@ -39,7 +46,10 @@ export const QnaSearch = () => {
           {userInfo.userType === "M" && (
             <>
               <label>제목</label>
-              <input onChange={(e) => setSearchValue({ ...searchValue, searchTitle: e.target.value })}></input>
+              <input
+                onChange={(e) => setSearchValue({ ...searchValue, searchTitle: e.target.value })}
+                onKeyDown={handleKeyDown} // 엔터 키 이벤트 추가
+              ></input>
 
               <label>기간</label>
               <input

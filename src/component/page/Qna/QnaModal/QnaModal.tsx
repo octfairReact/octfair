@@ -3,10 +3,11 @@ import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { modalState } from "../../../../stores/modalState";
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import { IDetailResponse, IDetailResponse2, IPostResponse, IQnaDetail } from "../../../../models/interface/IQna";
+import { IDetailResponse2, IPostResponse, IQnaDetail } from "../../../../models/interface/IQna";
 import { QnaModalStyled } from "./styled";
 import { postQnaApi } from "../../../../api/postQnaApi";
 import { Qna } from "../../../../api/api";
+import axios, { AxiosRequestConfig } from "axios";
 
 export interface IQnaModalProps {
   onSuccess: () => void;
@@ -18,10 +19,6 @@ export interface IQnaModalProps {
 export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qnaPassword }) => {
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [modal, setModal] = useRecoilState<boolean>(modalState);
-
-  console.log("비밀번호 확인", qnaPassword);
-  console.log("qnaSeq 확인", qnaSeq);
-
   //save
   const title = useRef<HTMLInputElement>();
   const context = useRef<HTMLTextAreaElement>();
@@ -33,7 +30,9 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
 
   useEffect(() => {
     //컴포넌트가 열렸을 때 조건 확인 후 함수
-    qnaSeq && searchDetail();
+    if (qnaSeq && modal) {
+      searchDetail();
+    }
 
     //컴포넌트가 사라지기 직전에 발동
     return () => {
@@ -42,7 +41,7 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
     // 클립업 함수
     // 컴포넌트가 언마운티드 되기 전에 실행되는 콜백함수
     // 추가 공부
-  }, []);
+  }, [qnaSeq, modal]);
 
   const searchDetail = async () => {
     const param = {
@@ -55,7 +54,8 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
 
     if (detail) {
       if (detail?.data.result === "fail") {
-        setModal(false); // 비밀번호 틀리면 모달 닫기
+        setModal(!modal); // 모달 닫기
+        setQnaSeq(undefined); // qnaSeq 초기화
         alert("비밀번호가 일치하지 않습니다.");
         return;
       }
@@ -109,7 +109,7 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
 
     if (save && save.data.result === "success") {
       console.log("성공");
-      // onSuccess();
+      onSuccess();
     } else {
       console.error("Failed to save notice:", save?.data);
     }
@@ -130,11 +130,14 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
       document.getElementById("qnaCon")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
+
     // 비밀번호를 입력해주세요
-    if (!password.current.value) {
-      alert("비밀번호를 입력해주세요.");
-      document.getElementById("password")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
+    if (userInfo.userType !== "M") {
+      if (!password.current.value) {
+        alert("비밀번호를 입력해주세요.");
+        document.getElementById("password")?.focus();
+        return; // 유효성 검사 실패 시 함수 종료
+      }
     }
 
     const fileForm = new FormData();
@@ -142,21 +145,28 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
       qnaTit: title.current.value,
       qnaCon: context.current.value,
       loginId: userInfo.loginId,
-      password: password.current.value,
       qna_type: userInfo.userType,
       qnaSeq: qnaDetail.qnaIdx,
-      ans_content: ansContent.current.value,
     };
+
+    if (userInfo.userType !== "M" && password.current.value) {
+      // textData["키 값"] = 밸류값
+      textData["password"] = password.current.value;
+    }
+    if (userInfo.userType === "M" && ansContent.current?.value) {
+      textData["ans_content"] = ansContent.current.value;
+    }
+
     fileData && fileForm.append("file", fileData);
     fileForm.append("text", new Blob([JSON.stringify(textData)], { type: "application/json" }));
 
-    const save = await postQnaApi<IPostResponse>(Qna.postUpdate, fileForm);
+    const update = await postQnaApi<IPostResponse>(Qna.postUpdate, fileForm);
 
-    if (save && save.data.result === "success") {
+    if (update && update.data.result === "success") {
       console.log("성공");
-      // onSuccess();
+      onSuccess();
     } else {
-      console.error("Failed to save notice:", save?.data);
+      console.error("Failed to save notice:", update?.data);
     }
   };
 
@@ -210,6 +220,48 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
 
       setFileData(fileInfo[0]); // 선택된 파일을 상태에 저장
     }
+  };
+
+  const downloadFile = async () => {
+    const param = new URLSearchParams();
+
+    param.append("qnaSeq", qnaSeq.toString());
+
+    // Axios 요청 설정 객체
+    const postAction: AxiosRequestConfig = {
+      url: "/board/qnaDownload.do", // 백엔드의 파일 다운로드 API 엔드포인트
+      method: "post", // HTTP 메서드: POST
+      data: param, // 요청 바디에 URLSearchParams 객체를 포함 (form-urlencoded 형태로 전달)
+      responseType: "blob", // 응답 데이터를 blob(이진 데이터)로 받음 (파일 다운로드 시 필요)
+      // 참고: blob은 파일, 이미지, 영상 등과 같은 대용량 바이너리 데이터를 다룰 때 사용
+    };
+
+    // Axios 요청 실행
+    await axios(postAction)
+      .then((res) => {
+        // 응답 데이터 확인: blob 형태로 반환되는 파일 데이터
+        console.log("다운로드 데이터 blob", res);
+
+        // Blob 데이터를 URL로 변환
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+
+        // <a> 태그를 생성하여 파일 다운로드 기능 구현
+        const link = document.createElement("a");
+        link.href = url; // Blob URL을 다운로드 링크로 설정
+        link.setAttribute("download", qnaDetail?.fileName as string);
+        // 다운로드 시 저장할 파일 이름을 설정 (as string: 타입 단언)
+
+        // 생성한 <a> 태그를 DOM에 추가한 후 클릭하여 다운로드 실행
+        document.body.appendChild(link);
+        link.click();
+
+        // 다운로드가 완료되면 DOM에서 <a> 태그 제거 (효율성 및 메모리 관리)
+        link.remove();
+      })
+      .catch((error) => {
+        // 에러 처리: 다운로드 실패 시 로그 출력
+        console.error("파일 다운로드 중 오류 발생", error);
+      });
   };
 
   return (
@@ -267,35 +319,38 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                     onChange={handlerFile}
                     disabled={!!qnaDetail?.ans_content}
                   />
-                  {imageUrl ? (
-                    <div>
-                      <img src={imageUrl} alt="미리보기" style={{ width: "100px" }} />
-                    </div>
-                  ) : (
-                    <div>등록된 파일이 없습니다.</div>
-                  )}
+                  <div onClick={downloadFile}>
+                    {imageUrl ? (
+                      <div>
+                        <img src={imageUrl} alt="미리보기" style={{ width: "100px" }} />
+                      </div>
+                    ) : (
+                      <div>등록된 파일이 없습니다.</div>
+                    )}
+                  </div>
                 </td>
               </tr>
-
-              <tr>
-                <th scope="row">
-                  비밀번호<span className="font_red">*</span>
-                </th>
-                <td colSpan={3}>
-                  <input
-                    type="text"
-                    className="inputTxt p100"
-                    name="password"
-                    id="password"
-                    ref={password}
-                    defaultValue={qnaDetail?.password}
-                    onFocus={(e) => (e.target.type = "text")} // 포커스 시 비밀번호로 전환
-                    onBlur={(e) => (e.target.type = "password")} // 포커스 해제 시 일반 텍스트로 변경
-                    readOnly={!!qnaDetail?.ans_content}
-                  />
-                </td>
-              </tr>
-              {userInfo.userType === "M" && (
+              {userInfo.userType !== "M" && (
+                <tr>
+                  <th scope="row">
+                    비밀번호<span className="font_red">*</span>
+                  </th>
+                  <td colSpan={3}>
+                    <input
+                      type="text"
+                      className="inputTxt p100"
+                      name="password"
+                      id="password"
+                      ref={password}
+                      // defaultValue={qnaDetail?.password}
+                      onFocus={(e) => (e.target.type = "text")} // 포커스 시 비밀번호로 전환
+                      onBlur={(e) => (e.target.type = "password")} // 포커스 해제 시 일반 텍스트로 변경
+                      readOnly={!!qnaDetail?.ans_content}
+                    />
+                  </td>
+                </tr>
+              )}
+              {qnaDetail ? (
                 <tr id="ansContent">
                   <th scope="row">답변</th>
                   <td colSpan={3}>
@@ -306,10 +361,27 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                       rows={5}
                       ref={ansContent}
                       defaultValue={qnaDetail?.ans_content}
-                      readOnly={userInfo.userType !== "M"}
+                      readOnly={userInfo.userType !== "M"} // 관리자만 수정 가능
                     ></textarea>
                   </td>
                 </tr>
+              ) : (
+                userInfo.userType === "M" && (
+                  <tr id="ansContent">
+                    <th scope="row">답변</th>
+                    <td colSpan={3}>
+                      <textarea
+                        name="ans_content"
+                        id="ans_content"
+                        cols={40}
+                        rows={5}
+                        ref={ansContent}
+                        defaultValue={qnaDetail?.ans_content}
+                        readOnly={false} // 관리자만 입력 가능
+                      ></textarea>
+                    </td>
+                  </tr>
+                )
               )}
             </tbody>
           </table>
@@ -320,11 +392,14 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                 저장
               </button>
             )}
-            {userInfo.userType !== "M" ? (
+
+            {userInfo.loginId === qnaDetail?.author && (
               <button className="btn blue" id="qnaFileUpdate" onClick={handleUpdate}>
                 수정
               </button>
-            ) : (
+            )}
+            {/* 답변등록 버튼: 관리자만 볼 수 있음 */}
+            {userInfo.userType === "M" && (
               <button className="btn blue" id="qnaFileUpdate" onClick={handleUpdate}>
                 답변등록
               </button>
