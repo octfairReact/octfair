@@ -151,32 +151,32 @@ export const HistoryModal = ({
               </tr>
             )}
 
-            {/* 깃링크*/}
-            {getResumeInfo.proLink && (
+            {(getResumeInfo.proLink || getResumeInfo.fileName) && (
               <tr>
                 <td>
-                  <p className="no-align">
-                    링크 : <a href={getResumeInfo.proLink} target="_blank" className="proLink">
-                    {getResumeInfo.proLink}
-                    </a>
-                  </p>
+                  {/* 깃링크 */}
+                  {getResumeInfo.proLink && (
+                    <p className="no-align">
+                      링크 : 
+                      <a href={getResumeInfo.proLink} target="_blank" className="proLink">
+                        {getResumeInfo.proLink}
+                      </a>
+                    </p>
+                  )}
+
+                  {/* 첨부파일 */}
+                  {getResumeInfo.fileName && (
+                    <p>
+                      첨부파일 : &nbsp;
+                      <span className="download-link" onClick={downloadFile}>
+                        {getResumeInfo.fileName}
+                      </span>
+                    </p>
+                  )}
                 </td>
               </tr>
             )}
 
-            {/* 첨부파일 */}
-            {getResumeInfo.fileName && (
-              <tr>
-                <td>
-                  <p>
-                    첨부파일 : &nbsp;
-                    <span className="download-link" onClick={downloadFile}>
-                    {getResumeInfo.fileName}
-                  </span>
-                  </p>
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
 
