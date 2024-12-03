@@ -145,7 +145,7 @@ export const NoticeMain = () => {
         </div>
         <div>
           {" "}
-          <strong>현재 페이지 : :</strong> {cPage}
+          <strong>현재 페이지 :</strong> {cPage}
         </div>
       </div>
 
