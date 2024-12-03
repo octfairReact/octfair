@@ -76,7 +76,6 @@ export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   fileDownload: "manage-hire/managehireDownload.do",
   postSave: "/manage-hire/managehireSaveFileForm.do",
- 
 };
 
 //지원자관리 - 신효
@@ -90,6 +89,7 @@ export const Applicant = {
 export const ScrapURL = {
   getScrapList: "/jobs/scrapListBody.do",
   getScarpDelete: "/jobs/deleteScrapBody.do",
+  getScarpUpdate: "/jobs/updateScrapBody.do",
 
   getpostDetail: (postIdx: number, bizIdx: number) => `/manage-post//managePostDetailBody.do/${postIdx}/${bizIdx}`,
 };

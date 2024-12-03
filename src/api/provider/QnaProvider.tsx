@@ -15,16 +15,12 @@ const defaultValue: Context = {
 };
 export const QnaContext = createContext(defaultValue);
 
-export const QnaProvider: FC<{ children: React.ReactNode | React.ReactNode[] }> = ({
-  children,
-}) => {
+export const QnaProvider: FC<{ children: React.ReactNode | React.ReactNode[] }> = ({ children }) => {
   const [searchKeyWord, setSearchKeyWord] = useState({});
   const [passwordStatus, setPasswordStatus] = useState(false);
 
   return (
-    <QnaContext.Provider
-      value={{ searchKeyWord, setSearchKeyWord, passwordStatus, setPasswordStatus }}
-    >
+    <QnaContext.Provider value={{ searchKeyWord, setSearchKeyWord, passwordStatus, setPasswordStatus }}>
       {children}
     </QnaContext.Provider>
   );

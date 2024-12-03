@@ -10,8 +10,12 @@ import { Scrap } from "./../../../../pages/Scrap";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
-import { scrapIndexGrop, scrapState } from "../../../../stores/modalState";
+import { ApplyModalState, postIndexGrop, scrapIndexGrop, scrapState } from "../../../../stores/modalState";
 import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
+import { Portal } from "../../../common/portal/Portal";
+import { ApplyModal } from "../applyModal/ApplyModal";
+import { postFaqApi } from "./../../../../api/postFaqApi";
+import { StyledTablePost } from "../../../common/styled/StyledTablePost";
 
 export const ScrapMain = () => {
   const { search } = useLocation();
@@ -24,13 +28,16 @@ export const ScrapMain = () => {
   const { searchKeyWord } = useContext(NoticeContext);
   const [isScrap, setIsScrap] = useRecoilState<boolean>(scrapState);
   const [scrapIndexG, setScrapIndexG] = useRecoilState<number[]>(scrapIndexGrop);
+  const [postIndexG, setPostIndexG] = useRecoilState<number[]>(postIndexGrop);
   const scrapIndexes = useRecoilValue(scrapIndexGrop);
+  const postIndexes = useRecoilValue(postIndexGrop);
   const [selectedItems, setSelectedItems] = useState([]);
-
+  const [modal, setModal] = useRecoilState<boolean>(ApplyModalState);
+  const [index, setIndex] = useState<number[]>();
   // 검색어가 변경되거나 컴포넌트가 마운트될 때 포스트 리스트를 검색
   useEffect(() => {
     searchScrapList(currentPage);
-  }, [search, searchKeyWord, scrapIndexes]);
+  }, [search, searchKeyWord, scrapIndexes, postIndexes, selectedItems]);
 
   useEffect(() => {
     setIsScrap(true); // Scrap 페이지에 들어왔을 때
@@ -58,6 +65,10 @@ export const ScrapMain = () => {
       setCPage(currentPage);
     }
   };
+  const handlerModal = (postIdx: number, bizIdx: number) => {
+    setModal(!modal);
+    setIndex([postIdx, bizIdx]);
+  };
 
   // 상세 보기 핸들러 함수
   const handlerDetail = (postIdx: number, bizIdx: number) => {
@@ -72,23 +83,34 @@ export const ScrapMain = () => {
       setSelectedItems((prev) => {
         const updatedItems = [...prev, item];
         console.log("항목 추가 후 selectedItems:", updatedItems);
-        setTimeout(() => setScrapIndexG(updatedItems), 0);
+        setTimeout(() => {
+          setScrapIndexG(updatedItems.map((i) => i.scrapIdx));
+          setPostIndexG(updatedItems.map((i) => i.postIdx)); // postIdx만 추출
+        }, 0);
         return updatedItems;
       });
     } else {
       // 체크박스 선택 해제, 항목 제거
       setSelectedItems((prev) => {
-        const updatedItems = prev.filter((i) => i !== item);
+        const updatedItems = prev.filter((i) => i.scrapIdx !== item.scrapIdx || i.postIdx !== item.postIdx);
         console.log("항목 제거 후 selectedItems:", updatedItems);
-        setTimeout(() => setScrapIndexG(updatedItems), 0);
+        setTimeout(() => {
+          setScrapIndexG(updatedItems.map((i) => i.scrapIdx));
+          setPostIndexG(updatedItems.map((i) => i.postIdx)); // postIdx만 추출
+        }, 0);
         return updatedItems;
       });
     }
   };
 
+  const onPostSuccess = () => {
+    setModal(!modal);
+    searchScrapList(currentPage);
+  };
+
   return (
     <>
-      <StyledTable>
+      <StyledTablePost>
         <thead>
           <tr>
             <StyledTh size={5}></StyledTh>
@@ -105,7 +127,10 @@ export const ScrapMain = () => {
             scrapList.map((scrap) => (
               <tr key={scrap.scrapIdx}>
                 <StyledTd>
-                  <input type="checkbox" onChange={(e) => handleCheckboxChange(e, scrap.scrapIdx)} />
+                  <input
+                    type="checkbox"
+                    onChange={(e) => handleCheckboxChange(e, { scrapIdx: scrap.scrapIdx, postIdx: scrap.postIdx })}
+                  />
                 </StyledTd>
                 {!scrap.loginId ? (
                   <>
@@ -119,7 +144,11 @@ export const ScrapMain = () => {
                     <StyledTd>{scrap.postWorkLocation}</StyledTd>
                     <StyledTd>{scrap.postEndDate?.substring(0, 10) || "Invalid Date"}</StyledTd>
                     <StyledTd>
-                      <button type="button" className="btn btn-warning">
+                      <button
+                        type="button"
+                        className="btn btn-warning"
+                        onClick={() => handlerModal(scrap.postIdx, scrap.postBizIdx)}
+                      >
                         입사지원
                       </button>
                     </StyledTd>
@@ -137,8 +166,12 @@ export const ScrapMain = () => {
             </tr>
           )}
         </tbody>
-      </StyledTable>
-
+      </StyledTablePost>
+      {modal && (
+        <Portal>
+          <ApplyModal onSuccess={onPostSuccess} indexGroup={index} />
+        </Portal>
+      )}
       <PageNavigate totalItemsCount={scrapCnt} onChange={searchScrapList} activePage={cPage} itemsCountPerPage={5} />
     </>
   );

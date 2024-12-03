@@ -116,6 +116,7 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({ refreshUserListHandl
     // 3. 데이터전송: 회원수정 입력정보 문제없음! 서버로 Update요청!
     if (isProblem === false) {
       const query: string[] = [];
+
       Object.entries(userData).forEach(([key, value]) => {
         query.push(`${key}=${encodeURIComponent(value)}`);
       });

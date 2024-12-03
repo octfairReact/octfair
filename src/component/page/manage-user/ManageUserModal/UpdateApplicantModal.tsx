@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../stores/modalState";
+import { updateApplicantModalState } from "../../../../stores/modalState";
 import { FC, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ManageUser } from "../../../../api/api";
@@ -49,7 +49,7 @@ export interface IUpdateUserModalProps {
 }
 
 export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({ refreshUserListHandler, userId, setUserId }) => {
-  const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(modalState);
+  const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(updateApplicantModalState);
   const [userData, setUserData] = useState<UserData>({
     // 기본값
     userType: "",
@@ -143,6 +143,7 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({ refreshUserLis
     // 3. 데이터전송: 회원수정 입력정보 문제없음! 서버로 Update요청!
     if (isProblem === false) {
       const query: string[] = [];
+
       Object.entries(userData).forEach(([key, value]) => {
         query.push(`${key}=${encodeURIComponent(value)}`);
       });
