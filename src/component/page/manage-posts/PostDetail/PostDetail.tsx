@@ -70,12 +70,12 @@ export const PostDetail = () => {
     <PostDetailStyled>
       <ContentBoxPost>
         채용 상세정보
-        {userInfo.loginId && userInfo.loginId === CDetail?.loginId && (
+        {/* {userInfo.loginId && userInfo.loginId === CDetail?.loginId && (
           <div className="action-buttons">
             <button className="btn btn-outline-primary">수정</button>
             <button className="btn btn-outline-danger">삭제</button>
           </div>
-        )}
+        )} */}
       </ContentBoxPost>
       <div id="container">
         <ul>

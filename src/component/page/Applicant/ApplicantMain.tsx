@@ -190,9 +190,13 @@ export const ApplicantMain = () => {
         console.log("상태 업데이트 핸들러 로그인 아이디 파람 ==========================>" +loginId);
         //현재 상태에 따른 다음 상태 결정
         let nextKeyword = ""; //다음 상태를 지정할 변수
+
         if(status === '서류심사중' && drop === '탈락'){
             nextKeyword = '서류탈락';
-            }else if(status === '서류심사중' && !drop){
+            }else if(status === '지원완료'){
+                nextKeyword = '서류심사중'
+            }
+            else if(status === '서류심사중' && !drop){
                 nextKeyword = '면접진행중'
             }
             else if(status === '면접진행중' && drop === '탈락'){
@@ -200,6 +204,8 @@ export const ApplicantMain = () => {
             }else if (status === '면접진행중' && !drop){
                 nextKeyword = '최종합격';
             }
+
+    
 
             
         
@@ -286,7 +292,7 @@ return(
                     {/* 오른쪽: 버튼들 */}
                     <div className="right">
                         <button onClick={() => handlerModal(applicant.loginId, applicant.resIdx)}>지원자 이력서 보기</button>
-                        {applicant.viewed === 1 && !applicant.status.includes("탈락") && ( // 이력서 조회해야 viewed가 1로 변하고 합/불 버튼이 활성화
+                        {applicant.viewed === 1 && !applicant.status.includes("탈락") && applicant.status !=="최종합격" &&( // 이력서 조회해야 viewed가 1로 변하고 합/불 버튼이 활성화
                             <div className="decision-buttons">                  
                                 <button onClick={() => handleStatusChange(applicant.status, applicant.loginId)}>합격</button>
                                 <button onClick={() => handleStatusChange(applicant.status, applicant.loginId, "탈락")}>불합격</button>                  
@@ -294,7 +300,7 @@ return(
                         )}
                         {applicant.viewed ===1 && applicant.status.includes("탈락") && (
                             <div className="decision-buttons">
-                                <button>추가합격</button>
+                                <button onClick={() => handleStatusChange("지원완료", applicant.loginId)}>추가합격</button>
                             </div> 
                         )}
                     </div>
