@@ -26,9 +26,9 @@ const Calendar = ({ label, onDateChange }) => {
         showTimeSelect
         timeIntervals={60} // 1시간 간격
         //timeCaption="시간" // 시간 선택 드롭다운 캡션
-        minDate={new Date()} //오늘 이후 날짜만 선택 가능
-        timeFormat="HH" // 시간 형식 설정
-        dateFormat ="yyyy-MM-dd HH" // 전체 날짜와 시간 형식       
+        //minDate={minDate || new Date()} //오늘 이후 날짜만 선택 가능
+        //timeFormat="HH" // 시간 형식 설정
+        dateFormat ="yyyy-MM-dd" // 전체 날짜와 시간 형식       
       />
     </div>   
   );
