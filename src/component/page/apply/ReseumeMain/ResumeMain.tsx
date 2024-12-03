@@ -46,10 +46,7 @@ export const ResumeMain = () => {
       userType: userInfo.userType,
     };
 
-    const bring_resumeList = await postResumeApi<IResumeListResponse>(
-      Resume.getListBody,
-      userParam
-    );
+    const bring_resumeList = await postResumeApi<IResumeListResponse>(Resume.getListBody, userParam);
 
     if (bring_resumeList) {
       setResumeList(bring_resumeList.data.resume);
