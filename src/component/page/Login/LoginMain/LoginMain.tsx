@@ -58,7 +58,7 @@ export const LoginMain = () => {
   const pressEnterEscHandler = (event) => {
     if (event.key === "Enter" && signupModal === false && searchIdPwModal === "close")
       loginHandler();
-    else if (event.key == "Escape") {
+    else if (event.key === "Escape") {
       setSignupModal(false);
       setSearchIdPwModal("close");
     }
