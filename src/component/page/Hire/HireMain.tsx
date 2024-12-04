@@ -6,6 +6,8 @@ import { StyledTable, StyledTd, StyledTh } from "../../common/styled/StyledTable
 import { PageNavigate } from "../../common/pageNavigation/PageNavigate";
 // import { HireContext } from "../../../api/provider/HireProvider";
 import { useLocation, useNavigate } from "react-router-dom";
+import { PageNavigateStyled } from "../../common/pageNavigation/styled";
+import { StyledButton } from "../../common/styled/StyledButton";
 
 
 
@@ -14,6 +16,7 @@ export const HireMain = () => {
     const [hireCnt, setHireCnt] = useState<number>(0);
     const [hireList, setHireList] = useState<IHire[]>();
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [cPage, setCPage] = useState<number>();
     const navigate = useNavigate();
 
 
@@ -26,8 +29,8 @@ export const HireMain = () => {
     },[]);
 
 
-    const getHireList = async () => {
-    
+    const getHireList = async (currentPage?: number) => {
+      currentPage = currentPage || 1;
       const searchParam = { currentPage: currentPage.toString(), pageSize: "5" };
       //const searchList = await postHireApi<IHireListResponse>(Hire.getListBody, searchParam);
       const getList = await postHireApi<IHireListResponse>(Hire.getListBody, searchParam);
@@ -37,6 +40,7 @@ export const HireMain = () => {
        if (getList) {
          setHireList(getList.data.MList);
          setHireCnt(getList.data.MCount);  
+         setCPage(currentPage);
        }
        
        
@@ -53,7 +57,7 @@ export const HireMain = () => {
     return (
         <>
           <br/>
-          <button onClick={buttonClick}>공고 등록</button>
+          <StyledButton onClick={buttonClick}>공고 등록</StyledButton>
 
           <StyledTable>
             <thead>
@@ -87,6 +91,14 @@ export const HireMain = () => {
         </tbody>
             
           </StyledTable>
+          <PageNavigateStyled>
+        <PageNavigate
+          totalItemsCount={hireCnt}
+          onChange={getHireList}
+          activePage={cPage}
+          itemsCountPerPage={5}
+        ></PageNavigate>
+      </PageNavigateStyled>
           
           {/* {modal && (
             <Portal>

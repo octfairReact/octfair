@@ -65,17 +65,40 @@ export const PostDetail = () => {
       handleBack();
     }
   };
+  const hireUpdate = (postIdx: number, bizIdx: number) => {
+    navigate("/react/manage-hire/managehireWritePageUpdate.do", {
+      state: { postIdx, bizIdx },
+    });
+  };
+  
+
+    
+   const hireDelete = async () => {
+    // data-status 값을 가져오기
+    const param = { postIdx, bizIdx };
+
+  
+    // status 값을 이용하여 처리
+    const response = await postPostApi<IPostResponse>(Hire.getDelete, param);
+    console.log(response);
+    if (response.data.result === "success") {
+      alert("삭제 되었습니다.");
+      handleBack();
+    }
+  };
+
+
 
   return (
     <PostDetailStyled>
       <ContentBoxPost>
         채용 상세정보
-        {/* {userInfo.loginId && userInfo.loginId === CDetail?.loginId && (
+        {userInfo.loginId && userInfo.loginId === CDetail?.loginId && (
           <div className="action-buttons">
-            <button className="btn btn-outline-primary">수정</button>
-            <button className="btn btn-outline-danger">삭제</button>
+            {/* <button className="btn btn-outline-primary" onClick={()=>hireUpdate(postIdx,bizIdx)}>수정</button> */}
+            <button className="btn btn-outline-danger" onClick={hireDelete}>삭제</button>
           </div>
-        )} */}
+        )}
       </ContentBoxPost>
       <div id="container">
         <ul>
