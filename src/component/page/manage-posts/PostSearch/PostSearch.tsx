@@ -53,6 +53,7 @@ export const PostSearch = () => {
     <NoticeSearchStyled>
       {/*NoticeSearchStyled = 라이브러리(Styled 컴포넌드/ 패키지json에 있음) */}
       <div className="input-box">
+        <text>제목</text>
         {/* <input ref={title}></input>
         <input type="date" onChange={(e) => setStartDate(e.target.value)}></input>
         <input type="date" onChange={(e) => setEndDate(e.target.value)}></input> */}

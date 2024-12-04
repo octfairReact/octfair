@@ -125,6 +125,7 @@ export const NoticeSearch = () => {
 
   return (
     <NoticeSearchStyled>
+      <text>제목</text>
       {/*NoticeSearchStyled = 라이브러리(Styled 컴포넌드/ 패키지json에 있음) */}
       <div className="input-box">
         {/* <input ref={title}></input>
