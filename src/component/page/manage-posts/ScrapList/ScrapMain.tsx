@@ -47,6 +47,11 @@ export const ScrapMain = () => {
     };
   }, [selectedItems]);
 
+  useEffect(() => {
+    setScrapIndexG(selectedItems.map((i) => i.scrapIdx));
+    setPostIndexG(selectedItems.map((i) => i.postIdx));
+  }, [selectedItems]);
+
   // 포스트 리스트 검색 함수
   const searchScrapList = async (currentPage?: number) => {
     currentPage = currentPage || 1;
@@ -79,27 +84,11 @@ export const ScrapMain = () => {
 
   const handleCheckboxChange = (e, item) => {
     if (e.target.checked) {
-      // 체크박스가 선택된 경우, 항목 추가
-      setSelectedItems((prev) => {
-        const updatedItems = [...prev, item];
-        console.log("항목 추가 후 selectedItems:", updatedItems);
-        setTimeout(() => {
-          setScrapIndexG(updatedItems.map((i) => i.scrapIdx));
-          setPostIndexG(updatedItems.map((i) => i.postIdx)); // postIdx만 추출
-        }, 0);
-        return updatedItems;
-      });
+      // 체크박스 선택 시 항목 추가
+      setSelectedItems((prev) => [...prev, item]);
     } else {
-      // 체크박스 선택 해제, 항목 제거
-      setSelectedItems((prev) => {
-        const updatedItems = prev.filter((i) => i.scrapIdx !== item.scrapIdx || i.postIdx !== item.postIdx);
-        console.log("항목 제거 후 selectedItems:", updatedItems);
-        setTimeout(() => {
-          setScrapIndexG(updatedItems.map((i) => i.scrapIdx));
-          setPostIndexG(updatedItems.map((i) => i.postIdx)); // postIdx만 추출
-        }, 0);
-        return updatedItems;
-      });
+      // 체크박스 선택 해제 시 항목 제거
+      setSelectedItems((prev) => prev.filter((i) => i.scrapIdx !== item.scrapIdx || i.postIdx !== item.postIdx));
     }
   };
 

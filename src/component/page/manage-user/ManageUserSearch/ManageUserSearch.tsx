@@ -25,7 +25,7 @@ export const ManageUserSearch = () => {
   const pressEnterEscHandler = (event) => {
     if (event.key === "Enter")
       setSearchKeyWord(searchValue);
-    else if (event.key == "Escape") {
+    else if (event.key === "Escape") {
       setUpdateApplicationModal(false);
       setUpdateBizModal(false);
     }
