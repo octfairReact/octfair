@@ -45,7 +45,7 @@ export const CompanyDetailPage = () => {
   console.log("방문객 유저타입 확인", userInfo.userType);
 
   const goToManageHire = () => {
-    window.history.back(); // 뒤로가기
+    navigate(-1); // 뒤로가기 "react-router-dom" 문서찾기;
   };
 
   return (

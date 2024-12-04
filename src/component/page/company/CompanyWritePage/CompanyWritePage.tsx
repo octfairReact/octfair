@@ -334,7 +334,7 @@ export const CompanyWritePage = () => {
                         name="bizWebUrl"
                         value={companyInfo.bizWebUrl}
                         onChange={handleChange}
-                        placeholder="ex) example@example.com"
+                        placeholder="ex) www.example.com"
                       />
                     </td>
                   </tr>
