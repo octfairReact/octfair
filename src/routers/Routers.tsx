@@ -72,6 +72,7 @@ const routers: RouteObject[] = [
         children: [
           { path: "post.do", element: <Hire /> },
           { path: "managehireWritePage.do", element: <HireAdd /> },
+          { path: "managehireWritePageUpdate.do", element: <HireAdd /> },
           { path: "applicant.do", element: <Applicant /> },
         ],
       },

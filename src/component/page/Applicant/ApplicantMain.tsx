@@ -72,7 +72,7 @@ export const ApplicantMain = () => {
         //const getList = await postApplicantApi<IApplicantListResponse>(Applicant.getListBody, userParam); //왜 작동 안하는지 모르겠음 제네릭..?
 
         if( getList ){
-            const initialPostIdx:number = getList.data.MDetail[3]?.postIdx;
+            const initialPostIdx:number = getList.data.MDetail[0]?.postIdx;
             console.log("initialPostIdxpostIdx==========================>" ,initialPostIdx)
             setPostIdxList(getList.data.MDetail);
             setSelectedPostIdx(initialPostIdx); // 첫 번째 postIdx 선택  
