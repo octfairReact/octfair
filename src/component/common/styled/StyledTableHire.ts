@@ -19,7 +19,7 @@ export const StyledTableHire = styled.table`
     color: #333;
   }
   th {
-    width: 10%;
+    width: 12%;
     background-color: #f2f4f6; /* 헤더 배경색 */
     color: #444; /* 헤더 글자색 */
     font-weight: bold;

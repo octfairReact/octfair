@@ -115,6 +115,14 @@ export const NoticeSearch = () => {
       console.log("삭제 완료");
     }
   };
+
+  // 엔터 키 입력 처리 함수
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handlerSearch(); // Enter 키가 눌리면 검색 실행
+    }
+  };
+
   return (
     <NoticeSearchStyled>
       {/*NoticeSearchStyled = 라이브러리(Styled 컴포넌드/ 패키지json에 있음) */}
@@ -122,7 +130,10 @@ export const NoticeSearch = () => {
         {/* <input ref={title}></input>
         <input type="date" onChange={(e) => setStartDate(e.target.value)}></input>
         <input type="date" onChange={(e) => setEndDate(e.target.value)}></input> */}
-        <input onChange={(e) => setSearchValue({ ...searchValue, searchTitle: e.target.value })}></input>
+        <input
+          onChange={(e) => setSearchValue({ ...searchValue, searchTitle: e.target.value })}
+          onKeyDown={handleKeyDown} // 엔터 키 이벤트 추가
+        ></input>
         <input type="date" onChange={(e) => setSearchValue({ ...searchValue, searchStDate: e.target.value })}></input>
         <input type="date" onChange={(e) => setSearchValue({ ...searchValue, searchEdDate: e.target.value })}></input>
         <Button onClick={handlerSearch}>검색</Button>

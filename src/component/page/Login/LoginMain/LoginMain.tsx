@@ -35,8 +35,7 @@ export const LoginMain = () => {
     param.append("lgn_Id", account.lgn_Id);
     param.append("pwd", account.pwd);
 
-    axios
-      .post(Login.login, param)
+    axios.post(Login.login, param)
       .then((res) => {
         const data = res.data;
         if (data.result === "SUCCESS") {
@@ -57,7 +56,8 @@ export const LoginMain = () => {
 
   // Enter=완료, ESC=닫기 작동
   const pressEnterEscHandler = (event) => {
-    if (event.key === "Enter" && signupModal === false && searchIdPwModal === "close") loginHandler();
+    if (event.key === "Enter" && signupModal === false && searchIdPwModal === "close")
+      loginHandler();
     else if (event.key == "Escape") {
       setSignupModal(false);
       setSearchIdPwModal("close");
@@ -127,17 +127,9 @@ export const LoginMain = () => {
                   />
                 </div>
                 <div>
-                  <button className="login-button" onClick={loginHandler}>
-                    {" "}
-                    Login{" "}
-                  </button>
-                  <button className="signup-button" onClick={openSignupModalHandler}>
-                    {" "}
-                    Sign Up{" "}
-                  </button>
-                  <SearchIdPwContainer tabIndex={-1}>
-                    {" "}
-                    {/* 'tabIndex={-1}' 의미: '아이디찾기' 텍스트의 포커싱을 없애서 ESC닫기Handler 작동을 가능하게 하는 용도 */}
+                  <button className="login-button" onClick={loginHandler}> Login </button>
+                  <button className="signup-button" onClick={openSignupModalHandler}> Sign Up </button>
+                  <SearchIdPwContainer tabIndex={-1} > {/* 'tabIndex={-1}' 의미: '아이디찾기' 텍스트의 포커싱을 없애서 ESC닫기Handler 작동을 가능하게 하는 용도 */}
                     <ClickableLabel onClick={openSearchIdModalHandler}> 아이디 찾기 </ClickableLabel>
                     <ClickableLabel onClick={openSearchPwModalHandler}> 비밀번호 찾기 </ClickableLabel>
                   </SearchIdPwContainer>
