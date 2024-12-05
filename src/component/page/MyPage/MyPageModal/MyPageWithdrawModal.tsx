@@ -2,7 +2,7 @@ import { useRecoilState } from "recoil";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { withdrawModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { MyPage } from "../../../../api/api";
 import { toast } from "react-toastify";
 import {
@@ -18,14 +18,13 @@ import {
 } from "./styled";
 
 export const MyPageWithdrawModal = () => {
-  const [withdrawModal, setWithdrawModal] = useRecoilState<boolean>(withdrawModalState);
+  const [, setModal] = useRecoilState<boolean>(modalState);
   const [password, setPassword] = useState<string>();
   const navigate = useNavigate();
 
   // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
   const closeModalHandler = () => {
-    if (withdrawModal !== false)
-      setWithdrawModal(false);
+    setModal(false);
   };
 
   // Enter키를 누를시 완료버튼 효과를 작동

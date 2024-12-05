@@ -1,9 +1,10 @@
 import { useRecoilState } from "recoil";
-import { updateApplicantModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { FC, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ManageUser } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { datafieldnameApplicationData, IApplicationData } from "../../../../models/interface/IUser";
 import {
   ModalOverlay,
   ModalStyled,
@@ -25,22 +26,6 @@ declare global {
   }
 }
 
-// 회원수정 입력데이터 구조체/멤버변수
-export interface UserData {
-  userType: string; // 유저타입 (선택박스로 'M'(관리자)/'A'(개인회원)/'B'(기업회원) 중 하나가 입력 됨)
-  loginId: string;
-  name: string;
-  sex: string; // 성별 (선택박스로 '1'/'2' 중 하나가 입력 됨)
-  birthday: string; // 생년월일 (날짜형 string)
-  phone: string;
-  email: string;
-  regdate: string; // 가입일자 (날짜형 string)
-  statusYn: string; // 활성화여부 (값이 '2'이면 탈퇴, '1'이면 활동가능회원)
-  zipCode: string; // 우편번호 (직접입력 또는 우편번호찾기 API로 입력 됨)
-  address: string;
-  detailAddress: string;
-}
-
 // 이 파일의 컴포넌트인 모달의 Props
 export interface IUpdateUserModalProps {
   refreshUserListHandler: () => void; // 리스트(표) 새로고침 핸들러: 모달에서 전송성공시, 리스트새로고침 + 모달닫기
@@ -49,42 +34,15 @@ export interface IUpdateUserModalProps {
 }
 
 export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserListHandler, userId, setUserId}) => {
-  const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(updateApplicantModalState)
-  const [userData, setUserData] = useState<UserData>({
-    // 기본값
-    userType: '',
-    loginId: '',
-    name: '',
-    sex: '',
-    birthday: '',
-    phone: '',
-    email: '',
-    regdate: '',
-    statusYn: '',
-    zipCode: '',
-    address: '',
-    detailAddress: '',
-  });
-  const dataFieldName = {
-    userType: '유저타입',
-    loginId: '로그인아이디',
-    name: '이름',
-    sex: '성별',
-    birthday: '생년월일',
-    phone: '전화번호',
-    email: '이메일',
-    regdate: '가입일자',
-    statusYn: '가입탈퇴여부',
-    zipCode: '우편번호',
-    address: '주소',
-    detailAddress: '상세주소',
-  }
+  const [, setModal] = useRecoilState<boolean>(modalState)
+  const [userData, setUserData] = useState<IApplicationData>();
+  const dataFieldName:IApplicationData = datafieldnameApplicationData;
 
   // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
   useEffect(() => {
     axios.get(ManageUser.getApplicantDetail+"?loginId=" + userId)
       .then((res) => {
-        let prevData = res.data.detail;
+        const prevData = res.data.detail;
         setUserData({
           userType: prevData.userType,
           loginId: prevData.loginId, // 아이디 칸은 읽기전용
@@ -107,8 +65,7 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
 
   // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
   const closeModalHandler = () => {
-    if (updateUserModal !== false)
-      setUpdateUserModal(false);
+    setModal(false);
   };
 
   // Enter키를 누를시 완료버튼 효과를 작동

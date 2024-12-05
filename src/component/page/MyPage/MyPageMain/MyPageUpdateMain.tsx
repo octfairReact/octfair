@@ -3,11 +3,12 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
-import { updatePasswordModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { MyPageUpdatePasswordModal } from "../MyPageModal/MyPageUpdatePasswordModal";
 import { useNavigate } from "react-router-dom";
 import { MyPage } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { IUpdateInput, defaultUpdateInput, datafieldnameUpdateInput } from "../../../../models/interface/IUser";
 import {
   Table,
   TableCaption,
@@ -25,54 +26,20 @@ declare global {
   }
 }
 
-// 회원수정 입력데이터 구조체/멤버변수
-export interface UpdateInput {
-  loginId: string;
-  name: string;
-  sex: string;  // 선택박스로 '1'/'2' 중 하나가 입력 됨
-  birthday: string;
-  phone: string;
-  email: string;
-  zipCode: string; // 직접입력 또는 우편번호찾기 API로 입력 됨
-  address: string;
-  detailAddress: string;
-}
-
 export const MyPageUpdateMain = () => {
-  const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(updatePasswordModalState);
+  const [modal, setModal] = useRecoilState<boolean>(modalState);
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [userType, setUserType] = useState<string>();
   const [bizIdx, setBizIdx] = useState<number>();
-  const [updateInput, setUpdateInput] = useState<UpdateInput>({
-    // 기본값
-    loginId: userInfo.loginId, // 아이디 칸은 읽기전용
-    name: '',
-    sex: '',
-    birthday: '',
-    phone: '',
-    email: '',
-    zipCode: '',
-    address: '',
-    detailAddress: '',
-  });
-  const dataFieldName = {
-    loginId: '로그인아이디',
-    name: '이름',
-    sex: '성별',
-    birthday: '생년월일',
-    phone: '전화번호',
-    email: '이메일',
-    zipCode: '우편번호',
-    address: '주소',
-    detailAddress: '상세주소',
-  }
+  const [updateInput, setUpdateInput] = useState<IUpdateInput>(defaultUpdateInput);
+  const dataFieldName:IUpdateInput = datafieldnameUpdateInput;
   const navigate = useNavigate();
 
   // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
   useEffect(() => {
     axios.get(MyPage.getUserInfo + "?loginId=" + userInfo.loginId)
       .then((res) => {
-        let prevData = res.data.detail;
+        const prevData = res.data.detail;
         setUserType(prevData.userType);
         setBizIdx(res.data.chkRegBiz.bizIdx);
         setUpdateInput({
@@ -95,10 +62,10 @@ export const MyPageUpdateMain = () => {
   // Enter=완료, ESC=닫기 작동
   const pressEnterEscHandler = (event) => {
     if (event.key === "Enter" 
-      && updatePasswordModal === false)
+      && modal === false)
       completeUpdateHandler();
     else if (event.key === "Escape")
-      setUpdatePasswordModal(false);
+      setModal(false);
   }
 
   // 회원수정 완료버튼 누를시 작동
@@ -201,8 +168,7 @@ export const MyPageUpdateMain = () => {
 
   // 비밀번호 수정 버튼 누를시 비밀번호수정 관련 모달 팝업
   const updatePasswordHandler = () => {
-    if (updatePasswordModal === false)
-      setUpdatePasswordModal(true);
+    setModal(true);
   }
 
   // 기업 등록 버튼 누를시 기업등록 페이지로 이동
@@ -319,7 +285,7 @@ export const MyPageUpdateMain = () => {
         <Button onClick={completeUpdateHandler}>수정</Button>
         <Button onClick={() => {}} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
       </div>
-      {updatePasswordModal !== false && (
+      {modal === true && (
         <MyPageUpdatePasswordModal/>
       )}
     </>

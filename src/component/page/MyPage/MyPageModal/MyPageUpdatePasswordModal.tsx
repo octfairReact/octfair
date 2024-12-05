@@ -1,9 +1,10 @@
 import { useRecoilState } from "recoil";
 import { useState } from "react";
 import axios from "axios";
-import { updatePasswordModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { MyPage } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { IPasswordInput, defaultPasswordInput, datafieldnamePasswordInput } from "../../../../models/interface/IUser";
 import {
   ModalOverlay,
   ModalStyled,
@@ -16,35 +17,20 @@ import {
   Button,
 } from "./styled";
 
-// 패스워드 3세트
-export interface PasswordInputs {
-  passwd: string;
-  newPasswd: string;
-  newPasswdConfirm: string;
-}
-
 export const MyPageUpdatePasswordModal = () => {
-  const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(updatePasswordModalState);
-  const [password, setPassword] = useState<PasswordInputs>({
-    passwd: '',
-    newPasswd: '',
-    newPasswdConfirm: '',
-  });
-  const dataFieldName = {
-    passwd: '기존 비밀번호',
-    newPasswd: '새 비밀번호',
-    newPasswdConfirm: '새 비밀번호 재입력',
-  }
+  const [, setModal] = useRecoilState<boolean>(modalState);
+  const [password, setPassword] = useState<IPasswordInput>(defaultPasswordInput);
+  const dataFieldName:IPasswordInput = datafieldnamePasswordInput;
   
   // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
   const closeModalHandler = () => {
-    if (updatePasswordModal !== false)
-      setUpdatePasswordModal(false);
+    setModal(false);
   };
 
   // Enter키를 누를시 완료버튼 효과를 작동
   const completeEnterHandler = (event) => {
-    if (event.key === "Enter") completeWithdrawHandler();
+    if (event.key === "Enter") 
+      completeWithdrawHandler();
   };
 
   // 탈퇴요청 버튼 누를 시 작동

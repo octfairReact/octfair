@@ -1,9 +1,10 @@
 import { useRecoilState } from "recoil";
-import { updateBizModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { FC, useEffect, useState } from "react";
 import axios from "axios";
 import { ManageUser } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { IBizData, defaultBizData, datafieldnameBizData } from "../../../../models/interface/IUser";
 import {
   ModalOverlay,
   ModalStyled,
@@ -17,20 +18,6 @@ import {
   Button,
 } from "./styled";
 
-// 회원수정 입력데이터 구조체/멤버변수
-export interface UserData {
-  bizIdx: number; // 사업자번호 (string 아님)
-  bizName: string; // 사업자명
-  bizCeoName: string; // 대표자
-  bizEmpCount: string; // 사원수
-  bizRevenue: string; // 매출액
-  bizContact: string; // 연락처
-  bizAddr: string; // 사업자 주소
-  bizWebUrl: string;  // 홈페이지 주소
-  bizFoundDate: string; // 설립일 (날짜형 string)
-  bizIntro: string; // 회사소개
-}
-
 // 이 파일의 컴포넌트인 모달의 Props
 export interface IUpdateUserModalProps {
   refreshUserListHandler: () => void; // 리스트(표) 새로고침 핸들러: 모달에서 전송성공시, 리스트새로고침 + 모달닫기
@@ -39,38 +26,15 @@ export interface IUpdateUserModalProps {
 }
 
 export const UpdateBizModal: FC<IUpdateUserModalProps> = ({refreshUserListHandler, userId, setUserId}) => {
-  const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(updateBizModalState)
-  const [userData, setUserData] = useState<UserData>({
-    // 기본값
-    bizIdx: 0,
-    bizName: '',
-    bizCeoName: '',
-    bizEmpCount: '',
-    bizRevenue: '',
-    bizContact: '',
-    bizAddr: '',
-    bizWebUrl: '',
-    bizFoundDate: '',
-    bizIntro: '',
-  });
-  const dataFieldName = {
-    bizIdx: '사업자번호',
-    bizName: '사업자명',
-    bizCeoName: '대표자',
-    bizEmpCount: '사원수',
-    bizRevenue: '매출액',
-    bizContact: '연락처',
-    bizAddr: '사업자 주소',
-    bizWebUrl: '홈페이지 주소',
-    bizFoundDate: '설립일',
-    bizIntro: '회사소개',
-  }
+  const [, setModal] = useRecoilState<boolean>(modalState)
+  const [userData, setUserData] = useState<IBizData>(defaultBizData);
+  const dataFieldName = datafieldnameBizData;
 
   // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
   useEffect(() => {
     axios.get(ManageUser.getBizDetail+"?bizIdx=" + userId)
       .then((res) => {
-        let prevData = res.data.detail;
+        const prevData = res.data.detail;
         setUserData({
           bizIdx: userId,
           bizName: prevData.bizName,
@@ -91,8 +55,7 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({refreshUserListHandle
 
   // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
   const closeModalHandler = () => {
-    if (updateUserModal !== false)
-      setUpdateUserModal(false);
+    setModal(false);
   };
 
   // Enter키를 누를시 완료버튼 효과를 작동

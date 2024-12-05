@@ -2,9 +2,10 @@ import { useCallback, useState } from "react";
 import axios from "axios";
 import qs from "qs";
 import { useRecoilState } from "recoil";
-import { signupModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { Login } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { ISignupInput, datafieldnameSignupInput, defaultSignupInput } from "../../../../models/interface/IUser";
 import {
   ModalOverlay,
   ModalStyled,
@@ -26,62 +27,17 @@ declare global {
   }
 }
 
-// 회원가입 입력데이터 구조체/멤버변수
-export interface SignupInput {
-  userType: string; // 유저타입 (선택박스로 'M'(관리자)/'A'(개인회원)/'B'(기업회원) 중 하나가 입력 됨)
-  loginId: string;
-  password: string;
-  passwordOk: string;
-  name: string;
-  sex: string; // 성별 (선택박스로 '1'/'2' 중 하나가 입력 됨)
-  birthday: string;
-  phone: string;
-  email: string;
-  zipCode: string; // 우편번호 (직접입력 또는 우편번호찾기 API로 입력 됨)
-  address: string;
-  detailAddress: string;
-  action: string; // 서버 컨트롤러에서 action="I"인지로 정상경로(회원가입 모달창)으로부터 온 데이터인지 보는듯????
-}
-
 export const SignupModal = () => {
-  const [signupModal, setSignupModal] = useRecoilState<boolean>(signupModalState); // false(닫힘) 또는 true(열림)
-  const [signupInput, setSignupInput] = useState<SignupInput>({
-    // 기본값
-    userType: '',
-    loginId: '',
-    password: '',
-    passwordOk: '',
-    name: '',
-    sex: '',
-    birthday: '',
-    phone: '',
-    email: '',
-    zipCode: '',
-    address: '',
-    detailAddress: '',
-    action: '',
-  });
-  const dataFieldName = {
-    userType: '유저타입',
-    loginId: '로그인아이디',
-    password: '비밀번호',
-    passwordOk: '비밀번호확인',
-    name: '이름',
-    sex: '성별',
-    birthday: '생년월일',
-    phone: '전화번호',
-    email: '이메일',
-    zipCode: '우편번호',
-    address: '주소',
-    detailAddress: '상세주소',
-    action: 'action',
-  }
+  // false(닫힘), "openSignupModal"(회원가입 모달 열림), 
+  // "openSearchIdModal"(아이디찾기 모달 열림), "openSearchPwModal"(비밀번호찾기 모달 열림), "openUpdatePwModal"(비밀번호변경 보달 열림)
+  const [, setModal] = useRecoilState<boolean | string>(modalState);
+  const [signupInput, setSignupInput] = useState<ISignupInput>(defaultSignupInput);
+  const dataFieldName:ISignupInput = datafieldnameSignupInput;
   const [isIdDuplicateChecked, setIsIdDuplicateChecked] = useState<boolean>(false); // 중복체크 여부에 대한 변수
 
   // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
   const closeModalHandler = () => {
-    if (signupModal !== false)
-      setSignupModal(false);
+      setModal(false);
   };
 
   // Enter키를 누를시 완료버튼 효과를 작동
@@ -181,7 +137,7 @@ export const SignupModal = () => {
       return true;
     }
 
-    let isDuplicate = false;
+    let isDuplicate:boolean = false;
     await axios.post(Login.getCheckId, qs.stringify({ loginId: signupInput.loginId }))
       .then((res) => {
         if (res.data === 1) { // 결과값이 1이면 중복이란 뜻 (Mapper에서 해당id의 갯수를 반환하기 때문)
