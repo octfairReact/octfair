@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { PageNavigateStyled } from "../../../common/pageNavigation/styled";
-import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
+import { StyledTable, StyledTh } from "../../../common/styled/StyledTable";
 import { FqaContext } from "../../../../api/provider/FaqProvider";
-import { useLocation } from "react-router-dom";
 import { postFaqApi } from "../../../../api/postFaqApi";
 import { Faq } from "../../../../api/api";
 import { IFaq, IFaqListResponse } from "../../../../models/interface/IFaq";
@@ -16,7 +15,6 @@ import { modalState } from "../../../../stores/modalState";
 import { HistoryModalStyled } from "../../History/HistoryModal/styled";
 
 export const FaqMain = () => {
-  // const { search } = useLocation();
   const [faqCnt, setFaqCnt] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [cPage, setCPage] = useState<number>();
@@ -50,18 +48,8 @@ export const FaqMain = () => {
 
     if (faqType && searchKeyWord) {
       searchFaqList(currentPage, faqType);
-    } else {
-      console.log("유저정보 아직");
     }
   }, [faqType, searchKeyWord]);
-
-  // useEffect(() => {
-  //   searchFaqList(currentPage);
-  // }, [search]);
-
-  // useEffect(() => {
-  //   searchFaqList();
-  // }, [searchKeyWord]);
 
   const searchFaqList = async (currentPage?: number, faqType?: string) => {
     currentPage = currentPage || 1;
@@ -100,8 +88,6 @@ export const FaqMain = () => {
     setFaqType(faqType);
     if (faqType) {
       searchFaqList(currentPage, faqType);
-    } else {
-      console.log("유저정보 아직2");
     }
   };
 
@@ -140,7 +126,6 @@ export const FaqMain = () => {
             <StyledTh size={50}>제목</StyledTh>
             <StyledTh size={10}>작성자</StyledTh>
             <StyledTh size={20}>등록일</StyledTh>
-            {/* 관리자만 볼 수 있음 */}
             {userInfo.userType === "M" && <StyledTh size={10}>관리</StyledTh>}
           </tr>
         </thead>
@@ -148,7 +133,6 @@ export const FaqMain = () => {
           {faqList?.length > 0 ? (
             faqList.map((faq) => (
               <>
-                {/* 클릭 가능한 FAQ 리스트 */}
                 <tr key={faq.faq_idx}>
                   <td>{faq.faq_idx}</td>
                   <td
@@ -167,7 +151,6 @@ export const FaqMain = () => {
                     </td>
                   )}
                 </tr>
-                {/* 클릭된 FAQ의 내용 표시 */}
                 {showContext === faq.faq_idx && (
                   <tr>
                     <td

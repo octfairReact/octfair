@@ -2,14 +2,17 @@ import { ChangeEvent, FC, useContext, useEffect, useRef, useState } from "react"
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../stores/userInfo";
-import { Hire } from "../../../api/api";
+import { Hire, ManagePost } from "../../../api/api";
 import { IPostResponse } from "../../../models/interface/INotice";
 import { postHireApi } from "../../../api/postHireApi";
 import { IHireWrite } from "../../../models/interface/IHire";
 import { StyledTable, StyledTd, StyledTh } from "../../common/styled/StyledTable";
 import Calendar from "../../Calendar";
 import { StyledTableHire } from "../../common/styled/StyledTableHire";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AllDetail, companyDetail, IPostDetail } from "../../../models/interface/IPost";
+import { postPostApi } from "../../../api/postPostApi";
+import { StyledButton } from "../../common/styled/StyledButton";
 
 
 
@@ -21,6 +24,7 @@ export const HireWrite = () => {
   const posDescription = useRef<HTMLInputElement>();
   const endDate = useRef<Date | null>(null);
   const startDate = useRef<Date | null>(null);
+
   const duties = useRef<HTMLInputElement>(null);
   const reqQualifications = useRef<HTMLInputElement>();
   const prefQualifications = useRef<HTMLInputElement>();
@@ -32,6 +36,16 @@ export const HireWrite = () => {
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [fileData, setFileData] = useState<File>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { postIdx, bizIdx } = location.state || {};
+  const [param, setParam] = useState<{ postIdx: string | number; bizIdx: string | number } | null>(null);
+  const [MDetail, setMDetail] = useState<IPostDetail | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // 로딩 상태 추가
+
+  const handlerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setMDetail((prev) => ({ ...prev, [id]: value }));
+  };
 
   //경력기간 selectBox
   const [year, setyear] = useState("");
@@ -42,6 +56,13 @@ export const HireWrite = () => {
   const [recruitProcessList, setRecruitProcessList] = useState([]);
   const [recruitProcess, setRecruitProcess] = useState("");
 
+
+  useEffect(() => {
+    if (postIdx && bizIdx) {
+      setParam({ postIdx, bizIdx });
+      fetchPostDetail();
+    }
+  }, [postIdx, bizIdx]);
   //채용과정 등록 버튼
   const handleClick = () => {
     const trimmedProcess = recruitProcess.trim(); //공백 제거
@@ -219,11 +240,30 @@ export const HireWrite = () => {
   const handleBack = () => {
     navigate(-1); // -1은 이전 페이지로 이동
   };
+  const fetchPostDetail = async () => {
+    if (!postIdx || !bizIdx) return; // 유효하지 않으면 요청하지 않음
+    console.log("여기는 업데이트 클릭후 detail입니다" + postIdx +" " + bizIdx)
+    setLoading(true); // 요청 전 로딩 시작
+    const apiUrl = ManagePost.getpostDetail(postIdx, bizIdx);
+    try {
+      const response = await postPostApi<AllDetail>(apiUrl, { postIdx, bizIdx });
+      console.log("데이터 확인ㅂㅈㄷ ", response.data.postDetail)
+      setMDetail(response.data.postDetail);
 
+
+    } catch (error) {
+      console.error("데이터 로드 중 오류 발생:", error);
+    } finally {
+      setLoading(false); // 로딩 종료
+    }
+  };
+
+  console.log("데이터 확인 ", MDetail)
   return (
     <>
   <br />
   <StyledTableHire>
+    
     <thead>
       <tr>
         <th>채용제목<span className="font_red">*</span></th>
@@ -231,7 +271,12 @@ export const HireWrite = () => {
           <input
             type="text"
             ref={title}
-            defaultValue={hireWrite?.title}
+            onChange={(e) => {
+              
+                setMDetail({ ...MDetail, title: e.target.value });
+              
+            }}
+            value={MDetail?.title ? `${MDetail.title}` :hireWrite?.title}
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
@@ -276,8 +321,14 @@ export const HireWrite = () => {
             type="text"
             ref={salary}
             onChange={handleSalaryChange}
-            defaultValue={hireWrite?.salary}
+          //   onChange={(e) => {
+              
+          //     setMDetail({ ...MDetail, title: e.target.value });
+            
+          // }}
             style={{ width: "100%", padding: "8px" }}
+            onClick={() => handlerChange}
+            value={MDetail?.salary ? `${MDetail.salary}` :hireWrite?.salary}
           />
         </td>
         <th>모집인원<span className="font_red">*</span></th>
@@ -285,8 +336,10 @@ export const HireWrite = () => {
           <input
             type="text"
             ref={openings}
-            defaultValue={hireWrite?.openings}
+            value={MDetail?.openings ? `${MDetail.openings}` :hireWrite?.openings}
+            onChange={handleOpeningsChange}
             style={{ width: "100%", padding: "8px" }}
+
           />
         </td>
       </tr>
@@ -296,7 +349,7 @@ export const HireWrite = () => {
           <input
             type="text"
             ref={workLocation}
-            defaultValue={hireWrite?.workLocation}
+            value={MDetail?.workLocation ? `${MDetail.workLocation}` :hireWrite?.workLocation}
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
@@ -305,7 +358,7 @@ export const HireWrite = () => {
           <input
             type="text"
             ref={posDescription}
-            defaultValue={hireWrite?.posDescription}
+            value={MDetail?.posDescription ? `${MDetail.posDescription}` :hireWrite?.posDescription}
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
@@ -316,10 +369,12 @@ export const HireWrite = () => {
             <Calendar
               label="시작 날짜"
               onDateChange={(date) => (startDate.current = date)} 
+             
             />
             <Calendar
               label="종료 날짜"
               onDateChange={(date) => (endDate.current = date)}
+             
             />
         </td>
       </tr>
@@ -341,7 +396,7 @@ export const HireWrite = () => {
               초기화
             </button>
           </div>
-          <label className="recruit-process-list" style={{ marginTop: "8px", display: "block" , width: "500px"}}>
+          <label className="recruit-process-list" style={{ marginTop: "8px", display: "block" }}>
             {recruitProcessList.join(" - ")}
           </label>
         </td>
@@ -352,7 +407,7 @@ export const HireWrite = () => {
           <input
             type="text"
             ref={reqQualifications}
-            defaultValue={hireWrite?.reqQualifications}
+            value={MDetail?.reqQualifications ? `${MDetail.reqQualifications}` :hireWrite?.reqQualifications}
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
@@ -363,7 +418,7 @@ export const HireWrite = () => {
           <input
             type="text"
             ref={prefQualifications}
-            defaultValue={hireWrite?.prefQualifications}
+            value={MDetail?.prefQualifications ? `${MDetail.prefQualifications}` :hireWrite?.prefQualifications}
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
@@ -374,7 +429,7 @@ export const HireWrite = () => {
           <input
             type="text"
             ref={duties}
-            defaultValue={hireWrite?.duties}
+            value={MDetail?.duties ? `${MDetail.duties}` :hireWrite?.duties}
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
@@ -385,7 +440,7 @@ export const HireWrite = () => {
           <input
             type="text"
             ref={benefits}
-            defaultValue={hireWrite?.benefits}
+            value={MDetail?.benefits ? `${MDetail.benefits}` :hireWrite?.benefits}
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
@@ -398,9 +453,9 @@ export const HireWrite = () => {
       </tr>
     </thead>
   </StyledTableHire>
-  <button onClick={handlerSaveFile} style={{ marginTop: "16px", padding: "12px 24px" }}>
+  <StyledButton onClick={handlerSaveFile} style={{ marginTop: "16px", padding: "12px 24px" }}>
     등록
-  </button>
+  </StyledButton>
 </>
   );
 };

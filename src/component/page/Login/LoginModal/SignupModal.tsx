@@ -17,10 +17,6 @@ import {
   RequiredMark,
   Button,
 } from "./styled";
-import { StyledTable } from "../../../common/styled/StyledTable";
-import { ContentBox } from "../../../common/ContentBox/ContentBox";
-import { ContentBoxPost } from "../../../common/ContentBox/ContentBoxPost";
-//import { Button } from "../../../common/Button/Button";
 
 // daum우편주소찾기API에 쓰일 window.daum을 활성화 시키기 위하여
 // window하위로 daum을 명시해 넣는 코드

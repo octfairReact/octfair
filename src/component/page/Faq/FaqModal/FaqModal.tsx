@@ -7,6 +7,7 @@ import { loginInfoState } from "../../../../stores/userInfo";
 import { postFaqApi } from "../../../../api/postFaqApi";
 import { IDetailResponse, IFaq, IPostResponse } from "../../../../models/interface/IFaq";
 import { Faq } from "../../../../api/api";
+import { toast } from "react-toastify";
 
 export interface IFaqModalProps {
   onSuccess: (faqType: string) => void;
@@ -22,18 +23,11 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [faqDetail, setFaqDetail] = useState<IFaq>();
 
-  // props는 리드온리여서 바로 수정이 안된다.
   useEffect(() => {
-    //컴포넌트가 열렸을 때 조건 확인 후 함수
     faqSeq && searchDetail();
-
-    //컴포넌트가 사라지기 직전에 발동
     return () => {
       faqSeq && setFaqIndex(undefined);
     };
-    // 클립업 함수
-    // 컴포넌트가 언마운티드 되기 전에 실행되는 콜백함수
-    // 추가 공부
   }, []);
 
   const searchDetail = async () => {
@@ -52,19 +46,19 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
       }
     } catch (error) {
       // API 호출이 실패했을 경우의 에러 처리
-      console.error("Error details:", error);
+      //console.error("Error details:", error);
     }
   };
 
   const handlerSave = async () => {
     if (!title) {
-      alert("제목을 입력해주세요.");
+      toast.warning("제목을 입력해주세요.");
       document.getElementById("title")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
 
     if (!context) {
-      alert("내용을을 입력해주세요.");
+      toast.warning("내용을을 입력해주세요.");
       document.getElementById("context")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
@@ -75,25 +69,23 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
       faq_type: faqType,
       loginId: userInfo.loginId,
     };
-    console.log("폼제출", param);
     const save = await postFaqApi<IPostResponse>(Faq.postSave, param);
     if (save && save.data.result === "success") {
-      console.log("글등록 성동");
       onSuccess(param.faq_type);
     } else {
-      console.error("Failed to save faq:", save?.data);
+      //console.error("Failed to save faq:", save?.data);
     }
   };
 
   const handlerUpdate = async () => {
     if (!title) {
-      alert("제목을 입력해주세요.");
+      toast.warning("제목을 입력해주세요.");
       document.getElementById("title")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
 
     if (!context) {
-      alert("내용을을 입력해주세요.");
+      toast.warning("내용을을 입력해주세요.");
       document.getElementById("context")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
@@ -156,7 +148,6 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
                       checked={faqType === "1"}
                       onChange={() => setFaqType("1")}
                     />{" "}
-                    {/* {" "} 공백추가하는 방식 */}
                     개인회원
                   </label>
                   <label style={{ marginLeft: "10px" }}>

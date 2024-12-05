@@ -58,7 +58,7 @@ export const ManageBizMain = () => {
 
   // ESC=닫기 작동
   const pressEscHandler = (event) => {
-    if (event.key == "Escape")
+    if (event.key === "Escape")
       setUpdateUserModal(false);
   };
 

@@ -7,13 +7,15 @@ import { StyledTable, StyledTh } from "../../../common/styled/StyledTable";
 import { PageNavigateStyled } from "../../../common/pageNavigation/styled";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { QnaModal } from "../QnaModal/QnaModal";
-import { modalState, qnaMyListState, qnaPasswordModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { IPasswordCheck, IPasswordCheckResponse, IQnaAns, IQnaListResponse } from "../../../../models/interface/IQna";
 import { postQnaApi } from "../../../../api/postQnaApi";
 import { Qna } from "../../../../api/api";
 import { QnaContext } from "../../../../api/provider/QnaProvider";
 import { QnaPassword } from "../QnaModal/QnaPassword";
 import { HistoryModalStyled } from "../../History/HistoryModal/styled";
+import { qnaMyListState, qnaPasswordModalState } from "../../../../stores/qnaModalState";
+import { toast } from "react-toastify";
 
 export const QnaMain = () => {
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
@@ -43,8 +45,6 @@ export const QnaMain = () => {
   useEffect(() => {
     if (qnaType && searchKeyWord) {
       searchQnaList(currentPage, qnaType, qnaMyList);
-    } else {
-      console.log("유저 정보 아직 안들어옴");
     }
   }, [qnaType, searchKeyWord, qnaMyList]);
 
@@ -61,7 +61,6 @@ export const QnaMain = () => {
     const searchList = await postQnaApi<IQnaListResponse>(Qna.getList, searchParam);
 
     if (searchList) {
-      //console.log("뭐들어와?", searchList.data.qna);
       setQnaList(searchList.data.qna);
       setQnaCnt(searchList.data.qnaCnt);
       setQPage(currentPage);
@@ -80,8 +79,6 @@ export const QnaMain = () => {
     setQnaType(qnaType);
     if (qnaType) {
       searchQnaList(currentPage, qnaType);
-    } else {
-      console.log("유저정보 아직2");
     }
   };
 
@@ -95,14 +92,6 @@ export const QnaMain = () => {
     setIndex(qnaIdx);
   };
 
-  // // 비밀번호 모달에서 비밀번호를 전달받고, 상태 업데이트
-  // const handlePasswordSubmit = (submittedPassword: string, index: number) => {
-  //   setPassword(submittedPassword); // 비밀번호 상태 업데이트
-  //   setIndex(index);
-  //   setPasswordModal(false); // 비밀번호 모달 닫기
-  //   setModal(!modal);
-  // };
-
   // 비밀번호 체크
   const handlePasswordSubmit = async (submittedPassword: string, index: number) => {
     const param = {
@@ -112,7 +101,6 @@ export const QnaMain = () => {
 
     // 비밀번호 확인 시작 전 로딩 상태 설정
     setIsLoaded(false);
-
     try {
       const passwordCheckRe = await postQnaApi<IPasswordCheck>(Qna.checkPassword, param); // 서버로 비밀번호 확인 요청
 
@@ -122,12 +110,11 @@ export const QnaMain = () => {
         setPasswordModal(false); // 비밀번호 입력 모달 닫기
         setModal(!modal);
       } else {
-        alert("비밀번호가 일치하지 않습니다.");
+        toast.warning("비밀번호가 일치하지 않습니다.");
         setPasswordModal(false); // 비밀번호 입력 모달 닫기
       }
     } catch (error) {
-      console.error("비밀번호 확인 요청 실패:", error);
-      alert("비밀번호 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
+      toast.warning("비밀번호 확인 중 오류가 발생했습니다. 다시 시도해주세요.");
       setPasswordModal(false); // 비밀번호 입력 모달 닫기
     } finally {
       // 요청이 완료된 후 로딩 상태 해제
@@ -144,7 +131,7 @@ export const QnaMain = () => {
       </HistoryModalStyled>
     );
   }
-  console.log("qnaType", qnaType);
+
   return (
     <>
       <QnaMainStyled>

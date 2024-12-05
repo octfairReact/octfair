@@ -25,7 +25,7 @@ export const ManageUserSearch = () => {
   const pressEnterEscHandler = (event) => {
     if (event.key === "Enter")
       setSearchKeyWord(searchValue);
-    else if (event.key == "Escape") {
+    else if (event.key === "Escape") {
       setUpdateApplicationModal(false);
       setUpdateBizModal(false);
     }
@@ -35,6 +35,7 @@ export const ManageUserSearch = () => {
     <>
       <ManageUserSearchStyled onKeyDown={pressEnterEscHandler}>
         <div className="input-box">
+          <text>이름/사업자명: </text>
           <input onChange={(e) => setSearchValue({ ...searchValue, searchName: e.target.value })}></input>
           <Button onClick={() => setSearchKeyWord(searchValue)}>검색</Button>
         </div>

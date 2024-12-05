@@ -76,6 +76,9 @@ export const Hire = {
   getListBody: "/manage-hire/managehireListBody.do",
   fileDownload: "manage-hire/managehireDownload.do",
   postSave: "/manage-hire/managehireSaveFileForm.do",
+  getUpdate: "/manage-hire/managehireUpdateBody.do",
+  getDelete: "/manage-hire/managehireDeleteBody.do"
+
 };
 
 //지원자관리 - 신효
