@@ -20,9 +20,9 @@ export const Notice = {
 };
 
 export const History = {
-  searchList: "/apply/searchHistoryBody.do",
-  postDelete: "/apply/cancleApplyBody.do",
-  getModal: "/apply/previewResumeBody.do",
+  searchListHistory: "/apply/searchHistoryBody.do",
+  cancleApplyDelete: "/apply/cancleApplyBody.do",
+  historyModal: "/apply/previewResumeBody.do",
 };
 
 export const Posts = {
