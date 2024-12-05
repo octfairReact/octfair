@@ -4,8 +4,9 @@ import { useRecoilState } from "recoil";
 import { useContext, useState } from "react";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
-import { modalState, qnaMyListState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { QnaContext } from "../../../../api/provider/QnaProvider";
+import { qnaMyListState } from "../../../../stores/qnaModalState";
 
 export const QnaSearch = () => {
   const [modal, setModal] = useRecoilState<boolean>(modalState);
