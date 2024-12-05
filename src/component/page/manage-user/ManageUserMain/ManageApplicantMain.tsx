@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { IManageApplicant, IManageApplicantListResponse } from "../../../../models/interface/IManageUser";
 import { useRecoilState } from "recoil";
-import { updateApplicantModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { UpdateApplicantModal } from "../ManageUserModal/UpdateApplicantModal";
 import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 
 export const ManageApplicantMain = () => {
   // 모달에 쓰이는 변수
-  const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(updateApplicantModalState);
+  const [modal, setModal] = useRecoilState<boolean>(modalState);
   const [id, setId] = useState<string>();
 
   // 리스트(표)에 쓰이는 변수
@@ -46,20 +46,20 @@ export const ManageApplicantMain = () => {
 
   // 리스트(표) 새로고침 핸들러: 모달에서 전송성공시, 리스트새로고침 + 모달닫기
   const refreshUserListHandler = () => {
-    setUpdateUserModal(!updateUserModal);
+    setModal(false);
     searchUserList();
   };
 
   // 리스트(표) 아이템 선택 시 아이템관련 정보를 담은 모달 팝업
   const openUpdateUserModalHandler = (id: string) => {
-    setUpdateUserModal(true);
+    setModal(true);
     setId(id);
   };
 
   // ESC=닫기 작동
   const pressEscHandler = (event) => {
     if (event.key === "Escape")
-      setUpdateUserModal(false);
+      setModal(false);
   };
 
   return (
@@ -101,7 +101,7 @@ export const ManageApplicantMain = () => {
         activePage={currentPage}
         itemsCountPerPage={5}
       ></PageNavigate>
-      {updateUserModal && (
+      {modal && (
         <UpdateApplicantModal refreshUserListHandler={refreshUserListHandler} userId={id} setUserId={setId} />
       )}
     </>

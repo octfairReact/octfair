@@ -3,11 +3,12 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
-import { updatePasswordModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { MyPageUpdatePasswordModal } from "../MyPageModal/MyPageUpdatePasswordModal";
 import { useNavigate } from "react-router-dom";
 import { MyPage } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { IUpdateInput, defaultUpdateInput, datafieldnameUpdateInput } from "../../../../models/interface/IUser";
 import {
   Table,
   TableCaption,
@@ -25,54 +26,20 @@ declare global {
   }
 }
 
-// 회원수정 입력데이터 구조체/멤버변수
-export interface UpdateInput {
-  loginId: string;
-  name: string;
-  sex: string;  // 선택박스로 '1'/'2' 중 하나가 입력 됨
-  birthday: string;
-  phone: string;
-  email: string;
-  zipCode: string; // 직접입력 또는 우편번호찾기 API로 입력 됨
-  address: string;
-  detailAddress: string;
-}
-
 export const MyPageUpdateMain = () => {
-  const [updatePasswordModal, setUpdatePasswordModal] = useRecoilState<boolean>(updatePasswordModalState);
+  const [modal, setModal] = useRecoilState<boolean>(modalState);
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [userType, setUserType] = useState<string>();
   const [bizIdx, setBizIdx] = useState<number>();
-  const [updateInput, setUpdateInput] = useState<UpdateInput>({
-    // 기본값
-    loginId: userInfo.loginId, // 아이디 칸은 읽기전용
-    name: '',
-    sex: '',
-    birthday: '',
-    phone: '',
-    email: '',
-    zipCode: '',
-    address: '',
-    detailAddress: '',
-  });
-  const dataFieldName = {
-    loginId: '로그인아이디',
-    name: '이름',
-    sex: '성별',
-    birthday: '생년월일',
-    phone: '전화번호',
-    email: '이메일',
-    zipCode: '우편번호',
-    address: '주소',
-    detailAddress: '상세주소',
-  }
+  const [updateInput, setUpdateInput] = useState<IUpdateInput>(defaultUpdateInput);
+  const dataFieldName:IUpdateInput = datafieldnameUpdateInput;
   const navigate = useNavigate();
 
   // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
   useEffect(() => {
     axios.get(MyPage.getUserInfo + "?loginId=" + userInfo.loginId)
       .then((res) => {
-        let prevData = res.data.detail;
+        const prevData = res.data.detail;
         setUserType(prevData.userType);
         setBizIdx(res.data.chkRegBiz.bizIdx);
         setUpdateInput({
@@ -95,10 +62,10 @@ export const MyPageUpdateMain = () => {
   // Enter=완료, ESC=닫기 작동
   const pressEnterEscHandler = (event) => {
     if (event.key === "Enter" 
-      && updatePasswordModal === false)
+      && modal === false)
       completeUpdateHandler();
     else if (event.key === "Escape")
-      setUpdatePasswordModal(false);
+      setModal(false);
   }
 
   // 회원수정 완료버튼 누를시 작동
@@ -107,17 +74,17 @@ export const MyPageUpdateMain = () => {
     let isProblem:boolean = false;
     
     // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
-    // return문 내 HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
+    // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
     Object.entries(updateInput).some(([key, value]) => { // 입력값이 많아서 반복문처리, signupInput이 배열은 아니어서 forEach()/map()대신 Object.entries()
       if (!value || value.length <= 0) {
         if (key !== "detailAddress") { // 빈칸이어도 되는 속성들
           toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
           document.getElementById(key)?.focus();
           isProblem = true;
-          return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐
+          return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐, 즉 문제발생하여 if문 입장시 검사 조기종료한다는 뜻
         }
       }
-      return false;
+      return false; // 이 return값(false)는 continue같은 역할로 Object.entires()반복문을 다음 key아이템으로 순회시킴
     });
     
     // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
@@ -201,8 +168,7 @@ export const MyPageUpdateMain = () => {
 
   // 비밀번호 수정 버튼 누를시 비밀번호수정 관련 모달 팝업
   const updatePasswordHandler = () => {
-    if (updatePasswordModal === false)
-      setUpdatePasswordModal(true);
+    setModal(true);
   }
 
   // 기업 등록 버튼 누를시 기업등록 페이지로 이동
@@ -319,7 +285,7 @@ export const MyPageUpdateMain = () => {
         <Button onClick={completeUpdateHandler}>수정</Button>
         <Button onClick={() => {}} style={{ backgroundColor: "#6c757d", borderColor: "#6c757d" }}>취소</Button>
       </div>
-      {updatePasswordModal !== false && (
+      {modal === true && (
         <MyPageUpdatePasswordModal/>
       )}
     </>

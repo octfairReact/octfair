@@ -1,9 +1,10 @@
 import { useRecoilState } from "recoil";
-import { updateApplicantModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { FC, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ManageUser } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { datafieldnameApplicationData, IApplicationData } from "../../../../models/interface/IUser";
 import {
   ModalOverlay,
   ModalStyled,
@@ -25,22 +26,6 @@ declare global {
   }
 }
 
-// 회원수정 입력데이터 구조체/멤버변수
-export interface UserData {
-  userType: string; // 유저타입 (선택박스로 'M'(관리자)/'A'(개인회원)/'B'(기업회원) 중 하나가 입력 됨)
-  loginId: string;
-  name: string;
-  sex: string; // 성별 (선택박스로 '1'/'2' 중 하나가 입력 됨)
-  birthday: string; // 생년월일 (날짜형 string)
-  phone: string;
-  email: string;
-  regdate: string; // 가입일자 (날짜형 string)
-  statusYn: string; // 활성화여부 (값이 '2'이면 탈퇴, '1'이면 활동가능회원)
-  zipCode: string; // 우편번호 (직접입력 또는 우편번호찾기 API로 입력 됨)
-  address: string;
-  detailAddress: string;
-}
-
 // 이 파일의 컴포넌트인 모달의 Props
 export interface IUpdateUserModalProps {
   refreshUserListHandler: () => void; // 리스트(표) 새로고침 핸들러: 모달에서 전송성공시, 리스트새로고침 + 모달닫기
@@ -49,42 +34,15 @@ export interface IUpdateUserModalProps {
 }
 
 export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserListHandler, userId, setUserId}) => {
-  const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(updateApplicantModalState)
-  const [userData, setUserData] = useState<UserData>({
-    // 기본값
-    userType: '',
-    loginId: '',
-    name: '',
-    sex: '',
-    birthday: '',
-    phone: '',
-    email: '',
-    regdate: '',
-    statusYn: '',
-    zipCode: '',
-    address: '',
-    detailAddress: '',
-  });
-  const dataFieldName = {
-    userType: '유저타입',
-    loginId: '로그인아이디',
-    name: '이름',
-    sex: '성별',
-    birthday: '생년월일',
-    phone: '전화번호',
-    email: '이메일',
-    regdate: '가입일자',
-    statusYn: '가입탈퇴여부',
-    zipCode: '우편번호',
-    address: '주소',
-    detailAddress: '상세주소',
-  }
+  const [, setModal] = useRecoilState<boolean>(modalState)
+  const [userData, setUserData] = useState<IApplicationData>();
+  const dataFieldName:IApplicationData = datafieldnameApplicationData;
 
   // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
   useEffect(() => {
     axios.get(ManageUser.getApplicantDetail+"?loginId=" + userId)
       .then((res) => {
-        let prevData = res.data.detail;
+        const prevData = res.data.detail;
         setUserData({
           userType: prevData.userType,
           loginId: prevData.loginId, // 아이디 칸은 읽기전용
@@ -107,8 +65,7 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
 
   // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
   const closeModalHandler = () => {
-    if (updateUserModal !== false)
-      setUpdateUserModal(false);
+    setModal(false);
   };
 
   // Enter키를 누를시 완료버튼 효과를 작동
@@ -123,17 +80,17 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
     let isProblem:boolean = false;
     
     // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
-    // return문 내 HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
+    // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
     Object.entries(userData).some(([key, value]) => { // 입력창이 12개나 되어서 반복문처리, signupInput이 배열은 아니어서 forEach()/map()대신 Object.entries()
       if (!value || value.length <= 0) {
         if (key !== "detailAddress") { // 빈칸이어도 되는 속성들
           toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
           document.getElementById(key)?.focus();
           isProblem = true;
-          return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐
+          return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐, 즉 문제발생하여 if문 입장시 검사 조기종료한다는 뜻
         }
       }
-      return false;
+      return false; // 이 return값(false)는 continue같은 역할로 Object.entires()반복문을 다음 key아이템으로 순회시킴
     });
     
     // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
@@ -237,9 +194,9 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
 
   return (
     <>
-      <ModalOverlay onMouseDown={closeModalHandler}>              {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
-        <ModalStyled onMouseDown={(e) => e.stopPropagation()}>    {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
-          <Table onKeyDown={completeEnterHandler} tabIndex={-1}> {/* 'tabIndex={-1}' 의미: 모달의 포커싱을 없애서 부모페이지의 ESC닫기Handler 작동을 가능하게 하는 용도 */}
+      <ModalOverlay onMouseDown={closeModalHandler}>           {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+        <ModalStyled onMouseDown={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
+          <Table onKeyDown={completeEnterHandler} tabIndex={-1}>     {/* 'tabIndex={-1}' 의미: 모달의 포커싱을 없애서 부모페이지의 ESC닫기Handler 작동을 가능하게 하는 용도 */}
             <TableCaption>개인회원정보</TableCaption>
             <tbody>
               <tr>
