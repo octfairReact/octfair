@@ -9,53 +9,45 @@ import { useRecoilState } from 'recoil';
 import { modalState } from '../../../../stores/modalState';
 import { HistoryModal } from '../HistoryModal/HistoryModal';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CancelButton, DisabledButton, StyledHoverText } from './styled';   // 스타일 적용
+import { CancelButton, DisabledButton, StyledHoverText } from './styled';
 import { CancelModal } from '../CancelModal/CancelModal';
 import { toast } from 'react-toastify';
 
 export const HistoryMain = () => {
-    const { search } = useLocation();       // URL 쿼리 파라미터에서 검색 정보 가져오기
-    const navigate = useNavigate();         // 페이지 이동을 위한 navigate 함수
+    const { search } = useLocation();
+    const navigate = useNavigate();
     
-    // 지원 내역 상태 및 페이지 관련 상태 관리
     const [historyList, setHistoryList] = useState<IHistory[]>([]);
     const [historyCnt, setHistoryCnt] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    
-    // 검색 키워드 상태
+    const [currentPage] = useState<number>(1);
     const { searchKeyWord } = useContext(HistoryContext);
-    
-    // 페이지 상태
     const [cPage, setCPage] = useState<number>(1);
-    
-    // 모달 상태 관리
-    const [modal, setModal] = useRecoilState<boolean>(modalState);
+    const [modal, setModal] = useRecoilState<boolean | string>(modalState);
+
+    // 지원이력서 모달
     const [index, setIndex] = useState<number>();
     const [resIdx, setResIdx] = useState<number | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
     
-    // 취소 관련 상태
+    // 지원취소 모달
     const [cancelAppId, setCancelAppId] = useState<number | null>(null);
     const [cancelPostTitle, setCancelPostTitle] = useState<string>('');
-    const [cancelModalVisible, setCancelModalVisible] = useState<boolean>(false);
 
-    // 이력서 모달 열기
-    const handlerModal = (appId: number, resIdx: number) => {
-        if (!modal) {
-            setModal(true);
-            setIndex(appId);
-            setResIdx(resIdx);
-        }
+    // 지원이력서 모달 열기(apply index, resume index)
+    const historyModalOpen = (appId: number, resIdx: number) => {
+        setModal("openHistoryModal");
+        setIndex(appId);
+        setResIdx(resIdx);
     };
-    // 취소 모달 열기
-    const openCancelModal = (appId: number, postTitle: string) => {
+    // 지원취소 모달 열기(apply index, apply title)
+    const applyCancelModalOpen = (appId: number, postTitle: string) => {
+        setModal("openCancelModal")
         setCancelAppId(appId);
         setCancelPostTitle(postTitle);
-        setCancelModalVisible(true);
     };
-    // 취소 모달 닫기
-    const closeCancelModal = () => {
-        setCancelModalVisible(false);
+
+    // 지원취소 모달 닫기
+    const applyCancelModalClose = () => {
+        setModal(false);
         setCancelAppId(null);
         setCancelPostTitle('');
     };
@@ -63,9 +55,7 @@ export const HistoryMain = () => {
     // 데이터 fetching 함수
     useEffect(() => {
         const fetchData = async () => {
-            setIsLoading(true);
             await searchHistoryList(currentPage);
-            setIsLoading(false);
         };
         fetchData();
     }, [search, searchKeyWord, currentPage]);
@@ -79,8 +69,7 @@ export const HistoryMain = () => {
             pageSize: "5",      // 페이지에 표시되는 수
         };
 
-        const searchList = await postHistoryApi<IHistoryResponse>(History.searchList, searchParam);
-        console.log(searchList);
+        const searchList = await postHistoryApi<IHistoryResponse>(History.searchListHistory, searchParam);
         if (searchList) {
             setHistoryList(searchList.data.history);
             setHistoryCnt(searchList.data.historyCnt);
@@ -92,12 +81,12 @@ export const HistoryMain = () => {
     const handlerCancel = async (appId: number, postTitle: string) => {
         const paramMap = { appId };
         try {
-            const deleteResponse = await postHistoryApi<IHistoryResponse>(History.postDelete, paramMap);
+            const deleteResponse = await postHistoryApi<IHistoryResponse>(History.cancleApplyDelete, paramMap);
             if (deleteResponse) {
 
                 toast.success(`${postTitle} 지원 내역이 취소되었습니다.`);
                 searchHistoryList(currentPage);         // 삭제 후 리스트 갱신
-                closeCancelModal();                     // 모달 닫기
+                applyCancelModalClose();                     // 모달 닫기
             } else {
                 console.error('삭제에 실패했습니다.');
             }
@@ -137,14 +126,7 @@ export const HistoryMain = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {isLoading ? (
-                        <tr>
-                            <StyledTd colSpan={5} height={400}>
-                                {/* 로딩 중에 보여줄 UI */}
-                                <p>로딩 중...</p>
-                            </StyledTd>
-                        </tr>
-                    ) : historyList.length > 0 ? (
+                    {historyList.length > 0 ? (
                         historyList.map((history) => (
                             <tr key={history.appId}>
                                 <StyledTd>
@@ -162,7 +144,7 @@ export const HistoryMain = () => {
                                     >
                                         {history.postTitle}
                                     </StyledHoverText>
-                                    <StyledHoverText onClick={() => handlerModal(history.appId, history.resIdx)}>
+                                    <StyledHoverText onClick={() => historyModalOpen(history.appId, history.resIdx)}>
                                         지원이력서
                                     </StyledHoverText>
                                 </StyledTd>
@@ -173,7 +155,7 @@ export const HistoryMain = () => {
                                     style={{
                                         color: history.viewed == 1 ? 'gray' : 'black',
                                     }}
-                                    onClick={history.viewed == 1 ? undefined : () => openCancelModal(history.appId, history.postTitle)}
+                                    onClick={history.viewed == 1 ? undefined : () => applyCancelModalOpen(history.appId, history.postTitle)}
                                 >
                                     {history.viewed == 1 ? 
                                         <DisabledButton>취소 불가</DisabledButton> : 
@@ -185,7 +167,7 @@ export const HistoryMain = () => {
                     ) : (
                         <tr>
                             <StyledTd colSpan={5} height={400}>
-                                <img
+                            <img
                                     src='/images/admin/comm/history_not_found.png'
                                     alt='지원하러가기'
                                     style={{ transform: 'scaleX(-1)', margin: '5px' }}
@@ -211,26 +193,19 @@ export const HistoryMain = () => {
                 />
             )}
 
-            {/* 지원이력서 */}
-            {modal && (
+            {/* 지원이력서 모달 */}
+            {modal === "openHistoryModal" && (
                 <HistoryModal
                     index={index}
-                    setModal={setModal}
-                    resumeInfo={{ userNm: '', email: '', phone: '', resTitle: '', shortIntro: '', perStatement: '', proLink: '', fileName: ''}}
-                    careerInfo={[]}
-                    eduInfo={[]}
-                    skillInfo={[]}
-                    certInfo={[]}
                     resIdx={resIdx}
                 />
             )}
 
-            {/* 지원 취소 */}
-            {cancelModalVisible && (
+            {/* 지원 취소 모달 */}
+            {modal === "openCancelModal" && (
                 <CancelModal
-                    appId={cancelAppId!}
+                    appId={cancelAppId}
                     postTitle={cancelPostTitle}
-                    closeModal={closeCancelModal}
                     handlerCancel={handlerCancel}
                 />
             )}

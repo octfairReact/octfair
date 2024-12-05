@@ -28,23 +28,22 @@ export interface IHistoryResponse {
 
 export interface IHistoryModal {
     index: number | null;
-    setModal: React.Dispatch<React.SetStateAction<boolean>>;
-    resumeInfo: { userNm: string; email: string; phone: string; resTitle: string; shortIntro: string; perStatement: string; proLink: string; fileName: String};
+    resIdx: number;
+    resumeInfo: IResumeInfo;
     careerInfo: ICareerInfo[];
-    eduInfo: IEduInfo[];
+    educationInfo: IEduInfo[];
     skillInfo: ISkillInfo[];
     certInfo: ICertInfo[];
-    resIdx: number;
 }
 export interface IResumeInfo {
+    title: string;
     userNm: string;
     email: string;
     phone: string;
-    resTitle: string;
     shortIntro: string;
-    perStatement?: string;
     proLink: string;
     fileName: string;
+    perStatement: string;
 }
 export interface ICareerInfo {
     company: string;

@@ -1,21 +1,24 @@
 import { CancelModalStyled } from "./Styled";
 import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
+import { useRecoilState } from "recoil";
+import { modalState } from "../../../../stores/modalState";
 
 interface CancelModalProps {
   appId: number;
   postTitle: string;
-  closeModal: () => void; // 모달 닫기 함수
   handlerCancel: (appId: number, postTitle: string) => void; // 취소 처리 함수
 }
 
-export const CancelModal = ({ appId, postTitle, closeModal, handlerCancel }: CancelModalProps) => {
-  // ESC 키로 모달 닫기 기능 활성화
-  useEscapeClose(closeModal, true);
+export const CancelModal = ({ appId, postTitle, handlerCancel }: CancelModalProps) => {
+  const [modal, setModal] = useRecoilState<boolean | string>(modalState);
+  
+  // ESC 키를 눌러 모달을 닫을 수 있는 커스텀 훅
+  useEscapeClose(() => setModal(false));
 
   const confirmCancel = async () => {
     // 직접 확인을 위해 confirm 대화상자를 제거하고, 버튼 클릭으로 취소
     await handlerCancel(appId, postTitle);
-    closeModal(); // 모달 닫기
+    setModal(false);
   };
 
   return (
@@ -28,7 +31,7 @@ export const CancelModal = ({ appId, postTitle, closeModal, handlerCancel }: Can
           {`' 지원을 취소하시겠습니까?`}
         </p>
         <div className="modal-buttons">
-          <button className="cancel-button" onClick={closeModal}>닫기</button>
+          <button className="cancel-button" onClick={() => setModal(false)}>닫기</button>
           <button className="delete-button" onClick={confirmCancel}>지원취소</button>
         </div>
       </div>
