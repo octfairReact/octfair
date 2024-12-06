@@ -2,9 +2,10 @@ import { useCallback, useState } from "react";
 import axios from "axios";
 import qs from "qs";
 import { useRecoilState } from "recoil";
-import { signupModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { Login } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { ISignupInput, datafieldnameSignupInput, defaultSignupInput } from "../../../../models/interface/IUser";
 import {
   ModalOverlay,
   ModalStyled,
@@ -26,122 +27,67 @@ declare global {
   }
 }
 
-// 회원가입 입력데이터 구조체/멤버변수
-export interface SignupInput {
-  userType: string; // 유저타입 (선택박스로 'M'(관리자)/'A'(개인회원)/'B'(기업회원) 중 하나가 입력 됨)
-  loginId: string;
-  password: string;
-  passwordOk: string;
-  name: string;
-  sex: string; // 성별 (선택박스로 '1'/'2' 중 하나가 입력 됨)
-  birthday: string;
-  phone: string;
-  email: string;
-  zipCode: string; // 우편번호 (직접입력 또는 우편번호찾기 API로 입력 됨)
-  address: string;
-  detailAddress: string;
-  action: string; // 서버 컨트롤러에서 action="I"인지로 정상경로(회원가입 모달창)으로부터 온 데이터인지 보는듯????
-}
-
 export const SignupModal = () => {
-  const [signupModal, setSignupModal] = useRecoilState<boolean>(signupModalState); // false(닫힘) 또는 true(열림)
-  const [signupInput, setSignupInput] = useState<SignupInput>({
-    // 기본값
-    userType: '',
-    loginId: '',
-    password: '',
-    passwordOk: '',
-    name: '',
-    sex: '',
-    birthday: '',
-    phone: '',
-    email: '',
-    zipCode: '',
-    address: '',
-    detailAddress: '',
-    action: '',
-  });
-  const dataFieldName = {
-    userType: '유저타입',
-    loginId: '로그인아이디',
-    password: '비밀번호',
-    passwordOk: '비밀번호확인',
-    name: '이름',
-    sex: '성별',
-    birthday: '생년월일',
-    phone: '전화번호',
-    email: '이메일',
-    zipCode: '우편번호',
-    address: '주소',
-    detailAddress: '상세주소',
-    action: 'action',
-  }
-  const [isIdDuplicateChecked, setIsIdDuplicateChecked] = useState<boolean>(false); // 중복체크 여부에 대한 변수
-
-  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
-  const closeModalHandler = () => {
-    if (signupModal !== false)
-      setSignupModal(false);
-  };
-
-  // Enter키를 누를시 완료버튼 효과를 작동
-  const completeEnterHandler = (event) => {
-    if (event.key === "Enter")
-      completeRegisterHandler();
-  }
+  // false(닫힘), "openSignupModal"(회원가입 모달 열림), 
+  // "openSearchIdModal"(아이디찾기 모달 열림), "openSearchPwModal"(비밀번호찾기 모달 열림), "openUpdatePwModal"(비밀번호변경 보달 열림)
+  const [, setModal] = useRecoilState<boolean | string>(modalState);
+  const [signupInput, setSignupInput] = useState<ISignupInput>(defaultSignupInput);
+  const dataFieldName:ISignupInput = datafieldnameSignupInput;
+  const [isIdDuplicateChecked, setIsIdDuplicateChecked] = useState<boolean>(true); // 중복체크 여부에 대한 변수
 
   // 회원가입 완료버튼 누를시 작동
   // 1. 빈값검사 -> 2. 중복검사(아이디중복체크) -> 3. 양식검사(이메일형식/비밀번호형식 등) -> 4. 데이터전송
   const completeRegisterHandler = () => {
     let isProblem:boolean = false;
     
-    // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
-    // return문 내 HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
     Object.entries(signupInput).some(([key, value]) => { // 입력창이 12개나 되어서 반복문처리, signupInput이 배열은 아니어서 forEach()/map()대신 Object.entries()
-      if (!value || value.length <= 0) {
+      
+      // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
+      // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
+      if (isProblem === false && (!value || value.length <= 0)) {
         if (key !== "detailAddress" && key !== "action") { // 빈칸이어도 되는 속성들
           toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
           document.getElementById(key)?.focus();
           isProblem = true;
-          return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐
+          return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐, 즉 문제발생하여 if문 입장시 검사 조기종료한다는 뜻
         }
       }
-      return false;
-    });
+      
+      // 2. 중복검사: id 입력창에 대하여 DB와의 중복 검사
+      // 3. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
+      if (isProblem === false) {
+        const passwordRegex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+        const phoneRegex = /^[0-9]([-]?[0-9])*$/;
+        const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        const zipCodeRegex = /^[0-9]*$/;
 
-    // 2. 중복검사: id 입력창에 대하여 DB와의 중복 검사
-    if (isProblem === false && isIdDuplicateChecked === false) {
-      toast.info("중복체크를 먼저 완료해주세요!");
-      isProblem = true;
-    }
-    
-    // 3. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
-    const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
-    const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    const phoneRules = /^[0-9]([-]?[0-9])*$/;
-    const zipCodeRules = /^[0-9]*$/;
-
-    if (isProblem === false) {
-      if (!passwordRules.test(signupInput.password)) {// .test()는 정규식패턴에 맞으면 true를 반환
-        toast.info("비밀번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다.");
-        isProblem = true;
-      } else if (signupInput.password !== signupInput.passwordOk) {
-        toast.info("비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다.");
-        isProblem = true;
-      } else if (new Date(signupInput.birthday) > new Date()) {
-        toast.info("생년월일은 미래의 날짜일 수 없습니다.");
-        isProblem = true;
-      } else if (!phoneRules.test(signupInput.phone)) {
-        toast.info("전화번호는 숫자여야하며 중간에만 '-'를 쓰실수는 있습니다.");
-        isProblem = true;
-      } else if (!emailRules.test(signupInput.email)) {
-        toast.info("이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다.");
-        isProblem = true;
-      } else if (!zipCodeRules.test(signupInput.zipCode)) {
-        toast.info("우편번호 형식을 확인해주세요. 숫자만 가능합니다.");
-        isProblem = true;
+        const validationRules = {
+          loginId:    { check: () => isIdDuplicateChecked === false,
+                        message: "중복체크를 먼저 완료해주세요!" },
+          password:   { check: () => !passwordRegex.test(signupInput.password), // .test()는 정규식패턴에 맞으면 true를 반환
+                        message: "비밀번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다." },
+          passwordOk: { check: () => signupInput.password !== signupInput.passwordOk,
+                        message: "비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다." },
+          birthday:   { check: () => new Date(signupInput.birthday) > new Date(),
+                        message: "생년월일은 미래의 날짜일 수 없습니다." },
+          phone:      { check: () => !phoneRegex.test(signupInput.phone),
+                        message: "전화번호는 숫자여야하며 중간에만 '-'를 쓰실수는 있습니다." },
+          email:      { check: () => !emailRegex.test(signupInput.email),
+                        message: "이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다." },
+          zipCode:    { check: () => !zipCodeRegex.test(signupInput.zipCode),
+                        message: "우편번호 형식을 확인해주세요. 숫자만 가능합니다." },
+        }
+        
+        // 위 중복검사/양식검사와 적발시에 대한 안내메시지와 포커싱 설정
+        if (validationRules[key]?.check()) {
+          toast.info(validationRules[key].message);
+          document.getElementById(key)?.focus();
+          isProblem = true;
+        }
       }
-    }
+
+      return false; // 이 return값(false)는 continue같은 역할로 Object.entires()반복문을 다음 key아이템으로 순회시킴
+    });
 
     // 4. 데이터전송: 회원가입 입력정보 문제없음! 서버로 Create요청!
     if (isProblem === false) {
@@ -181,7 +127,7 @@ export const SignupModal = () => {
       return true;
     }
 
-    let isDuplicate = false;
+    let isDuplicate:boolean = false;
     await axios.post(Login.getCheckId, qs.stringify({ loginId: signupInput.loginId }))
       .then((res) => {
         if (res.data === 1) { // 결과값이 1이면 중복이란 뜻 (Mapper에서 해당id의 갯수를 반환하기 때문)
@@ -232,19 +178,30 @@ export const SignupModal = () => {
     return () => document.body.removeChild(script);
   }, []);
 
+  // Enter키를 누를시 완료버튼 효과를 작동
+  const completeEnterHandler = (event) => {
+    if (event.key === "Enter")
+      completeRegisterHandler();
+  }
+
+  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
+  const closeModalHandler = () => {
+      setModal(false);
+  };
+
   return (
     <>
-      <ModalOverlay onMouseDown={closeModalHandler}>              {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
-        <ModalStyled onMouseDown={(e) => e.stopPropagation()}>    {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
-          <Table onKeyDown={completeEnterHandler} tabIndex={-1}> {/* 'tabIndex={-1}' 의미: 모달의 포커싱을 없애서 부모페이지의 ESC닫기Handler 작동을 가능하게 하는 용도 */}
+      <ModalOverlay onMouseDown={closeModalHandler}>           {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+        <ModalStyled onMouseDown={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
+          <Table onKeyDown={completeEnterHandler} tabIndex={-1}>     {/* 'tabIndex={-1}' 의미: 모달의 포커싱을 없애서 부모페이지의 ESC닫기Handler 작동을 가능하게 하는 용도 */}
             <TableCaption>회원가입</TableCaption>
             <tbody>
               <tr>
                 <TableHeaderCell>회원유형 <RequiredMark>*</RequiredMark></TableHeaderCell>
                 <TableDataCell colSpan={3}>
-                  <SelectBox name="userType" id="userType" value={signupInput.userType}
+                  <SelectBox name="userType" id="userType"
                     onChange={(e) => { setSignupInput((prev) => ({ ...prev, userType: e.target.value })); }}>
-                    <option value="" disabled>선택</option>
+                    <option value="" selected disabled>선택</option>
                     <option value="A">개인회원</option>
                     <option value="B">기업회원</option>
                   </SelectBox>
@@ -259,7 +216,11 @@ export const SignupModal = () => {
                   </InputField>
                 </TableDataCell>
                 <TableDataCell>
-                  <Button onClick={checkIdDuplicateHandler}>중복확인 </Button>
+                  <Button onClick={checkIdDuplicateHandler}
+                          disabled={isIdDuplicateChecked === true} // 중복체크 되었을시 불필요한 재 중복체크 방지
+                          style={{backgroundColor: isIdDuplicateChecked === true ? 'gray' : '#007bff',
+                                  cursor: isIdDuplicateChecked === true ? 'not-allowed' : 'pointer', }}
+                  >중복확인 </Button>
                 </TableDataCell>
               </tr>
               <tr>
@@ -289,9 +250,9 @@ export const SignupModal = () => {
               <tr>
                 <TableHeaderCell>성별 <RequiredMark>*</RequiredMark></TableHeaderCell>
                 <TableDataCell colSpan={3}>
-                  <SelectBox name="sex" id="sex" value={signupInput.sex}
+                  <SelectBox name="sex" id="sex"
                     onChange={(e) => { setSignupInput((prev) => ({ ...prev, sex: e.target.value })); }}>
-                    <option value="" disabled>선택</option>
+                    <option value="" selected disabled>선택</option>
                     <option value="1">남자</option>
                     <option value="2">여자</option>
                   </SelectBox>

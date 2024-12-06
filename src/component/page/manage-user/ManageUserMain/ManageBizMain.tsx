@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { IManageBiz, IManageBizListResponse } from "../../../../models/interface/IManageUser";
+import { IManageBiz, IManageBizListResponse, defaultBiz } from "../../../../models/interface/IManageUser";
 import { useRecoilState } from "recoil";
-import { updateBizModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { UpdateBizModal } from "../ManageUserModal/UpdateBizModal";
 import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
@@ -13,11 +13,11 @@ import { toast } from "react-toastify";
 
 export const ManageBizMain = () => {
   // 모달에 쓰이는 변수
-  const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(updateBizModalState);
+  const [modal, setModal] = useRecoilState<boolean>(modalState);
   const [id, setId] = useState<number>();
 
   // 리스트(표)에 쓰이는 변수
-  const [userList, setUserList] = useState<IManageBiz[]>(); // 아이템 리스트
+  const [userList, setUserList] = useState<IManageBiz[]>([defaultBiz]); // 아이템 리스트
   const [userCnt, setUserCnt] = useState<number>(0); // 총 아이템의 갯수 (리스트 페이지 갯수 x)
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -46,20 +46,20 @@ export const ManageBizMain = () => {
 
   // 리스트(표) 새로고침 핸들러: 모달에서 전송성공시, 리스트새로고침 + 모달닫기
   const refreshUserListHandler = () => {
-    setUpdateUserModal(!updateUserModal);
+    setModal(false);
     searchUserList();
   };
 
   // 리스트(표) 아이템 선택 시 아이템관련 정보를 담은 모달 팝업
   const openUpdateUserModalHandler = (id: number) => {
-    setUpdateUserModal(true);
+    setModal(true);
     setId(id);
   };
 
   // ESC=닫기 작동
   const pressEscHandler = (event) => {
     if (event.key === "Escape")
-      setUpdateUserModal(false);
+      setModal(false);
   };
 
   return (
@@ -78,21 +78,23 @@ export const ManageBizMain = () => {
           </tr>
         </thead>
         <tbody>
-          {userList?.length > 0 ? (
-            userList?.map((user) => { return (
-              <tr key={user.bizIdx} onClick={() => openUpdateUserModalHandler(user.bizIdx)}>
-                <StyledTd>{user.bizIdx}</StyledTd>
-                <StyledTd>{user.bizName}</StyledTd>
-                <StyledTd>{user.bizCeoName}</StyledTd>
-                <StyledTd>{user.bizContact}</StyledTd>
-                <StyledTd>{user.bizWebUrl}</StyledTd>
-                <StyledTd><Button>정보수정</Button></StyledTd>
-              </tr>
-            );})) : (
-              <tr>
-                <StyledTd colSpan={6}>데이터가 없습니다.</StyledTd>
-              </tr>
-          )}
+          {userList[0]?.bizIdx===-1 ? <tr>로딩중...</tr> :
+            userList?.length > 0 ? (
+              userList?.map((user) => { return (
+                <tr key={user.bizIdx} onClick={() => openUpdateUserModalHandler(user.bizIdx)}>
+                  <StyledTd>{user.bizIdx}</StyledTd>
+                  <StyledTd>{user.bizName}</StyledTd>
+                  <StyledTd>{user.bizCeoName}</StyledTd>
+                  <StyledTd>{user.bizContact}</StyledTd>
+                  <StyledTd>{user.bizWebUrl}</StyledTd>
+                  <StyledTd><Button>정보수정</Button></StyledTd>
+                </tr>
+              );})) : (
+                <tr>
+                  <StyledTd colSpan={6}>데이터가 없습니다.</StyledTd>
+                </tr>
+            )
+          }
         </tbody>
       </StyledTable>
       <PageNavigate
@@ -101,7 +103,7 @@ export const ManageBizMain = () => {
         activePage={currentPage}
         itemsCountPerPage={5}
       ></PageNavigate>
-      {updateUserModal && (
+      {modal && (
         <UpdateBizModal refreshUserListHandler={refreshUserListHandler} userId={id} setUserId={setId} />
       )}
     </>

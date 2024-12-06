@@ -18,7 +18,19 @@ export const HistoryMain = () => {
     const navigate = useNavigate();         // 페이지 이동을 위한 navigate 함수
     
     // 지원 내역 상태 및 페이지 관련 상태 관리
-    const [historyList, setHistoryList] = useState<IHistory[]>([]);
+    const [historyList, setHistoryList] = useState<IHistory[]>([{
+        appId: -1,
+        userIdx: 0,
+        postingId: 0,
+        applyDate: undefined,
+        viewed: 0,
+        postTitle: '',
+        status: '',
+        resIdx: 0,
+        bizName: undefined,
+        resumeData: '',
+        bizIdx: 0
+    }]);
     const [historyCnt, setHistoryCnt] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     
@@ -137,11 +149,11 @@ export const HistoryMain = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {isLoading ? (
+                    { historyList[0]?.appId===-1 ? (
                         <tr>
                             <StyledTd colSpan={5} height={400}>
                                 {/* 로딩 중에 보여줄 UI */}
-                                <p>로딩 중...</p>
+                                <p>로딩 중...........................................</p>
                             </StyledTd>
                         </tr>
                     ) : historyList.length > 0 ? (

@@ -6,39 +6,31 @@ import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import { useUserInfo } from "../../../hook/useUserInfo";
 import { CustomAlert } from "../../../common/CustomAlert";
 import { ScrapingComponent as MenuMain } from "../../page/Login/LoginMain/MenuMain";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
+import { Login } from "../../../pages/Login";
+import 'react-toastify/dist/ReactToastify.css';
 
 export const DashBoard = () => {
-  const [alertMessage, setAlertMessage] = useState("");
   const userInfo = sessionStorage.getItem("userInfo");
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
+  
   useUserInfo();
 
   useEffect(() => {
-    if (userInfo) {
-      const userInfoObj: ILoginInfo = JSON.parse(userInfo);
-      if (userInfoObj.result !== "SUCCESS") {
-        //alert("로그인을 실패했습니다");
-        setAlertMessage("로그인을 실패했습니다");
-        //navigate("/");
-      }
-    } else {
-      //alert("로그인부터 해주세요");
-      setAlertMessage("로그인 후에 이용 가능합니다.");
-      //navigate("/");
-    }
+    if (checkLogin()==="logoutUser")
+      toast("로그인 후에 이용 가능합니다.") ? navigate("/") : navigate("/");
   }, [userInfo]);
 
-  const handleCloseAlert = () => {
-    setAlertMessage("");
-    navigate("/");
-  };
+  const checkLogin = () => {
+    if (!userInfo || JSON.parse(userInfo).result !== "SUCCESS")
+      return "logoutUser";
+    return "loginUser";
+  }
 
   return (
+    checkLogin()==="logoutUser" ? <Login /> :
     <DashBoardStyled>
-      {alertMessage && <CustomAlert message={alertMessage} onClose={handleCloseAlert} />}
       <ul className="dashboard-ul">
         <li className="menu-bar">{<LeftMenuBar />}</li>
         <li className="content">
