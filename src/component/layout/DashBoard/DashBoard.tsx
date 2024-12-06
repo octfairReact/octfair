@@ -35,8 +35,8 @@ export const DashBoard = () => {
         <li className="menu-bar">{<LeftMenuBar />}</li>
         <li className="content">
           <Suspense fallback={<h2>Loading....</h2>}>{<Outlet />}</Suspense>
-          { location.pathname==="/react" && <MenuMain /> } {/* 웹크롤링한 메뉴판 */}
-          <ToastContainer/> {/* 토스트 메시지 기능 적용 */}
+          {location.pathname === "/react" && <MenuMain />} {/* 웹크롤링한 메뉴판 */}
+          <ToastContainer /> {/* 토스트 메시지 기능 적용 */}
         </li>
       </ul>
     </DashBoardStyled>
