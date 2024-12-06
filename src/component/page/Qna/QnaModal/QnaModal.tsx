@@ -20,14 +20,34 @@ export interface IQnaModalProps {
 export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qnaPassword }) => {
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [modal, setModal] = useRecoilState<boolean>(modalState);
-  //save
-  const title = useRef<HTMLInputElement>();
-  const context = useRef<HTMLTextAreaElement>();
-  const password = useRef<HTMLInputElement>();
-  const ansContent = useRef<HTMLTextAreaElement>();
+  // const title = useRef<HTMLInputElement>();
+  // const context = useRef<HTMLTextAreaElement>();
+  // const password = useRef<HTMLInputElement>();
+  // const ansContent = useRef<HTMLTextAreaElement>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [fileData, setFileData] = useState<File>();
-  const [qnaDetail, setQnaDetail] = useState<IQnaDetail>();
+  const [qnaDetail, setQnaDetail] = useState<IQnaDetail>({
+    fileName: "",
+    fileExt: "",
+    fileSize: 0,
+    logicalPath: "",
+    phsycalPath: "",
+    updatedDate: "",
+    ans_content: "",
+    qna_type: "",
+    qnaIdx: 0,
+    title: "",
+    content: "",
+    author: "",
+    createdDate: "",
+    password: "",
+  });
+
+  const dataFieldName = {
+    title: "제목",
+    content: "내용",
+    password: "비밀번호",
+  };
 
   useEffect(() => {
     if (qnaSeq && modal) {
@@ -68,28 +88,28 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.current.value) {
-      toast.warning("제목을 입력해주세요.");
-      document.getElementById("qnaTit")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
-    }
-    if (!context.current.value) {
-      toast.warning("내용을 입력해주세요.");
-      document.getElementById("qnaCon")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
-    }
-    if (!password.current.value) {
-      toast.warning("비밀번호를 입력해주세요.");
-      document.getElementById("password")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
+    let isProblem: boolean = false;
+
+    Object.entries(dataFieldName).some(([key]) => {
+      if (!qnaDetail[key] || qnaDetail[key].length <= 0) {
+        toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
+        document.getElementById(key)?.focus();
+        isProblem = true;
+        return true; // 비정상입니다, 반복을 종료합니다
+      }
+      return false; // 정상입니다, 다음순회를 반복합니다
+    });
+
+    if (isProblem) {
+      return toast("handleSave종료, 문제가 있어서 종료"); // 함수 종료
     }
 
     const fileForm = new FormData();
     const textData = {
-      qnaTit: title.current.value,
-      qnaCon: context.current.value,
+      qnaTit: qnaDetail.title,
+      qnaCon: qnaDetail.content,
       loginId: userInfo.loginId,
-      password: password.current.value,
+      password: qnaDetail.password,
       qna_type: userInfo.userType,
     };
     fileData && fileForm.append("file", fileData);
@@ -104,41 +124,44 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
     }
   };
 
+  console.log("userInfo.userType", userInfo.userType);
+
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.current.value) {
-      toast.warning("제목을 입력해주세요.");
-      document.getElementById("qnaTit")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
-    }
-    if (!context.current.value) {
-      toast.warning("내용을 입력해주세요.");
-      document.getElementById("qnaCon")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
-    }
 
-    if (userInfo.userType !== "M") {
-      if (!password.current.value) {
-        toast.warning("비밀번호를 입력해주세요.");
-        document.getElementById("password")?.focus();
-        return; // 유효성 검사 실패 시 함수 종료
+    let isProblem: boolean = false;
+
+    Object.entries(dataFieldName).some(([key]) => {
+      // 일반 사용자(M이 아닌 경우)일 때 비밀번호 검사를 포함
+      if (userInfo.userType !== "M") {
+        if (!qnaDetail[key] || qnaDetail[key].length <= 0) {
+          toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
+          document.getElementById(key)?.focus();
+          isProblem = true;
+          return true; // 문제가 있으므로 반복 종료
+        }
       }
+      return false; // 정상, 다음 순회 반복
+    });
+
+    if (isProblem) {
+      return toast("handleSave종료, 문제가 있어서 종료"); // 함수 종료
     }
 
     const fileForm = new FormData();
     const textData = {
-      qnaTit: title.current.value,
-      qnaCon: context.current.value,
+      qnaTit: qnaDetail.title,
+      qnaCon: qnaDetail.content,
       loginId: userInfo.loginId,
       qna_type: userInfo.userType,
       qnaSeq: qnaDetail.qnaIdx,
     };
 
-    if (userInfo.userType !== "M" && password.current.value) {
-      textData["password"] = password.current.value;
+    if (userInfo.userType !== "M" && qnaDetail.password) {
+      textData["password"] = qnaDetail.password;
     }
-    if (userInfo.userType === "M" && ansContent.current?.value) {
-      textData["ans_content"] = ansContent.current.value;
+    if (userInfo.userType === "M" && qnaDetail.ans_content) {
+      textData["ans_content"] = qnaDetail.ans_content;
     }
 
     fileData && fileForm.append("file", fileData);
@@ -256,9 +279,11 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                     type="text"
                     className="inputTxt p100"
                     name="qnaTit"
-                    id="qnaTit"
-                    ref={title}
-                    defaultValue={qnaDetail?.title}
+                    id="title"
+                    value={qnaDetail?.title}
+                    onChange={(e) => {
+                      setQnaDetail((prev) => ({ ...prev, title: e.target.value }));
+                    }}
                     readOnly={!!qnaDetail?.ans_content}
                   />
                 </td>
@@ -270,12 +295,14 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                 <td colSpan={3}>
                   <textarea
                     name="qnaCon"
-                    id="qnaCon"
+                    id="content"
                     cols={40}
                     rows={5}
-                    ref={context}
-                    defaultValue={qnaDetail?.content}
+                    value={qnaDetail?.content}
                     readOnly={!!qnaDetail?.ans_content}
+                    onChange={(e) => {
+                      setQnaDetail((prev) => ({ ...prev, content: e.target.value }));
+                    }}
                   ></textarea>
                 </td>
               </tr>
@@ -312,16 +339,17 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                       className="inputTxt p100"
                       name="password"
                       id="password"
-                      ref={password}
-                      // defaultValue={qnaDetail?.password}
                       onFocus={(e) => (e.target.type = "text")} // 포커스 시 비밀번호로 전환
                       onBlur={(e) => (e.target.type = "password")} // 포커스 해제 시 일반 텍스트로 변경
                       readOnly={!!qnaDetail?.ans_content}
+                      onChange={(e) => {
+                        setQnaDetail((prev) => ({ ...prev, password: e.target.value }));
+                      }}
                     />
                   </td>
                 </tr>
               )}
-              {qnaDetail ? (
+              {qnaDetail?.ans_content && (
                 <tr id="ansContent">
                   <th scope="row">답변</th>
                   <td colSpan={3}>
@@ -330,29 +358,14 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                       id="ans_content"
                       cols={40}
                       rows={5}
-                      ref={ansContent}
-                      defaultValue={qnaDetail?.ans_content}
+                      value={qnaDetail?.ans_content}
                       readOnly={userInfo.userType !== "M"} // 관리자만 수정 가능
+                      onChange={(e) => {
+                        setQnaDetail((prev) => ({ ...prev, ans_content: e.target.value }));
+                      }}
                     ></textarea>
                   </td>
                 </tr>
-              ) : (
-                userInfo.userType === "M" && (
-                  <tr id="ansContent">
-                    <th scope="row">답변</th>
-                    <td colSpan={3}>
-                      <textarea
-                        name="ans_content"
-                        id="ans_content"
-                        cols={40}
-                        rows={5}
-                        ref={ansContent}
-                        defaultValue={qnaDetail?.ans_content}
-                        readOnly={false} // 관리자만 입력 가능
-                      ></textarea>
-                    </td>
-                  </tr>
-                )
               )}
             </tbody>
           </table>

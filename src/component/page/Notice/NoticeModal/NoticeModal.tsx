@@ -191,10 +191,15 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
         <label>
           내용 : <input type="text" ref={context} defaultValue={noticeDetail?.content}></input>
         </label>
-        파일 :<input type="file" id="fileInput" style={{ display: "none" }} onChange={handlerFile}></input>
-        <label className="img-label" htmlFor="fileInput">
-          파일 첨부하기
-        </label>
+        {userInfo?.userType === "M" && (
+          <>
+            파일:
+            <input type="file" id="fileInput" style={{ display: "none" }} onChange={handlerFile} />
+            <label className="img-label" htmlFor="fileInput">
+              파일 첨부하기
+            </label>
+          </>
+        )}
         <div onClick={downloadFile}>
           {imageUrl ? (
             <div>
