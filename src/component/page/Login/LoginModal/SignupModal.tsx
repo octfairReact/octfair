@@ -35,17 +35,6 @@ export const SignupModal = () => {
   const dataFieldName:ISignupInput = datafieldnameSignupInput;
   const [isIdDuplicateChecked, setIsIdDuplicateChecked] = useState<boolean>(true); // 중복체크 여부에 대한 변수
 
-  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
-  const closeModalHandler = () => {
-      setModal(false);
-  };
-
-  // Enter키를 누를시 완료버튼 효과를 작동
-  const completeEnterHandler = (event) => {
-    if (event.key === "Enter")
-      completeRegisterHandler();
-  }
-
   // 회원가입 완료버튼 누를시 작동
   // 1. 빈값검사 -> 2. 중복검사(아이디중복체크) -> 3. 양식검사(이메일형식/비밀번호형식 등) -> 4. 데이터전송
   const completeRegisterHandler = () => {
@@ -67,23 +56,29 @@ export const SignupModal = () => {
       // 2. 중복검사: id 입력창에 대하여 DB와의 중복 검사
       // 3. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
       if (isProblem === false) {
+        const passwordRegex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+        const phoneRegex = /^[0-9]([-]?[0-9])*$/;
+        const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        const zipCodeRegex = /^[0-9]*$/;
+
         const validationRules = {
           loginId:    { check: () => isIdDuplicateChecked === false,
                         message: "중복체크를 먼저 완료해주세요!" },
-          password:   { check: () => !/^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/.test(signupInput.password), // .test()는 정규식패턴에 맞으면 true를 반환
+          password:   { check: () => !passwordRegex.test(signupInput.password), // .test()는 정규식패턴에 맞으면 true를 반환
                         message: "비밀번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다." },
           passwordOk: { check: () => signupInput.password !== signupInput.passwordOk,
                         message: "비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다." },
           birthday:   { check: () => new Date(signupInput.birthday) > new Date(),
                         message: "생년월일은 미래의 날짜일 수 없습니다." },
-          phone:      { check: () => !/^[0-9]([-]?[0-9])*$/.test(signupInput.phone),
+          phone:      { check: () => !phoneRegex.test(signupInput.phone),
                         message: "전화번호는 숫자여야하며 중간에만 '-'를 쓰실수는 있습니다." },
-          email:      { check: () => !/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i.test(signupInput.email),
+          email:      { check: () => !emailRegex.test(signupInput.email),
                         message: "이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다." },
-          zipCode:    { check: () => !/^[0-9]*$/.test(signupInput.zipCode),
+          zipCode:    { check: () => !zipCodeRegex.test(signupInput.zipCode),
                         message: "우편번호 형식을 확인해주세요. 숫자만 가능합니다." },
         }
         
+        // 위 중복검사/양식검사와 적발시에 대한 안내메시지와 포커싱 설정
         if (validationRules[key]?.check()) {
           toast.info(validationRules[key].message);
           document.getElementById(key)?.focus();
@@ -183,6 +178,17 @@ export const SignupModal = () => {
     return () => document.body.removeChild(script);
   }, []);
 
+  // Enter키를 누를시 완료버튼 효과를 작동
+  const completeEnterHandler = (event) => {
+    if (event.key === "Enter")
+      completeRegisterHandler();
+  }
+
+  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
+  const closeModalHandler = () => {
+      setModal(false);
+  };
+
   return (
     <>
       <ModalOverlay onMouseDown={closeModalHandler}>           {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
@@ -193,9 +199,9 @@ export const SignupModal = () => {
               <tr>
                 <TableHeaderCell>회원유형 <RequiredMark>*</RequiredMark></TableHeaderCell>
                 <TableDataCell colSpan={3}>
-                  <SelectBox name="userType" id="userType" value={signupInput.userType}
+                  <SelectBox name="userType" id="userType"
                     onChange={(e) => { setSignupInput((prev) => ({ ...prev, userType: e.target.value })); }}>
-                    <option value="" disabled>선택</option>
+                    <option value="" selected disabled>선택</option>
                     <option value="A">개인회원</option>
                     <option value="B">기업회원</option>
                   </SelectBox>
@@ -244,9 +250,9 @@ export const SignupModal = () => {
               <tr>
                 <TableHeaderCell>성별 <RequiredMark>*</RequiredMark></TableHeaderCell>
                 <TableDataCell colSpan={3}>
-                  <SelectBox name="sex" id="sex" value={signupInput.sex}
+                  <SelectBox name="sex" id="sex"
                     onChange={(e) => { setSignupInput((prev) => ({ ...prev, sex: e.target.value })); }}>
-                    <option value="" disabled>선택</option>
+                    <option value="" selected disabled>선택</option>
                     <option value="1">남자</option>
                     <option value="2">여자</option>
                   </SelectBox>

@@ -29,17 +29,6 @@ export const SearchIdPwModal = () => {
   const [inputs, setInputs] = useState<Inputs>({ inputA: '', inputB: '', }); // 기본값
   const [saveId, setSaveId] = useState<string>(); // '비밀번호찾기'->'비밀번호재설정' 으로 넘어갈시에 '비밀번호재설정'에서 아이디를 입력받지않기에 '비밀번호찾기'에서 입력했던 아이디를 기억해놓는 것
 
-  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
-  const closeModalHandler = () => {
-      setModal(false);
-  };
-
-  // Enter키를 누를시 완료버튼 효과를 작동
-  const completeEnterHandler = (event) => {
-    if (event.key === "Enter")
-      completeHandler ();
-  }
-
   // 완료버튼 누를시 작동
   // 1. 빈값검사 -> 2. 양식검사(이메일형식/비밀번호형식 등) -> 3. 데이터전송
   const completeHandler = () => {
@@ -60,21 +49,24 @@ export const SearchIdPwModal = () => {
 
       // 2. 양식검사: 이메일형식에 맞지 않아도 서버랑 매칭하는 걸로 대체가능하긴 하나 가능한 서버에 요청시키지 않는게 프론트의 역할
       if (isProblem === false) {
+        const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        const passwordRegex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+
         const validationRules = {
           "openSearchIdModal": {
-            // inputA: { check: () => {},
-            //           message: "" },
-            inputB: { check: () => !/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i.test(inputs.inputB),
+            inputA: { check: () => {},
+                      message: "" },
+            inputB: { check: () => !emailRegex.test(inputs.inputB), // .test()는 정규식패턴에 맞으면 true를 반환
                       message: "이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다." },
           },
           "openSearchPwModal": {
-            // inputA: { check: () => {},
-            //           message: "" },
-            inputB: { check: () => !/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i.test(inputs.inputB),
+            inputA: { check: () => {},
+                      message: "" },
+            inputB: { check: () => !emailRegex.test(inputs.inputB),
                       message: "이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다." },
           },
           "openUpdatePwModal": {
-            inputA: { check: () => !/^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/.test(inputs.inputA),
+            inputA: { check: () => !passwordRegex.test(inputs.inputA),
                       message: "비밀번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다." },
             inputB: { check: () => inputs.inputA !== inputs.inputB,
                       message: "비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다." },
@@ -142,6 +134,17 @@ export const SearchIdPwModal = () => {
         });
     }
   }
+
+  // Enter키를 누를시 완료버튼 효과를 작동
+  const completeEnterHandler = (event) => {
+    if (event.key === "Enter")
+      completeHandler ();
+  }
+
+  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
+  const closeModalHandler = () => {
+      setModal(false);
+  };
 
   let title       = modal === "openSearchIdModal" ? "아이디 찾기" : (modal === "openSearchPwModal" ? "비밀번호 찾기" : "비밀번호 변경");
   let input1_name = modal === "openSearchIdModal" ? "이름" : (modal === "openSearchPwModal" ? "아이디" : "변경할 비밀번호");

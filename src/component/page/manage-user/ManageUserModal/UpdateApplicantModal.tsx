@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { ManageUser } from "../../../../api/api";
 import { toast } from "react-toastify";
-import { datafieldnameApplicationData, IApplicationData } from "../../../../models/interface/IUser";
+import { datafieldnameApplicationData, defaultApplicationData, IApplicationData } from "../../../../models/interface/IUser";
 import {
   ModalOverlay,
   ModalStyled,
@@ -35,11 +35,14 @@ export interface IUpdateUserModalProps {
 
 export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserListHandler, userId, setUserId}) => {
   const [, setModal] = useRecoilState<boolean>(modalState)
-  const [userData, setUserData] = useState<IApplicationData>();
+  const [userData, setUserData] = useState<IApplicationData>(defaultApplicationData);
   const dataFieldName:IApplicationData = datafieldnameApplicationData;
 
-  // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
+  // userInfo가 세팅/변경될때, 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
   useEffect(() => {
+    if (!userId) // 새로고침/페이지앞뒤이동 시엔 List로부터 받아온 userId가 사라져있기 때문에 그에대한 예외처리가 필요
+      return setModal(false); // 예외처리: 모달이 페이지이동간에 닫혀야하는게 맞기도하고, userId가 없어 에러를 일으키므로 닫기(false)되도록 예외처리
+
     axios.get(ManageUser.getApplicantDetail+"?loginId=" + userId)
       .then((res) => {
         const prevData = res.data.detail;
@@ -63,26 +66,16 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
       });
   }, [userId]);
 
-  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
-  const closeModalHandler = () => {
-    setModal(false);
-  };
-
-  // Enter키를 누를시 완료버튼 효과를 작동
-  const completeEnterHandler = (event) => {
-    if (event.key === "Enter")
-      completeUpdateHandler();
-  }
-
   // 회원수정 완료버튼 누를시 작동
   // 1. 빈값검사 -> 2. 양식검사(날짜/이메일형식/전화번호형식 등) -> 3. 데이터전송
   const completeUpdateHandler = () => {
     let isProblem:boolean = false;
     
-    // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
-    // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
     Object.entries(userData).some(([key, value]) => { // 입력창이 12개나 되어서 반복문처리, signupInput이 배열은 아니어서 forEach()/map()대신 Object.entries()
-      if (!value || value.length <= 0) {
+      
+      // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
+      // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
+      if (isProblem === false && (!value || value.length <= 0)) {
         if (key !== "detailAddress") { // 빈칸이어도 되는 속성들
           toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
           document.getElementById(key)?.focus();
@@ -90,32 +83,36 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
           return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐, 즉 문제발생하여 if문 입장시 검사 조기종료한다는 뜻
         }
       }
+    
+      // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
+      if (isProblem === false) {
+        const phoneRegex = /^[0-9]([-]?[0-9])*$/;
+        const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        const zipCodeRegex = /^[0-9]*$/;
+
+        const validationRules = {
+          birthday: { check: () => new Date(userData.regdate) < new Date(userData.birthday),
+                      message: "가입일이 생일 이전일 수 없습니다."},
+          regdate:  { check: () => new Date(userData.regdate) > new Date(),
+                      message: "가입일이 오늘 이후일 수 없습니다."},
+          phone:    { check: () => !phoneRegex.test(userData.phone), // .test()는 정규식패턴에 맞으면 true를 반환
+                      message: "전화번호는 숫자로 시작해야하며 중간에만 '-'를 쓰실수는 있습니다."},
+          email:    { check: () => !emailRegex.test(userData.email),
+                      message: "이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다."},
+          zipCode:  { check: () => !zipCodeRegex.test(userData.zipCode),
+                      message: "우편번호 형식을 확인해주세요. 숫자만 가능합니다."},
+        }
+        
+        // 위 중복검사/양식검사와 적발시에 대한 안내메시지와 포커싱 설정
+        if (validationRules[key]?.check()) {
+          toast.info(validationRules[key].message);
+          document.getElementById(key)?.focus();
+          isProblem = true;
+        }
+      }
+
       return false; // 이 return값(false)는 continue같은 역할로 Object.entires()반복문을 다음 key아이템으로 순회시킴
     });
-    
-    // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
-    const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    const phoneRules = /^[0-9]([-]?[0-9])*$/;
-    const zipCodeRules = /^[0-9]*$/;
-
-    if (isProblem === false) {
-      if (new Date(userData.regdate) < new Date(userData.birthday)) {
-        toast.info("가입일이 생일 이전일 수 없습니다.");
-        isProblem = true;
-      } else if (new Date(userData.regdate) > new Date()) {
-        toast.info("가입일이 오늘 이후일 수 없습니다.");
-        isProblem = true;
-      } else if (!phoneRules.test(userData.phone)) {
-        toast.info("전화번호는 숫자로 시작해야하며 중간에만 '-'를 쓰실수는 있습니다.");
-        isProblem = true;
-      } else if (!emailRules.test(userData.email)) {
-        toast.info("이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다.")
-        isProblem = true;
-      } else if (!zipCodeRules.test(userData.zipCode)) {
-        toast.info("우편번호 형식을 확인해주세요. 숫자만 가능합니다.");
-        isProblem = true;
-      }
-    }
 
     // 3. 데이터전송: 회원수정 입력정보 문제없음! 서버로 Update요청!
     if (isProblem === false) {
@@ -191,6 +188,17 @@ export const UpdateApplicantModal: FC<IUpdateUserModalProps> = ({refreshUserList
         toast.error("서버통신 실패, 담당자에게 문의하세요!");
       });
   }
+
+  // Enter키를 누를시 완료버튼 효과를 작동
+  const completeEnterHandler = (event) => {
+    if (event.key === "Enter")
+      completeUpdateHandler();
+  }
+
+  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
+  const closeModalHandler = () => {
+    setModal(false);
+  };
 
   return (
     <>

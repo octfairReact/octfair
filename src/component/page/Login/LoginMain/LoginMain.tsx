@@ -56,21 +56,6 @@ export const LoginMain = () => {
       });
   };
 
-  // Enter=완료, ESC=닫기 작동, Backspace는 이전페이지효과를 내는것만 제한
-  const pressEnterEscHandler = (event) => {
-    if (event.key === "Enter" && modal === false)
-      loginHandler();
-    else if (event.key === "Escape")
-      setModal(false);
-    else if (event.key === "Backspace") {
-      if (event.target.tagName !== "INPUT" &&
-          event.target.tagName !== "TEXTAREA" &&
-          !event.target.isContentEditable) {
-        event.preventDefault();
-      }
-    }
-  };
-
   // 회원가입 버튼 클릭시 회원가입 모달창 팝업
   const openSignupModalHandler = () => {
     setModal("openSignupModal");
@@ -84,6 +69,21 @@ export const LoginMain = () => {
   // 아이디/비밀번호 찾기 클릭시 찾기 모달창 팝업, 추가적으로 아이디/비밀번호 중 어떤걸 찾을지 prop할 대상을 지정
   const openSearchPwModalHandler = () => {
     setModal("openSearchPwModal");
+  };
+
+  // Enter=완료, ESC=닫기 작동, Backspace는 이전페이지효과를 내는것만 제한
+  const pressEnterEscHandler = (event) => {
+    if (event.key === "Enter" && modal === false)
+      loginHandler();
+    else if (event.key === "Escape")
+      setModal(false);
+    else if (event.key === "Backspace") {
+      if (event.target.tagName !== "INPUT" &&
+          event.target.tagName !== "TEXTAREA" &&
+          !event.target.isContentEditable) {
+        event.preventDefault();
+      }
+    }
   };
 
   return (

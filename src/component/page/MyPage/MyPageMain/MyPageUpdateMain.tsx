@@ -35,7 +35,7 @@ export const MyPageUpdateMain = () => {
   const dataFieldName:IUpdateInput = datafieldnameUpdateInput;
   const navigate = useNavigate();
 
-  // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
+  // userInfo.loginId가 세팅/변경될때, 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
   useEffect(() => {
     axios.get(MyPage.getUserInfo + "?loginId=" + userInfo.loginId)
       .then((res) => {
@@ -59,24 +59,16 @@ export const MyPageUpdateMain = () => {
       });
   }, [userInfo.loginId]);
 
-  // Enter=완료, ESC=닫기 작동
-  const pressEnterEscHandler = (event) => {
-    if (event.key === "Enter" 
-      && modal === false)
-      completeUpdateHandler();
-    else if (event.key === "Escape")
-      setModal(false);
-  }
-
   // 회원수정 완료버튼 누를시 작동
   // 1. 빈값검사 -> 2. 양식검사(날짜/이메일형식/전화번호형식) -> 3. 데이터전송
   const completeUpdateHandler = async () => {
     let isProblem:boolean = false;
     
-    // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
-    // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
     Object.entries(updateInput).some(([key, value]) => { // 입력값이 많아서 반복문처리, signupInput이 배열은 아니어서 forEach()/map()대신 Object.entries()
-      if (!value || value.length <= 0) {
+      
+      // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
+      // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
+      if (isProblem === false && (!value || value.length <= 0)) {
         if (key !== "detailAddress") { // 빈칸이어도 되는 속성들
           toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
           document.getElementById(key)?.focus();
@@ -84,29 +76,34 @@ export const MyPageUpdateMain = () => {
           return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐, 즉 문제발생하여 if문 입장시 검사 조기종료한다는 뜻
         }
       }
+
+      // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
+      if (isProblem === false) {
+        const phoneRegex = /^[0-9]([-]?[0-9])*$/;
+        const emailRegex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        const zipCodeRegex = /^[0-9]*$/;
+
+        const validationRules = {
+          birthday: { check: () => new Date(updateInput.birthday) > new Date(),
+                      message: "생년월일은 미래의 날짜일 수 없습니다." },
+          phone:    { check: () => !phoneRegex.test(updateInput.phone), // .test()는 정규식패턴에 맞으면 true를 반환
+                      message: "전화번호는 숫자로 시작해야하며 중간에만 '-'를 쓰실수는 있습니다." },
+          email:    { check: () => !emailRegex.test(updateInput.email),
+                      message: "이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다." },
+          zipcode:  { check: () => !zipCodeRegex.test(updateInput.zipCode),
+                      message: "우편번호 형식을 확인해주세요. 숫자만 가능합니다." },
+        }
+        
+        // 위 중복검사/양식검사와 적발시에 대한 안내메시지와 포커싱 설정
+        if (validationRules[key]?.check()) {
+          toast.info(validationRules[key].message);
+          document.getElementById(key)?.focus();
+          isProblem = true;
+        }
+      }
+
       return false; // 이 return값(false)는 continue같은 역할로 Object.entires()반복문을 다음 key아이템으로 순회시킴
     });
-    
-    // 2. 양식검사: 입력창에 대하여 지켜야할 정규식패턴 검사
-    const emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    const phoneRules = /^[0-9]([-]?[0-9])*$/;
-    const zipCodeRules = /^[0-9]*$/;
-
-    if (isProblem === false) {
-      if (new Date(updateInput.birthday) > new Date()) {
-        toast.info("생년월일은 미래의 날짜일 수 없습니다.");
-        isProblem = true;
-      } else if (!phoneRules.test(updateInput.phone)) {
-        toast.info("전화번호는 숫자로 시작해야하며 중간에만 '-'를 쓰실수는 있습니다.");
-        isProblem = true;
-      } else if (!emailRules.test(updateInput.email)) {
-        toast.info("이메일 형식을 확인해주세요. 숫자나 알파벳으로 시작해야하며 중간값으로 '-_.'를 넣으실 순 있습니다. 그리고 당연히 @와 메일 홈페이지까지도 작성하셔야 합니다.")
-        isProblem = true;
-      } else if (!zipCodeRules.test(updateInput.zipCode)) {
-        toast.info("우편번호 형식을 확인해주세요. 숫자만 가능합니다.");
-        isProblem = true;
-      }
-    }
 
     // 3. 데이터전송: 회원수정 입력정보 문제없음! 서버로 Update요청!
     if (isProblem === false) {
@@ -180,6 +177,15 @@ export const MyPageUpdateMain = () => {
   const updateBizHandler = () => {
     navigate("/react/company/companyUpdatePage.do");
   };
+
+  // Enter=완료, ESC=닫기 작동
+  const pressEnterEscHandler = (event) => {
+    if (event.key === "Enter" 
+      && modal === false)
+      completeUpdateHandler();
+    else if (event.key === "Escape")
+      setModal(false);
+  }
 
   return (
     <>

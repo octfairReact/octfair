@@ -21,27 +21,17 @@ export const MyPageUpdatePasswordModal = () => {
   const [, setModal] = useRecoilState<boolean>(modalState);
   const [password, setPassword] = useState<IPasswordInput>(defaultPasswordInput);
   const dataFieldName:IPasswordInput = datafieldnamePasswordInput;
-  
-  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
-  const closeModalHandler = () => {
-    setModal(false);
-  };
-
-  // Enter키를 누를시 완료버튼 효과를 작동
-  const completeEnterHandler = (event) => {
-    if (event.key === "Enter") 
-      completeWithdrawHandler();
-  };
 
   // 탈퇴요청 버튼 누를 시 작동
   // 1. 빈값검사 -> 2. 양식검사(비밀번호형식) -> 3. 데이터전송
   const completeWithdrawHandler = () => {
     let isProblem:boolean = false;
 
-    // 1. 빈값검사
-    // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
     Object.entries(password).some(([key, value]) => { // 입력창이 많아서 반복문처리, signupInput이 배열은 아니어서 forEach()/map()대신 Object.entries()
-      if (!value || value.length <= 0) {
+      
+      // 1. 빈값검사
+      // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
+      if (isProblem === false && (!value || value.length <= 0)) {
         if (true) { // 빈칸이어도 되는 속성들
           toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
           document.getElementById(key)?.focus();
@@ -49,21 +39,28 @@ export const MyPageUpdatePasswordModal = () => {
           return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐, 즉 문제발생하여 if문 입장시 검사 조기종료한다는 뜻
         }
       }
+    
+      // 2. 양식검사: password 입력창에 대하여 지켜야할 정규식패턴 검사
+      if (isProblem === false) {
+        const passwordRegex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+
+        const validationRules = {
+          newPasswd:        { check: () => !passwordRegex.test(password.newPasswd),// .test()는 정규식패턴에 맞으면 true를 반환
+                              message: "비밀번호는 숫자,영문자,특수문자 조합으로 8~15자리여야 합니다." },
+          newPasswdConfirm: { check: () => password.newPasswd !== password.newPasswdConfirm,
+                              message: "비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다." },
+        }
+        
+        // 위 중복검사/양식검사와 적발시에 대한 안내메시지와 포커싱 설정
+        if (validationRules[key]?.check()) {
+          toast.info(validationRules[key].message);
+          document.getElementById(key)?.focus();
+          isProblem = true;
+        }
+      }
+
       return false; // 이 return값(false)는 continue같은 역할로 Object.entires()반복문을 다음 key아이템으로 순회시킴
     });
-    
-    // 2. 양식검사: password 입력창에 대하여 지켜야할 정규식패턴 검사
-    const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
-
-    if (isProblem === false) {
-      if (!passwordRules.test(password.newPasswd)) {// .test()는 정규식패턴에 맞으면 true를 반환
-        toast.info("비밀번호는 숫자,영문자,특수문자 조합으로 8~15자리여야 합니다.");
-        isProblem = true;
-      } else if (password.newPasswd !== password.newPasswdConfirm) {
-        toast.info("비밀번호와 비밀번호확인에 입력하신 값이 일치하지 않습니다.")
-        isProblem = true;
-      }
-    }
 
     // 3. 데이터전송: 비번수정 입력정보 문제없음! 서버로 Update요청!
     if (isProblem === false) {
@@ -90,6 +87,17 @@ export const MyPageUpdatePasswordModal = () => {
         });
     }
   }
+
+  // Enter키를 누를시 완료버튼 효과를 작동
+  const completeEnterHandler = (event) => {
+    if (event.key === "Enter") 
+      completeWithdrawHandler();
+  };
+  
+  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
+  const closeModalHandler = () => {
+    setModal(false);
+  };
 
   return (
     <>

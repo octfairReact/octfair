@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { IManageApplicant, IManageApplicantListResponse } from "../../../../models/interface/IManageUser";
+import { IManageApplicant, IManageApplicantListResponse, defaultApplicant } from "../../../../models/interface/IManageUser";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../stores/modalState";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
@@ -17,7 +17,7 @@ export const ManageApplicantMain = () => {
   const [id, setId] = useState<string>();
 
   // 리스트(표)에 쓰이는 변수
-  const [userList, setUserList] = useState<IManageApplicant[]>(); // 아이템 리스트
+  const [userList, setUserList] = useState<IManageApplicant[]>([defaultApplicant]); // 아이템 리스트
   const [userCnt, setUserCnt] = useState<number>(0); // 총 아이템의 갯수 (리스트 페이지 갯수 x)
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -78,21 +78,23 @@ export const ManageApplicantMain = () => {
           </tr>
         </thead>
         <tbody>
-          {userList?.length > 0 ? (
-            userList?.map((user) => { return (
-              <tr key={user.userIdx} onClick={() => openUpdateUserModalHandler(user.loginId)}>
-                <StyledTd>{user.userIdx}</StyledTd>
-                <StyledTd>{user.loginId}</StyledTd>
-                <StyledTd>{user.name}</StyledTd>
-                <StyledTd>{user.email}</StyledTd>
-                <StyledTd>{new Date(user.regdate).toISOString().substring(0, 10)}</StyledTd>
-                <StyledTd><Button>정보수정</Button></StyledTd>
-              </tr>
-            );})) : (
-              <tr>
-                <StyledTd colSpan={6}>데이터가 없습니다.</StyledTd>
-              </tr>
-          )}
+        {userList[0]?.userIdx===-1 ? <tr>로딩중...</tr> :
+            userList?.length > 0 ? (
+              userList?.map((user) => { return (
+                <tr key={user.userIdx} onClick={() => openUpdateUserModalHandler(user.loginId)}>
+                  <StyledTd>{user.userIdx}</StyledTd>
+                  <StyledTd>{user.loginId}</StyledTd>
+                  <StyledTd>{user.name}</StyledTd>
+                  <StyledTd>{user.email}</StyledTd>
+                  <StyledTd>{new Date(user.regdate).toISOString().substring(0, 10)}</StyledTd>
+                  <StyledTd><Button>정보수정</Button></StyledTd>
+                </tr>
+              );})) : (
+                <tr>
+                  <StyledTd colSpan={6}>데이터가 없습니다.</StyledTd>
+                </tr>
+            )
+          }
         </tbody>
       </StyledTable>
       <PageNavigate
