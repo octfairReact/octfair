@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Container, ImageWrapper, StyledImage, LoadingMessage, ErrorMessage } from './styled';
 import axios from 'axios';
 
-export const ScrapingComponent = () => {
+export const MenuMain = () => {
   const [imageUrl, setImageUrl] = useState<string | 'loading' | 'error'>('loading');
 
   useEffect(() => {

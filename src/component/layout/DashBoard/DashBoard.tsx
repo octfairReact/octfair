@@ -5,7 +5,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import { useUserInfo } from "../../../hook/useUserInfo";
 import { CustomAlert } from "../../../common/CustomAlert";
-import { ScrapingComponent as MenuMain } from "../../page/Login/LoginMain/MenuMain";
+import { MenuMain } from "../../page/Login/LoginMain/MenuMain";
 import { toast, ToastContainer } from "react-toastify";
 import { Login } from "../../../pages/Login";
 import 'react-toastify/dist/ReactToastify.css';
