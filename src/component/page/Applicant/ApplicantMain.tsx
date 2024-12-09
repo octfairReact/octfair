@@ -13,12 +13,10 @@ import { PageNavigate } from "../../common/pageNavigation/PageNavigate";
 import { modalState } from "../../../stores/modalState";
 import { HistoryModal } from "../History/HistoryModal/HistoryModal";
 import { ApplicantPageNavigateStyled } from "../../common/pageNavigation/styledApplicant";
-//import '../../../common/styled/Applicant.css';
+import { toast } from "react-toastify";
 
 
 export const ApplicantMain = () => {
-    // const [applicants, setApplicants]  = useState([]);
-    // const [companyList, setCompanyList] = useState([]);
     const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [cPage, setCPage] = useState<number>();
@@ -27,7 +25,6 @@ export const ApplicantMain = () => {
     
     const [process, setProcess] = useState<string[]>([]); //채용과정 옵션 리스트
     const [keyword, setKeyword]  = useState<string>("서류심사중"); 
-   // const [keyword, setKeyword]  = useState<string>(process[0]); 
 
     const [count, setCount] = useState<number>(0); // 지원자 수
     const [selectedPostIdx, setSelectedPostIdx] = useState<number>();
@@ -46,21 +43,17 @@ export const ApplicantMain = () => {
     //     setProcess(process);
     // }, [applicantList]);
 
-
     //지원자 목록 불러오기 -> selectBox 선택에 따라서
     useEffect(() => {
         if(selectedPostIdx){
             getApplicantList();
             setMessage(""); //메세지 초기화            
-            // console.log("postIdx 잘 불러오는지 useEffect 에서 ------------------------------>" + selectedPostIdx);
         }       
     }, [selectedPostIdx, keyword]); //공고제목, 채용절차 상태 값 바뀔 때 마다 실행
 
     //지원자 목록 가져오기위한 postIdx 리스트 받아오기
     const getPostIndexList = async () => {
         const userParam = { loginId: userInfo.loginId, };
-        console.log("아이디는 "+userInfo.loginId);
-
         //requestParam 형식 --> encoded
         // await axios.post(Applicant.getListBody + "?loginId=" + encodeURIComponent(userInfo.loginId))
         //             .then((res) => {
@@ -69,19 +62,13 @@ export const ApplicantMain = () => {
         //             })
 
          const getList = await axios.post(Applicant.getPostIdx, userParam); //requestBody 형식
-        //const getList = await postApplicantApi<IApplicantListResponse>(Applicant.getListBody, userParam); //왜 작동 안하는지 모르겠음 제네릭..?
 
         if( getList ){
-            const initialPostIdx:number = getList.data.MDetail[0]?.postIdx;
-            console.log("initialPostIdxpostIdx==========================>" ,initialPostIdx)
+            const initialPostIdx:number = getList.data.MDetail[0]?.postIdx; //첫 번째 값으로 초기화
             setPostIdxList(getList.data.MDetail);
             setSelectedPostIdx(initialPostIdx); // 첫 번째 postIdx 선택  
-            //setSelectedTitle(response.data.MDetail[0].title); // 첫 번째 title 선택  
-            
         }        
     };
-
-    
     
     //지원자 목록 가져오기
     const getApplicantList = async(page?: number) => {   
@@ -126,7 +113,6 @@ export const ApplicantMain = () => {
                 setSelectedTitle(selectedApplicant.title); // 제목을 설정
             }
         }
-        console.log("useEffect postIdx로 title 찾는:", postIdxList);
     }, [selectedPostIdx, applicantList]); // selectedPostIdx가 변경될 때마다 실행
 
     // 공고제목 selectBox에서 선택된 값 처리
@@ -186,8 +172,6 @@ export const ApplicantMain = () => {
     // }
 
     const handleStatusChange = async (status: string, loginId: string, drop?: string) => {   
-        console.log("상태 업데이트 핸들러 파람 ==========================>" +status);
-        console.log("상태 업데이트 핸들러 로그인 아이디 파람 ==========================>" +loginId);
         //현재 상태에 따른 다음 상태 결정
         let nextKeyword = ""; //다음 상태를 지정할 변수
 
@@ -205,26 +189,20 @@ export const ApplicantMain = () => {
                 nextKeyword = '최종합격';
             }
 
-    
-
-            
-        
-
-        console.log("상태 업데이트 ============================================>" + nextKeyword);
         const param = {keyword: nextKeyword, postIdx: selectedPostIdx, loginId: loginId }
         const statusChange = await postApplicantApi<IApplicantPostResponse>(Applicant.statusUpdate, param);
 
         if(statusChange && statusChange.data.result ==="success"){
-            alert("성공");
+            toast("성공");
            
             await getApplicantList();
         }else{
             console.error("Failed to statusUpdate:", statusChange?.data);
+            toast.error("서버통신 실패, 담당자에게 문의하세요!");
         }
 
     }
-
-    
+   
 
 return(
     <>
