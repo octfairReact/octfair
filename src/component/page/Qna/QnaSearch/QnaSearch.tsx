@@ -39,6 +39,8 @@ export const QnaSearch = () => {
     }
   };
 
+  console.log("userInfo.userType", userInfo.userType);
+
   return (
     <>
       <QnaSearchStyled>
@@ -69,12 +71,12 @@ export const QnaSearch = () => {
             </>
           )}
           {/* 유저 타입 m일때만 보이게 하기  */}
-          {userInfo.userType === "B" || userInfo.userType === "A" ? (
-            <Button onClick={() => handlerMylist("my")}>내가 쓴 글</Button>
-          ) : null}
-          {userInfo.userType === "B" || userInfo.userType === "A" ? (
-            <Button onClick={handlerModal}>질문등록</Button>
-          ) : null}
+          {(userInfo?.userType === "B" || userInfo?.userType === "A") && (
+            <>
+              <Button onClick={() => handlerMylist("my")}>내가 쓴 글</Button>
+              <Button onClick={handlerModal}>질문등록</Button>
+            </>
+          )}
         </div>
       </QnaSearchStyled>
     </>

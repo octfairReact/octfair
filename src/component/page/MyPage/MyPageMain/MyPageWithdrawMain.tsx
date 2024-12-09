@@ -1,21 +1,20 @@
 import { Button, CautionText, NoticeContainer } from "./styled";
-import { withdrawModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { MyPageWithdrawModal } from "../MyPageModal/MyPageWithdrawModal";
 import { useRecoilState } from "recoil";
 
 export const MyPageWithdrawMain = () => {
-  const [withdrawModal, setWithdrawModal] = useRecoilState<boolean>(withdrawModalState);
+  const [modal, setModal] = useRecoilState<boolean>(modalState);
 
   // 회원탈퇴 버튼 누를시 회원탈퇴 관련 모달 팝업
   const withdrawHandler = () => {
-    if (withdrawModal === false)
-      setWithdrawModal(true);
+    setModal(true);
   }
 
   // ESC=닫기 작동
   const pressEscHandler = (event) => {
     if (event.key === "Escape")
-      setWithdrawModal(false);
+      setModal(false);
   };
 
   return (
@@ -28,7 +27,7 @@ export const MyPageWithdrawMain = () => {
           <CautionText> 안내 사항을 모두 확인하였으며, 이에 동의합니다. </CautionText>
           <Button onClick={withdrawHandler} style={{ width: '100px' }}>확인</Button>
         </NoticeContainer>
-        {withdrawModal !== false && (
+        {modal !== false && (
           <MyPageWithdrawModal/>
         )}
       </>

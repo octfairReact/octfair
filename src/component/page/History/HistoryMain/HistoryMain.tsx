@@ -18,6 +18,7 @@ export const HistoryMain = () => {
     const navigate = useNavigate();
     
     const [historyList, setHistoryList] = useState<IHistory[]>([]);
+
     const [historyCnt, setHistoryCnt] = useState<number>(0);
     const [currentPage] = useState<number>(1);
     const { searchKeyWord } = useContext(HistoryContext);
