@@ -373,7 +373,7 @@ export const CompanyWritePage = () => {
                 <button type="submit" className="btnType blue" id="btnCompanySave">
                   <span>등록</span>
                 </button>
-                <button type="button" className="btnType gray" onClick={() => navigate("/react/mypage/update.do")}>
+                <button type="button" className="btnType gray" onClick={() => navigate(-1)}>
                   <span>돌아가기</span>
                 </button>
               </div>
