@@ -1,7 +1,7 @@
 import { CancelModalStyled } from "./Styled";
-import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
 import { useRecoilState } from "recoil";
 import { modalState } from "../../../../stores/modalState";
+import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
 
 interface CancelModalProps {
   appId: number;
