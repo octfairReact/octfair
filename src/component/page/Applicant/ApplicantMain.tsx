@@ -326,12 +326,6 @@ return(
  {modal && (
                 <HistoryModal
                     index={0}
-                    setModal={setModal}
-                    resumeInfo={{ userNm: '', email: '', phone: '', resTitle: '', shortIntro: '', perStatement: '', proLink: '', fileName: ''}}
-                    careerInfo={[]}
-                    eduInfo={[]}
-                    skillInfo={[]}
-                    certInfo={[]}
                     resIdx={resIdx}
                 />
             )}
