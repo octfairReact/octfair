@@ -71,19 +71,12 @@ export const LoginMain = () => {
     setModal("openSearchPwModal");
   };
 
-  // Enter=완료, ESC=닫기 작동, Backspace는 이전페이지효과를 내는것만 제한
+  // Enter=완료, ESC=닫기 작동
   const pressEnterEscHandler = (event) => {
     if (event.key === "Enter" && modal === false)
       loginHandler();
     else if (event.key === "Escape")
       setModal(false);
-    else if (event.key === "Backspace") {
-      if (event.target.tagName !== "INPUT" &&
-          event.target.tagName !== "TEXTAREA" &&
-          !event.target.isContentEditable) {
-        event.preventDefault();
-      }
-    }
   };
 
   return (
