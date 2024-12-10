@@ -8,23 +8,25 @@
 
 <table>
   <thead>
-    <tr>
-      <th style="background-color: orange; color: white;">황윤기</th>
-      <th style="background-color: orange; color: white;">이민서</th>
-      <th style="background-color: orange; color: white;">손신효</th>
+    <tr style="background-color: orange;">
+      <th>헤더1</th>
+      <th>헤더2</th>
+      <th>헤더3</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>데이터 1</td>
-      <td>데이터 2</td>
-      <td>데이터 3</td>
+      <td>값 1</td>
+      <td>값 2</td>
+      <td>값 3</td>
+    </tr>
+    <tr>
+      <td>값 4</td>
+      <td>값 5</td>
+      <td>값 6</td>
     </tr>
   </tbody>
 </table>
-
-
-
 
 | 유성찬 | 우황희 | 김호관 |
 |--------|--------|--------|
@@ -79,5 +81,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;
