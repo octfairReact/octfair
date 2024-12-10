@@ -23,14 +23,13 @@ export const HireWrite = () => {
   const startDate = useRef<Date | null>(null); //시작날짜
   const endDate = useRef<Date | null>(null);  //종료날짜
   const expRequired = useRef<string[]>([]);
-  const expYears = useRef<HTMLSelectElement | null>(null);
 
-  const inputRefs = useRef([]); //참조 배열 초기화 useRef<HTMLInputElement> 
-  const addToRefs = (el) => {
-      if(el && !inputRefs.current.includes(el)){
-        inputRefs.current.push(el);
+  const inputRefs = useRef<{name:string, ref: HTMLInputElement | HTMLSelectElement}[]>([]); //참조 배열 초기화 useRef<HTMLInputElement> 
+  const addToRefs = (name:string, el:HTMLInputElement | HTMLSelectElement) => {
+      if(el && !inputRefs.current.find((ref) => ref.name === name)) {
+        inputRefs.current.push({ name, ref: el });
       }
-    };
+    };  
   
   const [hireWrite, setHireWrite] = useState<IHireWrite>();
   const [fileData, setFileData] = useState<File>();
@@ -73,22 +72,19 @@ export const HireWrite = () => {
       return;
     }
     setRecruitProcessList([...recruitProcessList, trimmedProcess]); //기존값 + 새로입력한값
-    //입력 필드 초기화
-    const hirProcessInput = inputRefs.current.find(
-      (input) => input.name === 'hirProcess'
-    );
-    hirProcessInput.value = "";
+    
+     //입력 필드 초기화
+     setRecruitProcess(""); // recruitProcess 상태를 초기화
+     handleProcessSubmit();  // 추가: 초기화 시 ref도 업데이트
+    
   };
 
-  //채용과정 초기화 버튼
-  const handleClickRefresh = () => {
-    setRecruitProcessList([]);
-    //입력 필드 초기화
-    const hirProcessInput = inputRefs.current.find(
-      (input) => input.name === 'hirProcess'
-    );
-    hirProcessInput.value = "";
-  };
+//채용과정 초기화 버튼
+const handleClickRefresh = () => {
+  setRecruitProcessList([]);
+  setRecruitProcess(""); // recruitProcess 상태를 초기화
+  handleProcessSubmit();  // 추가: 초기화 시 ref도 업데이트
+};
 
   //채용과정 처리 후 ref에 저장
   const handleProcessSubmit = () => {
@@ -97,7 +93,7 @@ export const HireWrite = () => {
       (input) => input.name === 'hirProcess'
     );
     if(hirProcessInput){
-      hirProcessInput.value = combineProcess;
+      hirProcessInput.ref.value = combineProcess;
     }
 
     // if (hirProcess.current) {
@@ -118,12 +114,12 @@ export const HireWrite = () => {
       )
 
       if(/^\d*$/g.test(value)){
-        if(inputField) inputField.value = value; 
+        if(inputField) inputField.ref.value = value; 
       }
       else {
         toast.warn(`${name === 'salary' ? '급여는' : '모집인원은'} 숫자만 입력 가능합니다`)
         setTimeout(() => {
-          if(inputField) inputField.value = ""; //초기화
+          if(inputField) inputField.ref.value = ""; //초기화
         }, 0);
       }
     }
@@ -157,11 +153,21 @@ export const HireWrite = () => {
       const selectedValues = updatedCheckBox
         .filter((checkBox) => checkBox.checked) //선택된 항목만 추출
         .map((checkBox) => checkBox.label); //라벨값만 추출
-      expRequired.current = selectedValues; //ref에 저장
+  
+      // expRequired 값 갱신
+      expRequired.current = selectedValues; // expRequired에 체크된 값 저장
+      
+  // inputRefs에 체크박스 값 동기화
+  const checkboxGroupRef = inputRefs.current.find((input) => input.name === "checkboxGroup");
+    if (checkboxGroupRef?.ref) {
+      (checkboxGroupRef.ref as HTMLInputElement).value = selectedValues.join(", ");
+    }
 
-      return updatedCheckBox; //수정된 상태를 반환
+    return updatedCheckBox; //수정된 상태를 반환
     });
+
   };
+  
 
   //파일 선택 핸들러
   const handleFilechange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -176,20 +182,23 @@ export const HireWrite = () => {
     const reqiredFields = {
       title: "채용제목을", 
       salary: "급여를", 
-      opening: "모집인원을", 
+      openings: "모집인원을", 
       workLocation: "근무지역을", 
-      hirProcess: "채용절차를", 
+      //hirProcess: "채용절차를", 
       posDescription: "포지션 설명을", 
       reqQualifications: "자격조건을"
+      
     };
 
-    const validation = 
-    inputRefs.current.some((input) => {
-      if(reqiredFields[input.name] && !input.value){
-          toast.warn(`"${reqiredFields[input.name]}" 입력해 주세요`)
-          return true;   
-      }
-    })
+   
+  // 필드를 순차적으로 검사
+  for (const input of inputRefs.current) {
+    if (reqiredFields[input.name] && !input.ref.value) {
+      // 해당 필드가 비어있을 때만 알림을 띄움
+      toast.warn(`"${reqiredFields[input.name]}" 입력해 주세요`);
+      return;  // 알림을 띄운 후, 즉시 종료하여 다른 필드는 검사하지 않음
+    }
+  }
 
     if (!checkBox.some((checkbox) => checkbox.checked)) {
       toast.warn("경력 여부를 선택해주세요.");
@@ -204,29 +213,36 @@ export const HireWrite = () => {
       toast.warn("종료 날짜를 선택해주세요.");
       return;
     }
-    if (!recruitProcessList.length) {
+    if (recruitProcessList.length === 0) {
       toast.warn("채용 절차를 입력하고 등록 버튼을 눌러주세요.");
       return;
     }
 
-    const expRequiredString = expRequired.current.join(","); // 배열을 string으로 전환 예) "신입, 경력"
+
     handleProcessSubmit();
     const fileForm = new FormData();
-    
+    // expRequired 배열을 문자열로 변환
+    const expRequiredString = expRequired.current.join(", "); 
     const textData = {
       expRequired: expRequiredString,
-      expYears: year,
       startDate: startDate.current ? formatDate(startDate.current) : null,
       endDate: endDate.current ? formatDate(endDate.current) : null,
       loginId: userInfo?.loginId,
     };
 
     //HTMLInputElement 값들 textData에 담기
-    inputRefs.current.forEach((input) => {
-      if(input && input.name){
-        textData[input.name] = input.value; //name 속성을 키로 사용
+    inputRefs.current.forEach(({name, ref}) => {
+      if(ref){
+        textData[name] = ref.value; //name 속성을 키로 사용
       }
     });
+
+        // //HTMLInputElement 값들 textData에 담기
+        // inputRefs.current.forEach((input) => {
+        //   if(input && input.name){
+        //     textData[input.name] = input.value; //name 속성을 키로 사용
+        //   }
+        // });
 
     fileData && fileForm.append("file", fileData);
     fileForm.append("text", new Blob([JSON.stringify(textData)], { type: "application/json" }));
@@ -269,7 +285,7 @@ export const HireWrite = () => {
           <input
             type="text"
             name="title"
-            ref={addToRefs}
+            ref={(el) => addToRefs("title", el)}
             //placeholder="채용 제목을 입력하세요"
             style={{ width: "100%", padding: "8px" }}
           />
@@ -283,6 +299,8 @@ export const HireWrite = () => {
               <label key={checkbox.id} style={{ display: "inline-flex", alignItems: "center" }}>
                 <input
                   type="checkbox"
+                  name={`checkbox-${checkbox.id}`}
+                  ref={(el) => addToRefs("checkboxGroup", el)}
                   checked={checkbox.checked}
                   onChange={() => handleCheckboxChange(checkbox.id)}
                 />
@@ -296,7 +314,8 @@ export const HireWrite = () => {
           <select
             value={year}
             onChange={handleChange}
-            ref={expYears}
+            name="expYears"
+            ref={(el) => addToRefs("expYears", el)}
             disabled={!checkBox.find((checkbox) => checkbox.id === 2 && checkbox.checked)}
             style={{ width: "100%", padding: "8px" }}
           >
@@ -314,7 +333,7 @@ export const HireWrite = () => {
           <input
             type="text"
             name="salary"
-            ref={addToRefs}
+            ref={(el) => addToRefs("salary", el)}
             onChange={handleInputAlert}
             placeholder="급여는 숫자만 입력 가능합니다"
             style={{ width: "100%", padding: "8px" }}
@@ -325,8 +344,8 @@ export const HireWrite = () => {
         <td>
           <input
             type="text"
-            name="opening"
-            ref={addToRefs}
+            name="openings"
+            ref={(el) => addToRefs("openings", el)}
             onChange={handleInputAlert}
             placeholder="모집인원은 숫자만 입력 가능합니다"
             style={{ width: "100%", padding: "8px" }}
@@ -340,7 +359,7 @@ export const HireWrite = () => {
           <input
             type="text"
             name="workLocation"
-            ref={addToRefs}
+            ref={(el) => addToRefs("workLocation", el)}
             //placeholder="근무지역을 입력하세요"
             style={{ width: "100%", padding: "8px" }}
           />
@@ -350,7 +369,7 @@ export const HireWrite = () => {
           <input
             type="text"
             name="posDescription"
-            ref={addToRefs}
+            ref={(el) => addToRefs("posDescription", el)}
             style={{ width: "100%", padding: "8px" }}
           />
         </td>
@@ -376,8 +395,9 @@ export const HireWrite = () => {
           <div className="recruit-process-wrapper" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <input
               type="text"
-              name="hirProcess"
-              ref={addToRefs}
+               name="hirProcess"
+              value={recruitProcess}
+             ref={(el) => addToRefs("hirProcess", el)}
               onChange={(e) => setRecruitProcess(e.target.value)}
               placeholder="과정을 하나씩 적은 후 절차등록 버튼을 눌러주세요"
               style={{ flex: 1, padding: "8px", width: "500px"}}
@@ -400,7 +420,7 @@ export const HireWrite = () => {
           <input
             type="text"
             name="reqQualifications"
-            ref={addToRefs}
+            ref={(el) => addToRefs("reqQualifications", el)}
             //placeholder="자격조건을 입력하세요"
             style={{ width: "100%", padding: "8px" }}
           />
@@ -412,7 +432,7 @@ export const HireWrite = () => {
           <input
             type="text"
             name="prefQualifications"
-            ref={addToRefs}
+            ref={(el) => addToRefs("prefQualifications", el)}
             //placeholder="우대사항을 입력하세요"
             style={{ width: "100%", padding: "8px" }}
           />
@@ -424,7 +444,7 @@ export const HireWrite = () => {
           <input
             type="text"
             name="duties"
-            ref={addToRefs}
+            ref={(el) => addToRefs("duties", el)}
             //placeholder="업무내용을 입력하세요"
             style={{ width: "100%", padding: "8px" }}
           />
@@ -436,7 +456,7 @@ export const HireWrite = () => {
           <input
             type="text"
             name="benefits"
-            ref={addToRefs}
+            ref={(el) => addToRefs("benefits", el)}
             //placeholder="혜택 및 복지내용을 입력하세요"
             style={{ width: "100%", padding: "8px" }}
           />

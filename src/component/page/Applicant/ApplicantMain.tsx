@@ -93,16 +93,14 @@ export const ApplicantMain = () => {
             setApplicantList([]);
             setCount(getList.data.count);
             setCPage(currentPage);
-            setMessage("지원자가 없습니다")
-            
+            setMessage("지원자가 없습니다")   
         }
              
     }
     //loginId
     useEffect(() => {
          if (sessionStorage.getItem("userInfo")) {
-           setUserInfo(JSON.parse(sessionStorage.getItem("userInfo")!));
-           console.log(sessionStorage.getItem("userInfo"));       
+           setUserInfo(JSON.parse(sessionStorage.getItem("userInfo")!));      
          }
        }, []);
     
@@ -119,7 +117,6 @@ export const ApplicantMain = () => {
     const handleTitleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const selectPost = Number(e.target.value);
         setSelectedPostIdx(selectPost); // postIdx 업데이트
-        console.log("핸들러 체인지 시작:", postIdxList);
     };
     // 채용절차 selectBox 선택된 값 처리
     const handleKeywordSelectChange = async (e: ChangeEvent<HTMLSelectElement>) => {
