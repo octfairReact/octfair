@@ -10,6 +10,9 @@
 |--------|--------|--------|
 | <div align="center"><a href="https://github.com/hykworld"><img src="https://avatars.githubusercontent.com/u/70290522" width="250" height="250" /></a><br><a href="https://github.com/hykworld">hykworld</a></div> | <div align="center"><a href="https://github.com/Dev-miiing"><img src="https://avatars.githubusercontent.com/u/74334443" width="250" height="250" /></a><br><a href="https://github.com/Dev-miiing">Dev-miiing</a></div> | <div align="center"><a href="https://github.com/shinyorrr"><img src="https://avatars.githubusercontent.com/u/71862647" width="250" height="250" /></a><br><a href="https://github.com/shinyorrr">shinyorrr</a></div> |
 
+| [<img src="https://avatars.githubusercontent.com/u/70290522?v=4" height=150 width=150> <br/> @hykworld](https://github.com/hykworld) | [<img src="https://avatars.githubusercontent.com/u/74334443?v=4" height=150 width=150> <br/> @Dev-miiing](https://github.com/Dev-miiing) | [<img src="https://avatars.githubusercontent.com/u/71862647?v=4" height=150 width=150> <br/> @shinyorrr](https://github.com/shinyorrr)
+
+
 | 유성찬 | 우황희 | 김호관 |
 |--------|--------|--------|
 | <div align="center"><a href="https://github.com/hykworld"><img src="https://avatars.githubusercontent.com/u/70290522" width="250" height="250" /></a><br><a href="https://github.com/hykworld">hykworld</a></div> | <div align="center"><a href="https://github.com/Dev-miiing"><img src="https://avatars.githubusercontent.com/u/74334443" width="250" height="250" /></a><br><a href="https://github.com/Dev-miiing">Dev-miiing</a></div> | <div align="center"><a href="https://github.com/shinyorrr"><img src="https://avatars.githubusercontent.com/u/71862647" width="250" height="250" /></a><br><a href="https://github.com/shinyorrr">shinyorrr</a></div> |
