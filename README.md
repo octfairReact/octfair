@@ -4,6 +4,8 @@
 
 - 이 프로젝트는 **리액트**로 구현된 **채용박람회 웹 애플리케이션**입니다. 사용자들은 다양한 채용 정보를 확인하고, 관심 있는 직무에 지원할 수 있습니다. 기존 Spring 기반 백엔드와 연동하여, 채용 공고 리스트와 상세 정보를 제공하며, 사용자 경험을 개선하기 위한 다양한 기능을 제공합니다.
 
+<br>
+
 ## 2️⃣ 팀원 구성
 
 <div align="center">
@@ -21,10 +23,12 @@
 
 ## 3️⃣ 개발 환경
 
-- **Front** : React 18, React Router, axios, styled-components
+- **Front** : ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![axios badge](https://img.shields.io/badge/axios-%2B-blue?style=flat&logo=axios)
+ ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) ![Context-API](https://img.shields.io/badge/Context--Api-000000?style=for-the-badge&logo=react) ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
+- React 18, React Router, axios, styled-components
 - **Back-end** : Spring Framework (기존 API 연동)
 - **버전 관리** : Git, GitHub
-- 
+  
 <br>
 
 ## 4️⃣ 기술 스택
