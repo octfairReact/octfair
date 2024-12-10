@@ -58,9 +58,6 @@
      │     ├── css_sprites.png
      │     ├── logo-404.svg
      │     └── logo-home.svg
-     │          .
-     │          .
-     │          .
      ├── atoms
      │     ├── LoginData.js
      │     └── LoginState.js
@@ -104,6 +101,7 @@
      │     └── privateRoutesRev.jsx  
      └── styles
            └── Globalstyled.jsx
+
 ```
 
 <br>
