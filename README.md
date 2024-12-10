@@ -16,10 +16,7 @@
 
 | 황윤기     | 이민서     | 손신효 |
 |----------|----------|----------------|
-| <div align="center"><a href="https://github.com/hykworld"><img src="https://avatars.githubusercontent.com/u/70290522" width="100" height="100" /></a><br><a href="https://github.com/hykworld">hykworld</a></div> | <div align="center"><a href="https://github.com/Dev-miiing"><img src="https://avatars.githubusercontent.com/u/74334443" width="100" height="100" /></a><br><a href="https://github.com/Dev-miiing">Dev-miiing</a></div> | <div align="center"><a href="https://github.com/shinyorrr"><img src="https://avatars.githubusercontent.com/u/71862647" width="100" height="100" /></a><br><a href="https://github.com/shinyorrr">shinyorrr</a></div> |
-
-
-
+| <div align="center"><a href="https://github.com/hykworld"><img src="https://avatars.githubusercontent.com/u/70290522" width="150" height="150" /></a><br><a href="https://github.com/hykworld">hykworld</a></div> | <div align="center"><a href="https://github.com/Dev-miiing"><img src="https://avatars.githubusercontent.com/u/74334443" width="150" height="150" /></a><br><a href="https://github.com/Dev-miiing">Dev-miiing</a></div> | <div align="center"><a href="https://github.com/shinyorrr"><img src="https://avatars.githubusercontent.com/u/71862647" width="150" height="150" /></a><br><a href="https://github.com/shinyorrr">shinyorrr</a></div> |
 
 
 ## 3️⃣ 개발 환경
