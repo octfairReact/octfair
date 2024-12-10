@@ -6,9 +6,19 @@
 
 ## 2️⃣ 팀원 구성
 
-| <span style="background-color:orange; color:white;">황윤기</span> | <span style="background-color:orange; color:white;">이민서</span> | <span style="background-color:orange; color:white;">손신효</span> |
-|------------------------------------------------------------|------------------------------------------------------------|------------------------------------------------------------|
-| 데이터 1                                                   | 데이터 2                                                   | 데이터 3                                                   |
+<table>
+  <tr>
+    <td style="background-color: orange; color: white;">황윤기</td>
+    <td style="background-color: orange; color: white;">이민서</td>
+    <td style="background-color: orange; color: white;">손신효</td>
+  </tr>
+  <tr>
+    <td>데이터 1</td>
+    <td>데이터 2</td>
+    <td>데이터 3</td>
+  </tr>
+</table>
+                                                | 데이터 2                                                   | 데이터 3                                                   |
 
 
 | 유성찬 | 우황희 | 김호관 |
