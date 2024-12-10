@@ -29,18 +29,14 @@
 
 ☮ **Front** : ![React badge](https://img.shields.io/badge/React-18.x-61DAFB?style=flat&logo=react) ![TypeScript badge](https://img.shields.io/badge/TypeScript-4.5-3178C6?style=flat&logo=typescript) ![Recoil](https://img.shields.io/badge/Recoil-000000?style=flat&logo=react&logoColor=white) ![Recoil-persist](https://img.shields.io/badge/Recoil--persist-000000?style=flat&logo=react&logoColor=white) ![React Router badge](https://img.shields.io/badge/React_Router-v6-CA4245?style=flat&logo=react-router) ![Axios badge](https://img.shields.io/badge/axios-0.27.2-5A29E8?style=flat&logo=axios) ![Styled-components badge](https://img.shields.io/badge/styled--components-5.3.0-DB7093?style=flat&logo=styled-components) 
 <br>
-
 ☯ **Back-end** : ![Node.js badge](https://img.shields.io/badge/Node.js-16.x-339933?style=flat&logo=node.js) ![Spring badge](https://img.shields.io/badge/Spring_Framework-5.x-brightgreen?style=flat&logo=spring) ![Java badge](https://img.shields.io/badge/Java-18-red?style=flat&logo=java)
 <br>
-
 ✡ **Database** : ![DBeaver](https://img.shields.io/badge/DBeaver-3A76F0?style=flat&logo=dbeaver&logoColor=white) ![MySQL badge](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql)
 <br>
 ☦ **Version Control** : ![GitHub badge](https://img.shields.io/badge/GitHub-black?style=flat&logo=github) ![GitHub badge](https://img.shields.io/badge/GitHub-2.x-lightgray?style=flat&logo=github) ![SVN](https://img.shields.io/badge/SVN-%23FF4500?style=flat&logo=subversion&logoColor=%23fff)
 <br>
-
 ⛎ **Build Tools** : ![npm badge](https://img.shields.io/badge/npm-8.19.0-CB3837?style=flat&logo=npm) ![Maven](https://img.shields.io/badge/Maven-C71A36?style=flat&logo=apache-maven&logoColor=white)
 <br>
-
 ♈ **IDE/Editor** : ![VS Code badge](https://img.shields.io/badge/VS_Code-1.78-0078D4?style=flat&logo=visual-studio-code) ![Eclipse badge](https://img.shields.io/badge/Eclipse-2023-2C2255?style=flat&logo=eclipse)
 
 <br>
