@@ -17,6 +17,9 @@
 | 황윤기     | 이민서     | 손신효 |
 |----------|----------|----------------|
 | ![황윤기](https://avatars.githubusercontent.com/u/hykworld) | ![이민서](https://avatars.githubusercontent.com/u/Dev-miiing) |![손신효](https://avatars.githubusercontent.com/u/shinyorrr) |
+| 황윤기     | 이민서     | 손신효 |
+|----------|----------|----------------|
+| ![황윤기](https://avatars.githubusercontent.com/u/70290522) | ![이민서](https://avatars.githubusercontent.com/u/74334443) | ![손신효](https://avatars.githubusercontent.com/u/71862647) |
 
 
 
