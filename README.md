@@ -16,7 +16,7 @@
 
 | 황윤기     | 이민서     | 손신효 |
 |----------|----------|----------------|
-| <center>[![황윤기](https://avatars.githubusercontent.com/u/70290522)](https://github.com/hykworld) <br> <div style="text-align: center;"><a href="https://github.com/hykworld">hykworld</a></div></center> | <center>[![이민서](https://avatars.githubusercontent.com/u/74334443)](https://github.com/Dev-miiing) <br> <div style="text-align: center;"><a href="https://github.com/Dev-miiing">Dev-miiing</a></div></center> | <center>[![손신효](https://avatars.githubusercontent.com/u/71862647)](https://github.com/shinyorrr) <br> <div style="text-align: center;"><a href="https://github.com/shinyorrr">shinyorrr</a></div></center> |
+| <div align="center"><a href="https://github.com/hykworld"><img src="https://avatars.githubusercontent.com/u/70290522" width="100" height="100" /></a><br><a href="https://github.com/hykworld">hykworld</a></div> | <div align="center"><a href="https://github.com/Dev-miiing"><img src="https://avatars.githubusercontent.com/u/74334443" width="100" height="100" /></a><br><a href="https://github.com/Dev-miiing">Dev-miiing</a></div> | <div align="center"><a href="https://github.com/shinyorrr"><img src="https://avatars.githubusercontent.com/u/71862647" width="100" height="100" /></a><br><a href="https://github.com/shinyorrr">shinyorrr</a></div> |
 
 
 
