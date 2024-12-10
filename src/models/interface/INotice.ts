@@ -4,6 +4,7 @@ export interface INoitce {
   content: string;
   author: string;
   createdDate: string;
+  logicalPath: string | null;
 }
 
 export interface IPostResponse {
