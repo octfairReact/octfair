@@ -5,7 +5,7 @@ import { IPost, IPostListResponse } from "../../../../models/interface/IPost";
 import { PostContext } from "../../../../api/provider/PostProvider";
 import { ManagePost } from "../../../../api/api";
 import { postPostApi } from "../../../../api/postPostApi";
-import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
+import { StyledTd, StyledTh } from "../../../common/styled/StyledTable";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";

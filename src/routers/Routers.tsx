@@ -4,14 +4,10 @@ import { DashBoard } from "../component/layout/DashBoard/DashBoard";
 import { NotFound } from "../component/common/NotFound/NotFound";
 import { Notice } from "../pages/Notice";
 import { History } from "../pages/History";
-import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
 import { Hire } from "../pages/HireMain";
 import { HireAdd } from "../pages/HireWrite";
-import { Post } from "../pages/Post";
+import { PostPage } from "../pages/PostPage";
 import { ManagePostPage } from "../pages/ManagePostPage";
-import { CompanyDetail } from "../pages/Company/CompanyDetail";
-import { CompanyWrite } from "../pages/Company/CompanyWrite";
-import { CompanyUpdate } from "../pages/Company/CompanyUpdate";
 import { MyPageUpdate } from "../pages/MyPageUpdate";
 import { MyPageWithdraw } from "../pages/MyPageWithdraw";
 import { Resume } from "../pages/Resume";
@@ -22,6 +18,11 @@ import { Applicant } from "../pages/Applicant";
 import { QnA } from "../pages/QnA";
 import { ManageApplicant } from "../pages/ManageApplicant";
 import { ManageBiz } from "../pages/ManageBiz";
+import { CompanyWritePage } from "../component/page/company/CompanyWritePage/CompanyWritePage";
+import { CompanyUpdatePage } from "../component/page/company/CompanyUpdatePage/CompanyUpdatePage";
+import { CompanyDetailPage } from "../component/page/company/CompanyDetail/CompanyDetailPage";
+import { MenuMain } from "../component/page/Login/LoginMain/MenuMain";
+import { ImageCardList } from "../component/page/Login/LoginMain/ImageCardList";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -31,6 +32,13 @@ const routers: RouteObject[] = [
     element: <DashBoard />,
 
     children: [
+      {
+        path: "",
+        element:  <>
+                    <MenuMain />, 
+                    {/* <ImageCardList /> */}
+                  </>
+      },
       {
         path: "apply",
         children: [
@@ -44,7 +52,6 @@ const routers: RouteObject[] = [
         path: "board",
         children: [
           { path: "notice.do", element: <Notice /> },
-          { path: "notice.do/:noticeIdx", element: <NoticeRouter /> },
           { path: "faq.do", element: <FaQ /> },
           { path: "qna.do", element: <QnA /> },
         ],
@@ -52,18 +59,18 @@ const routers: RouteObject[] = [
       {
         path: "company",
         children: [
-          { path: "companyWritePage.do", element: <CompanyWrite /> },
-          { path: "companyUpdatePage.do", element: <CompanyUpdate /> },
+          { path: "companyWritePage.do", element: <CompanyWritePage /> },
+          { path: "companyUpdatePage.do", element: <CompanyUpdatePage /> },
           {
             path: "companyDetailPage.do/:postIdx/:bizIdx", // :postIdx와 :bizIdx는 URL 파라미터로 취급됩니다.
-            element: <CompanyDetail />,
+            element: <CompanyDetailPage />,
           },
         ],
       },
       {
         path: "jobs",
         children: [
-          { path: "posts.do", element: <Post /> },
+          { path: "posts.do", element: <PostPage /> },
           { path: "scrap.do", element: <Scrap /> },
         ],
       },
@@ -80,8 +87,8 @@ const routers: RouteObject[] = [
         path: "manage-post",
         children: [
           { path: "managePostDetailBody.do", element: <ManagePostPage /> },
-          { path: "approval.do", element: <Post /> },
-          { path: "post.do", element: <Post /> },
+          { path: "approval.do", element: <PostPage /> },
+          { path: "post.do", element: <PostPage /> },
         ],
       },
       {

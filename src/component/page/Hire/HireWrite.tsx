@@ -10,7 +10,7 @@ import { StyledTable, StyledTd, StyledTh } from "../../common/styled/StyledTable
 import Calendar from "../../Calendar";
 import { StyledTableHire } from "../../common/styled/StyledTableHire";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AllDetail, companyDetail, IPostDetail } from "../../../models/interface/IPost";
+import { IAllDetail, IPostDetail } from "../../../models/interface/IPost";
 import { postPostApi } from "../../../api/postPostApi";
 import { StyledButton } from "../../common/styled/StyledButton";
 import { toast } from "react-toastify";
@@ -263,7 +263,7 @@ const handleClickRefresh = () => {
       if (!postIdx || !bizIdx) return; // 유효하지 않으면 요청하지 않음
       const apiUrl = ManagePost.getpostDetail(postIdx, bizIdx);
       try {
-        const response = await postPostApi<AllDetail>(apiUrl, { postIdx, bizIdx });
+        const response = await postPostApi<IAllDetail>(apiUrl, { postIdx, bizIdx });
         setMDetail(response.data.postDetail);
 
 

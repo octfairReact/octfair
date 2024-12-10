@@ -2,7 +2,7 @@ import { useRecoilState } from "recoil";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { withdrawModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { MyPage } from "../../../../api/api";
 import { toast } from "react-toastify";
 import {
@@ -18,20 +18,9 @@ import {
 } from "./styled";
 
 export const MyPageWithdrawModal = () => {
-  const [withdrawModal, setWithdrawModal] = useRecoilState<boolean>(withdrawModalState);
+  const [, setModal] = useRecoilState<boolean>(modalState);
   const [password, setPassword] = useState<string>();
   const navigate = useNavigate();
-
-  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
-  const closeModalHandler = () => {
-    if (withdrawModal !== false)
-      setWithdrawModal(false);
-  };
-
-  // Enter키를 누를시 완료버튼 효과를 작동
-  const completeEnterHandler = (event) => {
-    if (event.key === "Enter") completeWithdrawHandler();
-  };
 
   // 탈퇴요청 버튼 누를 시 작동
   // 1. 빈값검사 -> 2. 양식검사(비밀번호형식) -> 3. 탈퇴의사 재확인 -> 4. 데이터전송
@@ -39,12 +28,13 @@ export const MyPageWithdrawModal = () => {
     let isProblem:boolean = false;
 
     // 1. 빈값검사
-    if ( !password || password.length <= 0) {
+    if (isProblem === false && (!password || password.length <= 0)) {
       toast.info("비밀번호를 입력해 주세요!");
       document.getElementById(password)?.focus();
       isProblem = true;
     }
     
+    /* ***** 아래코드는 원랜 정상코드이나 개발/테스트 시 편의를 위해 임시 주석처리 해놓은 상태 ***** */
     // // 2. 양식검사: password 입력창에 대하여 지켜야할 정규식패턴 검사
     // const passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 
@@ -77,11 +67,21 @@ export const MyPageWithdrawModal = () => {
     }
   }
 
+  // Enter키를 누를시 완료버튼 효과를 작동
+  const completeEnterHandler = (event) => {
+    if (event.key === "Enter") completeWithdrawHandler();
+  };
+
+  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
+  const closeModalHandler = () => {
+    setModal(false);
+  };
+
   return (
     <>
-      <ModalOverlay onMouseDown={closeModalHandler}>              {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
-        <ModalStyled onMouseDown={(e) => e.stopPropagation()}>    {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
-          <Table onKeyDown={completeEnterHandler} tabIndex={-1}> {/* 'tabIndex={-1}' 의미: 모달의 포커싱을 없애서 부모페이지의 ESC닫기Handler 작동을 가능하게 하는 용도 */}
+      <ModalOverlay onMouseDown={closeModalHandler}>           {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+        <ModalStyled onMouseDown={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
+          <Table onKeyDown={completeEnterHandler} tabIndex={-1}>     {/* 'tabIndex={-1}' 의미: 모달의 포커싱을 없애서 부모페이지의 ESC닫기Handler 작동을 가능하게 하는 용도 */}
           <TableCaption>회원탈퇴 본인확인을 위해 비밀번호를 입력해주세요</TableCaption>
           <tr>
             <TableHeaderCell>비밀번호 <RequiredMark>*</RequiredMark></TableHeaderCell>

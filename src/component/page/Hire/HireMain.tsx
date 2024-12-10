@@ -7,6 +7,11 @@ import { PageNavigate } from "../../common/pageNavigation/PageNavigate";
 import { useNavigate } from "react-router-dom";
 import { PageNavigateStyled } from "../../common/pageNavigation/styled";
 import { StyledButton } from "../../common/styled/StyledButton";
+import { useRecoilState } from "recoil";
+import { ILoginInfo } from "../../../models/interface/store/userInfo";
+import { loginInfoState } from "../../../stores/userInfo";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 
 export const HireMain = () => {
@@ -15,9 +20,18 @@ export const HireMain = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [cPage, setCPage] = useState<number>();
     const navigate = useNavigate();
+    const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
 
     const buttonClick = () => {
-      navigate("/react/manage-hire/managehireWritePage.do");
+      axios.get("/mypage/userDetail.do?loginId=" + userInfo.loginId)
+      .then((res) => {
+        if (res.data.chkRegBiz.bizIdx === 0) {
+          toast.info("사장님~ 기업등록부터 하셔야합니다~!")
+          navigate("/react/company/companyWritePage.do");
+        } else {
+          navigate("/react/manage-hire/managehireWritePage.do");
+        }
+      })
     };
 
     useEffect(() => {
