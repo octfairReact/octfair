@@ -79,7 +79,7 @@ export const ManageBizMain = () => {
           </tr>
         </thead>
         <tbody>
-          {!userList ? <div><img src={loading_circle} alt="loading" /></div> :
+          {!userList ? <tr><td colSpan={6} style={{ textAlign: "center", padding: "20px" }}><img src={loading_circle} alt="loading" /></td></tr> :
             userList?.length > 0 ? (
               userList?.map((user) => { return (
                 <tr key={user.bizIdx} onClick={() => openUpdateUserModalHandler(user.bizIdx)}>

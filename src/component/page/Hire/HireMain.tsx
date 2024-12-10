@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../stores/userInfo";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 
 
@@ -26,10 +27,12 @@ export const HireMain = () => {
 
     const buttonClick = () => {axios.get("/mypage/userDetail.do?loginId=" + userInfo.loginId)
       .then((res) => {
-        if (res.data.chkRegBiz.bizIdx === 0)
+        if (res.data.chkRegBiz.bizIdx === 0) {
+          toast.info("사장님~ 기업등록부터 하셔야합니다~!")
           navigate("/react/company/companyWritePage.do");
-        else
+        } else {
           navigate("/react/manage-hire/managehireWritePage.do");
+        }
       })
     };
 
