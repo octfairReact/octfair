@@ -7,17 +7,22 @@
 ## 2️⃣ 팀원 구성
 
 <table>
-  <tr>
-    <th style="background-color: orange; color: white;">황윤기</th>
-    <th style="background-color: orange; color: white;">이민서</th>
-    <th style="background-color: orange; color: white;">손신효</th>
-  </tr>
-  <tr>
-    <td>데이터 1</td>
-    <td>데이터 2</td>
-    <td>데이터 3</td>
-  </tr>
+  <thead>
+    <tr>
+      <th style="background-color: orange; color: white;">황윤기</th>
+      <th style="background-color: orange; color: white;">이민서</th>
+      <th style="background-color: orange; color: white;">손신효</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>데이터 1</td>
+      <td>데이터 2</td>
+      <td>데이터 3</td>
+    </tr>
+  </tbody>
 </table>
+
 
 
 
