@@ -14,7 +14,7 @@
 
 | 황윤기 | 이민서 | 손신효 |
 |--------|--------|--------|
-| [<img src="https://avatars.githubusercontent.com/u/151594104?v=4" height=250 width=250> <br/> @hykworld](https://github.com/hykworld)  | [<img src="https://avatars.githubusercontent.com/u/139543251?v=4" height=250 width=250> <br/> @Dev-miiing](https://github.com/Dev-miiing) | [<img src="https://avatars.githubusercontent.com/u/113576529?v=4" height=250 width=250></a><br><a href="https://github.com/shinyorrr">shinyorrr</a> |
+| [<img src="https://avatars.githubusercontent.com/u/151594104?v=4" height=250 width=250> <br/> @hykworld](https://github.com/hykworld)]  | [<img src="https://avatars.githubusercontent.com/u/139543251?v=4" height=250 width=250> <br/> @Dev-miiing](https://github.com/Dev-miiing)] | [<img src="https://avatars.githubusercontent.com/u/113576529?v=4" height=250 width=250></a><br><a href="https://github.com/shinyorrr">shinyorrr</a>] |
 
 </div>
 
