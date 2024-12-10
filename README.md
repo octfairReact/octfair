@@ -23,22 +23,25 @@
 </div>
 <br>
 
-## 3️⃣ 개발 환경
+## 3️⃣ Development Environment and Tech Stack
 
-- **Front** : ![React badge](https://img.shields.io/badge/React-18.x-61DAFB?style=flat&logo=react) ![TypeScript badge](https://img.shields.io/badge/TypeScript-4.5-3178C6?style=flat&logo=typescript) ![Recoil](https://img.shields.io/badge/Recoil-000000?style=for-the-badge&logo=react&logoColor=white) ![Recoil-persist](https://img.shields.io/badge/Recoil--persist-000000?style=for-the-badge&logo=react&logoColor=white)![React Router badge](https://img.shields.io/badge/React_Router-v6-CA4245?style=flat&logo=react-router) ![Axios badge](https://img.shields.io/badge/axios-0.27.2-5A29E8?style=flat&logo=axios) ![Styled-components badge](https://img.shields.io/badge/styled--components-5.3.0-DB7093?style=flat&logo=styled-components)
+- **Front** : ![React badge](https://img.shields.io/badge/React-18.x-61DAFB?style=flat&logo=react) ![TypeScript badge](https://img.shields.io/badge/TypeScript-4.5-3178C6?style=flat&logo=typescript)
+- ![Recoil](https://img.shields.io/badge/Recoil-000000?style=for-the-badge&logo=react&logoColor=white) ![Recoil-persist](https://img.shields.io/badge/Recoil--persist-000000?style=for-the-badge&logo=react&logoColor=white)![React Router badge](https://img.shields.io/badge/React_Router-v6-CA4245?style=flat&logo=react-router) ![Axios badge](https://img.shields.io/badge/axios-0.27.2-5A29E8?style=flat&logo=axios) ![Styled-components badge](https://img.shields.io/badge/styled--components-5.3.0-DB7093?style=flat&logo=styled-components)
 - **Back-end** : ![Node.js badge](https://img.shields.io/badge/Node.js-16.x-339933?style=flat&logo=node.js) ![Spring badge](https://img.shields.io/badge/Spring_Framework-5.x-brightgreen?style=flat&logo=spring) ![Java badge](https://img.shields.io/badge/Java-18-red?style=flat&logo=java)
 - **Database** : ![MySQL badge](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql)
 - **Version Control** : ![GitHub badge](https://img.shields.io/badge/GitHub-black?style=flat&logo=github) ![GitHub badge](https://img.shields.io/badge/GitHub-2.x-lightgray?style=flat&logo=github)
+- **Build Tools** : ![npm badge](https://img.shields.io/badge/npm-8.19.0-CB3837?style=flat&logo=npm)
+- **IDE/Editor** : ![VS Code badge](https://img.shields.io/badge/VS_Code-1.78-0078D4?style=flat&logo=visual-studio-code) ![Eclipse badge](https://img.shields.io/badge/Eclipse-2023-2C2255?style=flat&logo=eclipse)
 
 <br>
 
 ## 4️⃣ 기술 스택
 
-- **React**: UI 컴포넌트 및 페이지 구조 구현
-- **Axios**: 서버와의 데이터 통신 (API 요청)
-- **React Router**: 페이지 간 라우팅
-- **Styled Components**: CSS-in-JS 방식으로 스타일링
-- **Context API**: 전역 상태 관리 (예: 로그인 상태, 사용자 정보 등)
+
+
+
+
+<br>
 
 ## 5️⃣ 프로젝트 구조
 
