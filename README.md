@@ -25,7 +25,7 @@
 
 - **Front** : ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![axios badge](https://img.shields.io/badge/axios-%2B-blue?style=flat&logo=axios)
  ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) ![Context-API](https://img.shields.io/badge/Context--Api-000000?style=for-the-badge&logo=react) ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
-- **Back-end** : ![Spring badge](https://img.shields.io/badge/Spring-Framework-6.0-green?style=flat&logo=spring) ![Java badge](https://img.shields.io/badge/Java-17-red?style=flat&logo=java)
+- **Back-end** : ![Spring badge](https://img.shields.io/badge/Spring_Framework-5.x-brightgreen?style=flat&logo=spring) ![Java badge](https://img.shields.io/badge/Java-17-red?style=flat&logo=java)
 - **버전 관리** : ![GitHub badge](https://img.shields.io/badge/GitHub-black?style=flat&logo=github) ![GitHub badge](https://img.shields.io/badge/GitHub-2.x-lightgray?style=flat&logo=github)
 
 
