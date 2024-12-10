@@ -10,7 +10,7 @@
 |--------|--------|--------|
 | 데이터 1 | 데이터 2 | 데이터 3 |
 
-| 유성창 | 우황희 | 김호관 |
+| 유성찬 | 우황희 | 김호관 |
 |--------|--------|--------|
 | 데이터 1 | 데이터 2 | 데이터 3 |
 
@@ -18,9 +18,10 @@
 |----------|----------|----------------|
 | <div align="center"><a href="https://github.com/hykworld"><img src="https://avatars.githubusercontent.com/u/70290522" width="250" height="250" /></a><br><a href="https://github.com/hykworld">hykworld</a></div> | <div align="center"><a href="https://github.com/Dev-miiing"><img src="https://avatars.githubusercontent.com/u/74334443" width="250" height="250" /></a><br><a href="https://github.com/Dev-miiing">Dev-miiing</a></div> | <div align="center"><a href="https://github.com/shinyorrr"><img src="https://avatars.githubusercontent.com/u/71862647" width="250" height="250" /></a><br><a href="https://github.com/shinyorrr">shinyorrr</a></div> |
 
-| 유성창          | 우황희         | 김호관           |
+| 유성찬          | 우황희         | 김호관           |
 |-----------------|----------------|------------------|
-| [it-is-wanthefull](https://github.com/it-is-wanthefull) | [skh9301](https://github.com/skh9301) | [KimHoKwan](https://github.com/KimHoKwan) |
+| <div align="center"><a href="https://github.com/it-is-wanthefull"><img src="https://avatars.githubusercontent.com/u/your_user_id" width="250" height="250" /></a><br><a href="https://github.com/it-is-wanthefull">it-is-wanthefull</a></div> | <div align="center"><a href="https://github.com/skh9301"><img src="https://avatars.githubusercontent.com/u/your_user_id" width="250" height="250" /></a><br><a href="https://github.com/skh9301">skh9301</a></div> | <div align="center"><a href="https://github.com/KimHoKwan"><img src="https://avatars.githubusercontent.com/u/your_user_id" width="250" height="250" /></a><br><a href="https://github.com/KimHoKwan">KimHoKwan</a></div> |
+
 
 
 ## 3️⃣ 개발 환경
