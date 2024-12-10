@@ -33,6 +33,7 @@
 - **Version Control** : ![GitHub badge](https://img.shields.io/badge/GitHub-black?style=flat&logo=github) ![GitHub badge](https://img.shields.io/badge/GitHub-2.x-lightgray?style=flat&logo=github) ![SVN](https://img.shields.io/badge/SVN-%23000000?style=flat&logo=subversion&logoColor=%23fff)
 - **Build Tools** : ![npm badge](https://img.shields.io/badge/npm-8.19.0-CB3837?style=flat&logo=npm)
 - **IDE/Editor** : ![VS Code badge](https://img.shields.io/badge/VS_Code-1.78-0078D4?style=flat&logo=visual-studio-code) ![Eclipse badge](https://img.shields.io/badge/Eclipse-2023-2C2255?style=flat&logo=eclipse)
+![SVN](https://img.shields.io/badge/SVN-%23FF4500?style=flat&logo=subversion&logoColor=%23fff)
 
 <br>
 
