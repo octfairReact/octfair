@@ -23,7 +23,7 @@
 </div>
 <br>
 
-## 3️⃣ Development Environment and Tech Stack
+## 3️⃣ 개발환경 및 기술 스택
 
 - **Front** : ![React badge](https://img.shields.io/badge/React-18.x-61DAFB?style=flat&logo=react) ![TypeScript badge](https://img.shields.io/badge/TypeScript-4.5-3178C6?style=flat&logo=typescript) ![Recoil](https://img.shields.io/badge/Recoil-000000?style=for-the-badge&logo=react&logoColor=white) ![Recoil-persist](https://img.shields.io/badge/Recoil--persist-000000?style=for-the-badge&logo=react&logoColor=white)![React Router badge](https://img.shields.io/badge/React_Router-v6-CA4245?style=flat&logo=react-router) ![Axios badge](https://img.shields.io/badge/axios-0.27.2-5A29E8?style=flat&logo=axios) ![Styled-components badge](https://img.shields.io/badge/styled--components-5.3.0-DB7093?style=flat&logo=styled-components)
 - **Back-end** : ![Node.js badge](https://img.shields.io/badge/Node.js-16.x-339933?style=flat&logo=node.js) ![Spring badge](https://img.shields.io/badge/Spring_Framework-5.x-brightgreen?style=flat&logo=spring) ![Java badge](https://img.shields.io/badge/Java-18-red?style=flat&logo=java)
@@ -34,17 +34,7 @@
 
 <br>
 
-## 4️⃣ 기술 스택
-
-
-
-
-
-<br>
-
-## 5️⃣ 프로젝트 구조
-
-## 프로젝트 구조
+## 4️⃣ 프로젝트 구조
 
 ```jsx
 ├── README.md
@@ -114,19 +104,12 @@
            └── Globalstyled.jsx
 ```
 
-## 6️⃣ 역할분담
+<br>
 
-- **프론트엔드**
-  - **홈페이지**: 채용박람회에 대한 간략한 설명과 최신 채용 정보를 제공
-  - **채용 공고 목록**: 각 기업의 채용 공고를 리스트 형태로 출력
-  - **채용 공고 상세**: 특정 채용 공고의 세부 정보를 제공
+## 5️⃣ 역할분담
 
-- **백엔드**
-  - Spring 기반 RESTful API 서버 구축
-  - 채용 공고 데이터 제공 (GET 요청)
-  - 사용자 정보와 채용 공고 연동 (POST 요청)
 
-## 7️⃣ 페이지별 기능
+## 6️⃣ 페이지별 기능
 
 ### 홈 페이지 (`Home.js`)
 홈 페이지는 채용박람회의 개요와 최신 채용 정보를 보여주며, 사용자가 관심 있는 채용 공고로 쉽게 이동할 수 있도록 합니다.
