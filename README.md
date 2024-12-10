@@ -2,7 +2,7 @@
 
 ## 1️⃣ 프로젝트 소개
 
-이 프로젝트는 **리액트**로 구현된 **채용박람회 웹 애플리케이션**입니다. 사용자들은 다양한 채용 정보를 확인하고, 관심 있는 직무에 지원할 수 있습니다. 기존 Spring 기반 백엔드와 연동하여, 채용 공고 리스트와 상세 정보를 제공하며, 사용자 경험을 개선하기 위한 다양한 기능을 제공합니다.
+- 이 프로젝트는 **리액트**로 구현된 **채용박람회 웹 애플리케이션**입니다. 사용자들은 다양한 채용 정보를 확인하고, 관심 있는 직무에 지원할 수 있습니다. 기존 Spring 기반 백엔드와 연동하여, 채용 공고 리스트와 상세 정보를 제공하며, 사용자 경험을 개선하기 위한 다양한 기능을 제공합니다.
 
 ## 2️⃣ 팀원 구성
 
@@ -15,21 +15,17 @@
 | **유성찬** | **우황희** | **김호관** |
 | :------: |  :------: | :------: |
 | [<img src="https://avatars.githubusercontent.com/u/153047019?v=4" height=250 width=250> <br/> @it-is-wanthefull](https://github.com/it-is-wanthefull) | [<img src="https://avatars.githubusercontent.com/u/157680899?v=4" height=250 width=250> <br/> @skh9301](https://github.com/skh9301) | [<img src="https://avatars.githubusercontent.com/u/153481438?v=4" height=250 width=250> <br/> @KimHoKwan](https://github.com/KimHoKwan) |
-
-
   
 </div>
-
-
-
-
+<br>
 
 ## 3️⃣ 개발 환경
 
-- **프론트엔드**: React 18, React Router, axios, styled-components
-- **백엔드**: Spring Framework (기존 API 연동)
-- **버전 관리**: Git, GitHub
-- **배포**: Netlify / Vercel
+- **Front** : React 18, React Router, axios, styled-components
+- **Back-end** : Spring Framework (기존 API 연동)
+- **버전 관리** : Git, GitHub
+- 
+<br>
 
 ## 4️⃣ 기술 스택
 
