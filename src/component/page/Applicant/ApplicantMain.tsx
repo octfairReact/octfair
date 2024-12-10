@@ -326,6 +326,7 @@ return(
  {modal && (
                 <HistoryModal
                     index={0}
+                    setIndex={()=>{}}
                     resIdx={resIdx}
                 />
             )}

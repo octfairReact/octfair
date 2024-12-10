@@ -23,7 +23,7 @@ export const HistoryMain = () => {
     const [currentPage] = useState<number>(1);
     const { searchKeyWord } = useContext(HistoryContext);
     const [cPage, setCPage] = useState<number>(1);
-    const [modal, setModal] = useRecoilState<boolean | string>(modalState);
+    const [modal, setModal] = useRecoilState<boolean>(modalState);
 
     // 로딩 상태 추가
     const [loading, setLoading] = useState<boolean>(true);
@@ -38,14 +38,14 @@ export const HistoryMain = () => {
 
     // 지원이력서 모달 열기(apply index, resume index)
     const historyModalOpen = (appId: number, resIdx: number) => {
-        setModal("openHistoryModal");
+        setModal(true);
         setIndex(appId);
         setResIdx(resIdx);
     };
 
     // 지원취소 모달 열기(apply index, apply title)
     const applyCancelModalOpen = (appId: number, postTitle: string) => {
-        setModal("openCancelModal")
+        setModal(true);
         setCancelAppId(appId);
         setCancelPostTitle(postTitle);
     };
@@ -53,6 +53,7 @@ export const HistoryMain = () => {
     // 지원취소 모달 닫기
     const applyCancelModalClose = () => {
         setModal(false);
+        setIndex(null);
         setCancelAppId(null);
         setCancelPostTitle('');
     };
@@ -214,18 +215,20 @@ export const HistoryMain = () => {
                     )}
 
                     {/* 지원이력서 모달 */}
-                    {modal === "openHistoryModal" && (
+                    {modal && index && (
                         <HistoryModal
                             index={index}
+                            setIndex={setIndex}
                             resIdx={resIdx}
                         />
                     )}
 
                     {/* 지원 취소 모달 */}
-                    {modal === "openCancelModal" && (
+                    {modal && cancelAppId && (
                         <CancelModal 
                             handlerCancel={handlerCancel}
                             appId={cancelAppId}
+                            setCancelAppId={setCancelAppId}
                             postTitle={cancelPostTitle}
                         />
                     )}

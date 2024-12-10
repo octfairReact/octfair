@@ -8,7 +8,7 @@ import { modalState } from "../../../../stores/modalState";
 import { useRecoilState } from "recoil";
 import { History } from "../../../../api/api";
 
-export const HistoryModal = ({ index, resIdx }) => {
+export const HistoryModal = ({ index, setIndex, resIdx }) => {
   const [modal, setModal] = useRecoilState<boolean | string>(modalState);
   const [historyData, setHistoryData] = useState<IHistoryModal>(defaultHistoryModal);
   
@@ -28,10 +28,11 @@ export const HistoryModal = ({ index, resIdx }) => {
   }, [index, resIdx]);
 
     // ESC 키를 눌러 모달을 닫을 수 있는 커스텀 훅
-    useEscapeClose(() => setModal(false));
+    useEscapeClose(() => {setModal(false); setIndex(undefined);});
 
   const handlerClose = () => {
     setModal(false);
+    setIndex(undefined);
   };
 
   const handlerPrint = () => {
@@ -78,11 +79,14 @@ export const HistoryModal = ({ index, resIdx }) => {
           {/* 기본 정보 */}
           <table>
             <tbody>
-              <p>이름 : {historyData?.resumeInfo?.userNm}</p>
-              <p>이메일 : {historyData?.resumeInfo?.email}</p>
-              <p>전화번호 : {historyData?.resumeInfo?.phone}</p>
+              <tr>
+                <td>이름: {historyData?.resumeInfo?.userNm}</td>
+                <td>이메일: {historyData?.resumeInfo?.email}</td>
+                <td>전화번호: {historyData?.resumeInfo?.phone}</td>
+              </tr>
             </tbody>
           </table>
+
     
           {/* 이력서 소개 내용 */}
           {historyData?.resumeInfo?.shortIntro && (

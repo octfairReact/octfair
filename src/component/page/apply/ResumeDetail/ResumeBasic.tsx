@@ -359,6 +359,7 @@ export const ResumeBasic = () => {
       {modal && (
         <HistoryModal
           resIdx={resIdx}
+          setIndex={()=>{}}
           index={0}
         />
       )}
