@@ -1,26 +1,30 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ManagePost, Posts } from "../../../../api/api";
-import { AllDetail, ApplyDetailAll, companyDetail, IPostDetail } from "../../../../models/interface/IPost";
 import { postPostApi } from "../../../../api/postPostApi";
 import { PostDetailStyled } from "./ManagePostPage";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
-import { IScrapResponse } from "../../../../models/interface/IScrap";
+import { IScrap, IScrapResponse } from "../../../../models/interface/IScrap";
 import { ApplyModalState } from "../../../../stores/modalState";
 import { Portal } from "../../../common/portal/Portal";
 import { ApplyModal } from "../applyModal/ApplyModal";
+import { IAllDetail, IApplyStatus, ICompanyDetail, IPostDetail } from "../../../../models/interface/IPost";
 
-export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
+export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: ICompanyDetail }) => {
   const location = useLocation();
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const { postIdx, bizIdx } = location.state || {};
   const [param, setParam] = useState<{ postIdx: string | number; bizIdx: string | number } | null>(null);
-  const [CDetail, setCDetail] = useState<companyDetail>();
+  const [CDetail, setCDetail] = useState<ICompanyDetail>();
   const [MDetail, setMDetail] = useState<IPostDetail>();
   const [modal, setModal] = useRecoilState<boolean>(ApplyModalState);
   const [index, setIndex] = useState<number[]>();
+  const [scrapResult, setScrapReslt] = useState<String>();
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [applyId, setApplyId] = useState<number | null>(null);
+  const [scrapId, setScrapId] = useState<number | null>(null);
 
   useEffect(() => {
     if (postIdx && bizIdx) {
@@ -30,13 +34,17 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
     fetchPostDetail();
   }, [postIdx, bizIdx]);
 
+  useEffect(() => {
+    // 컴포넌트가 렌더링되자마자 실행
+    scrapIdDetail(); // 스크랩아이디
+    applyDetail(); // 이력서 넣은 아이디 / deleteid
+  }, [scrapId, applyId]); // 빈 배열로 설정하여 한 번만 실행
+
   const apiUrl = postIdx && bizIdx ? ManagePost.getpostDetail(postIdx, bizIdx) : "";
 
   const fetchPostDetail = async () => {
     const param = { postIdx, bizIdx };
-    const response = await postPostApi<AllDetail>(apiUrl, param);
-    console.log(response.data);
-    console.log("userInfo : " + userInfo.userType);
+    const response = await postPostApi<IAllDetail>(apiUrl, param);
     setCDetail(response.data.bizDetail);
     setMDetail(response.data.postDetail);
   };
@@ -45,10 +53,10 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
     const saveParam = { postIdx, loginId };
 
     const response = await postPostApi<IScrapResponse>(Posts.getScrapSave, saveParam);
-    console.log(response.data);
-    console.log("userInfo : " + userInfo.userType);
-    if (response.data.result == "success") {
+    if (response.data.result === "success") {
+      setScrapReslt(response.data.result);
       alert("스크립 저장성공!!");
+      scrapIdDetail();
     } else {
       alert("이미 스크랩된 공고입니다.");
     }
@@ -61,8 +69,37 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
 
   const onPostSuccess = () => {
     setModal(!modal);
+    applyDetail();
     fetchPostDetail();
   };
+
+  const applyDetail = async () => {
+    const { loginId } = userInfo;
+    const param = {
+      postIdx,
+      loginId,
+    };
+
+    const applySuatus = await postPostApi<IApplyStatus>(Posts.statusApplyBody, param);
+    if (applySuatus.data.applyIdx != -1) {
+      setDeleteId(applySuatus.data.applyDeleteStatus);
+      setApplyId(applySuatus.data.applyIdx);
+    } else {
+      setApplyId(null);
+    }
+  };
+  const scrapIdDetail = async () => {
+    const { loginId } = userInfo;
+    const param = { postIdx, loginId };
+
+    const scrapIdValue = await postPostApi<IScrap>(Posts.scrapId, param);
+    if (scrapIdValue.data.scrapIdx != -1) {
+      setScrapId(scrapIdValue.data.scrapIdx);
+    } else {
+      setScrapId(null);
+    }
+  };
+
   return (
     <PostDetailStyled>
       <div className="job-details-content">
@@ -74,16 +111,32 @@ export const JobDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDe
           <div className="detail-item action-buttons">
             {userInfo.userType === "A" && (
               <>
-                <button type="button" className="btn btn-outline-secondary" onClick={handlerScrapSave}>
-                  스크랩
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-warning"
-                  onClick={() => handlerModal(data.postIdx, data.bizIdx)}
-                >
-                  입사지원
-                </button>
+                {scrapId != null ? (
+                  <button type="button" className="btn btn-outline-secondary">
+                    스크랩 완료
+                  </button>
+                ) : (
+                  <button type="button" className="btn btn-outline-secondary" onClick={handlerScrapSave}>
+                    스크랩
+                  </button>
+                )}
+                {applyId != null ? (
+                  <>
+                    <button type="button" className="btn btn-warning">
+                      입사지원완료
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className="btn btn-warning"
+                      onClick={() => handlerModal(data.postIdx, data.bizIdx)}
+                    >
+                      입사지원
+                    </button>
+                  </>
+                )}
               </>
             )}
           </div>

@@ -4,10 +4,12 @@ import { NoticeModalStyled } from "./styled";
 import { useRecoilState } from "recoil";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
-import { IDetailResponse, INoitce, INoitceDetail, IPostResponse } from "../../../../models/interface/INotice";
+import { IDetailResponse, INoitceDetail, IPostResponse } from "../../../../models/interface/INotice";
 import { postNoticeApi } from "../../../../api/postNoticeApi";
 import { Notice } from "../../../../api/api";
 import axios, { AxiosRequestConfig } from "axios";
+import { toast } from "react-toastify";
+import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
 
 export interface INoitceModalProps {
   onSuccess: () => void;
@@ -16,54 +18,39 @@ export interface INoitceModalProps {
 }
 
 export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNoticeSeq }) => {
-  //FC 펑션 컴포넌트
   const [modal, setModal] = useRecoilState<boolean>(modalState);
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [noticeDetail, setNoticeDetail] = useState<INoitceDetail>();
   const title = useRef<HTMLInputElement>();
   const context = useRef<HTMLInputElement>();
-  //const [seq, setSeq] = useState<number>(noticeSeq);
   const [imageUrl, setImageUrl] = useState<string>();
   const [fileData, setFileData] = useState<File>();
 
-  // props는 리드온리여서 바로 수정이 안된다.
   useEffect(() => {
-    //컴포넌트가 열렸을 때 조건 확인 후 함수
     noticeSeq && searchDetail();
-
-    //컴포넌트가 사라지기 직전에 발동
     return () => {
       noticeSeq && setNoticeSeq(undefined);
     };
     // 클립업 함수
     // 컴포넌트가 언마운티드 되기 전에 실행되는 콜백함수
-    // 추가 공부
   }, []);
 
   const handlerModal = () => {
     setModal(!modal);
   };
 
-  //상세조회
   const searchDetail = async () => {
     const detail = await postNoticeApi<IDetailResponse>(Notice.getDetail, { noticeSeq });
 
     if (detail) {
       setNoticeDetail(detail.data.detail);
       const { fileExt, logicalPath } = detail.data.detail;
-      console.log("데이터", detail.data.detail);
       if (fileExt === "jpg" || fileExt === "gif" || fileExt === "png") {
         setImageUrl(logicalPath);
-
-        console.log("미리보기", logicalPath);
       } else {
         setImageUrl("");
       }
     }
-
-    // axios.post("/board/noticeDetailJson.do", { noticeSeq }).then((res: AxiosResponse<IDetailResponse>) => {
-    //   setNoticeDetail(res.data.detail);
-    // });
   };
 
   const handlerSaveFile = async () => {
@@ -81,54 +68,9 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
     if (save && save.data.result === "success") {
       onSuccess();
     } else {
-      console.error("Failed to save notice:", save?.data);
+      //console.error("Failed to save notice:", save?.data);
     }
-    // axios.post(`/board/noticeSaveBody.do`, param).then((res: AxiosResponse<IPostResponse>) => {
-    //   res.data.result === "success" && onSuccess();
-    // });
   };
-  //  title: title.curren.value > title(dbname) : title.curren.value(프론트값)
-
-  // const handlerSave = async () => {
-  //   const param = {
-  //     title: title.current.value,
-  //     context: context.current.value,
-  //     loginId: userInfo.loginId,
-  //   };
-
-  //   const save = await postNoticeApi<IPostResponse>(Notice.postSave, param);
-
-  //   if (save && save.data.result === "success") {
-  //     onSuccess();
-  //   } else {
-  //     console.error("Failed to save notice:", save?.data);
-  //   }
-  //   // axios.post(`/board/noticeSaveBody.do`, param).then((res: AxiosResponse<IPostResponse>) => {
-  //   //   res.data.result === "success" && onSuccess();
-  //   // });
-  // };
-  // //  title: title.curren.value > title(dbname) : title.curren.value(프론트값)
-
-  //update
-  // const handlerUpdate = async () => {
-  //   const param = {
-  //     title: title.current.value,
-  //     context: context.current.value,
-  //     noticeSeq,
-  //   };
-
-  //   const update = await postNoticeApi<IPostResponse>(Notice.postUpdate, param);
-
-  //   if (update && update.data.result === "success") {
-  //     onSuccess();
-  //   } else {
-  //     console.error("Failed to save notice:", update?.data);
-  //   }
-
-  //   // axios.post("/board/noticeUpdateJson.do", param).then((res: AxiosResponse<IPostResponse>) => {
-  //   //   res.data.result === "success" && onSuccess();
-  //   // });
-  // };
 
   const handlerUpdateFile = async () => {
     const fileForm = new FormData();
@@ -140,21 +82,17 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
     fileData && fileForm.append("file", fileData);
     fileForm.append("text", new Blob([JSON.stringify(textData)], { type: "application/json" }));
 
-    fileForm.forEach((value, key) => {
-      console.log(key, value);
-    });
+    // fileForm.forEach((value, key) => {
+    //   console.log(key, value);
+    // });
 
     const update = await postNoticeApi<IPostResponse>(Notice.postUpdate, fileForm);
 
     if (update && update.data.result === "success") {
       onSuccess();
     } else {
-      console.error("Failed to save notice:", update?.data);
+      //console.error("Failed to save notice:", update?.data);
     }
-
-    // axios.post("/board/noticeUpdateJson.do", param).then((res: AxiosResponse<IPostResponse>) => {
-    //   res.data.result === "success" && onSuccess();
-    // });
   };
 
   const handlerDelete = async () => {
@@ -167,12 +105,8 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
     if (postDelete && postDelete.data.result === "success") {
       onSuccess();
     } else {
-      console.error("Failed to save notice:", postDelete?.data);
+      //console.error("Failed to save notice:", postDelete?.data);
     }
-    // 프론트 > 컨트롤러 > 서비스 > 서비스 임플 > dao > 맵퍼 > ... 생략 > 컨트롤러에서 리절트 값 확인 후 > 프론트로 >
-    // axios.post("/board/noticeDeleteJson.do", param).then((res: AxiosResponse<IPostResponse>) => {
-    //   res.data.result === "success" && onSuccess();
-    // });
   };
 
   const handlerFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -186,10 +120,6 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
 
       const file = fileInfo[0]; // 첫 번째 파일
 
-      console.log(file.name); // 파일 이름 (예: "example.jpg")
-      console.log(file.size); // 파일 크기 (바이트 단위)
-      console.log(file.type); // MIME 타입 (예: "image/jpeg" 또는 "image/png")
-
       if (fileExtension === "jpg" || fileExtension === "gif" || fileExtension === "png") {
         if (file.size <= 10 * 1024 * 1024) {
           // 10MB 이하로 제한
@@ -197,30 +127,18 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
           console.log("미리보기", URL.createObjectURL(fileInfo[0]));
         } else {
           // 파일이 너무 크면 처리
-          alert("파일이 너무 큽니다. 10MB 이하로 업로드해 주세요.");
+          toast.warning("파일이 너무 큽니다. 10MB 이하로 업로드해 주세요.");
           setImageUrl(""); // 이미지 미리보기 URL 초기화
         }
       } else {
         setImageUrl(""); // 다른 확장자일 경우 미리보기 URL 초기화
-        alert("이미지 파일만 업로드 가능합니다.");
+        toast.warning("이미지 파일만 업로드 가능합니다.");
       }
 
       setFileData(fileInfo[0]); // 선택된 파일을 상태에 저장
     }
   };
 
-  // const handlerFileSave = async () => {
-  //   const save = await postNoticeApi<IPostResponse>(Notice.postSave, fileForm);
-
-  //   if (save && save.data.result === "success") {
-  //     onSuccess();
-  //   } else {
-  //     console.error("Failed to save notice:", save?.data);
-  //   }
-  // };
-
-  // 다운로드 기능을 구현하는 함수
-  // URLSearchParams: 백엔드 컨트롤러에서 파라미터를 처리하기 위해 사용
   const downloadFile = async () => {
     // URLSearchParams 객체 생성
     const param = new URLSearchParams();
@@ -265,6 +183,8 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
       });
   };
 
+  useEscapeClose(() => setModal(false));
+
   return (
     <NoticeModalStyled>
       <div className="container">
@@ -274,11 +194,15 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
         <label>
           내용 : <input type="text" ref={context} defaultValue={noticeDetail?.content}></input>
         </label>
-        파일 :<input type="file" id="fileInput" style={{ display: "none" }} onChange={handlerFile}></input>
-        <label className="img-label" htmlFor="fileInput">
-          파일 첨부하기
-        </label>
-        {/* 다운로드 액션 */}
+        {userInfo?.userType === "M" && (
+          <>
+            파일:
+            <input type="file" id="fileInput" style={{ display: "none" }} onChange={handlerFile} />
+            <label className="img-label" htmlFor="fileInput">
+              파일 첨부하기
+            </label>
+          </>
+        )}
         <div onClick={downloadFile}>
           {imageUrl ? (
             <div>

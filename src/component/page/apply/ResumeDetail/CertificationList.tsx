@@ -1,19 +1,4 @@
-import { StyledTable } from "../../../common/styled/StyledTable";
-import {
-  ResumeDetailBody,
-  ResumeDetailBodyBasicInfo,
-  ResumeDetailBodyHeader,
-  ResumeDetailBodyGuide,
-  ResumeInput,
-  ResumeTextarea,
-  ResumeButton,
-  ResumeTable,
-  InputBtnGroup,
-  BtnGroup,
-  AttachContainer,
-  AttachFileName,
-  AttachDeleteButton,
-} from "../styled";
+import { ResumeInput, ResumeButton, ResumeTable, InputBtnGroup } from "../styled";
 import { Button } from "../../../common/Button/Button";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { Certification, IPostResponse } from "../../../../models/interface/IResume";
@@ -50,9 +35,7 @@ export const CertificationList = () => {
 
   const [formData, setFormData] = useState<Certification>(initialFormData);
 
-  const handlerChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  const handlerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value })); // 업데이트 해주깅
   };
@@ -102,9 +85,7 @@ export const CertificationList = () => {
       {showTable && (
         <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
           <li style={{ marginBottom: "24px" }}>
-            <ResumeTable
-              style={{ width: "100%", border: "1px solid gray", borderCollapse: "collapse" }}
-            >
+            <ResumeTable style={{ width: "100%", border: "1px solid gray", borderCollapse: "collapse" }}>
               <tbody>
                 <tr>
                   <td style={{ border: "1px solid gray", width: "25%" }}>
@@ -245,9 +226,7 @@ export const CertListDisplay: FC<CertListDisplayProps> = ({
                 <td>{certification.issuer}</td>
                 <td>{certification.acqDate}</td>
                 <td>
-                  <ResumeButton onClick={() => handlerDelete(certification.certIdx)}>
-                    삭제
-                  </ResumeButton>
+                  <ResumeButton onClick={() => handlerDelete(certification.certIdx)}>삭제</ResumeButton>
                 </td>
               </tr>
             </React.Fragment>

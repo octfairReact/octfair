@@ -1,9 +1,10 @@
 import { useRecoilState } from "recoil";
-import { updateBizModalState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { FC, useEffect, useState } from "react";
 import axios from "axios";
 import { ManageUser } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { IBizData, defaultBizData, datafieldnameBizData } from "../../../../models/interface/IUser";
 import {
   ModalOverlay,
   ModalStyled,
@@ -17,20 +18,6 @@ import {
   Button,
 } from "./styled";
 
-// 회원수정 입력데이터 구조체/멤버변수
-export interface UserData {
-  bizIdx: number; // 사업자번호 (string 아님)
-  bizName: string; // 사업자명
-  bizCeoName: string; // 대표자
-  bizEmpCount: string; // 사원수
-  bizRevenue: string; // 매출액
-  bizContact: string; // 연락처
-  bizAddr: string; // 사업자 주소
-  bizWebUrl: string;  // 홈페이지 주소
-  bizFoundDate: string; // 설립일 (날짜형 string)
-  bizIntro: string; // 회사소개
-}
-
 // 이 파일의 컴포넌트인 모달의 Props
 export interface IUpdateUserModalProps {
   refreshUserListHandler: () => void; // 리스트(표) 새로고침 핸들러: 모달에서 전송성공시, 리스트새로고침 + 모달닫기
@@ -39,38 +26,18 @@ export interface IUpdateUserModalProps {
 }
 
 export const UpdateBizModal: FC<IUpdateUserModalProps> = ({refreshUserListHandler, userId, setUserId}) => {
-  const [updateUserModal, setUpdateUserModal] = useRecoilState<boolean>(updateBizModalState)
-  const [userData, setUserData] = useState<UserData>({
-    // 기본값
-    bizIdx: 0,
-    bizName: '',
-    bizCeoName: '',
-    bizEmpCount: '',
-    bizRevenue: '',
-    bizContact: '',
-    bizAddr: '',
-    bizWebUrl: '',
-    bizFoundDate: '',
-    bizIntro: '',
-  });
-  const dataFieldName = {
-    bizIdx: '사업자번호',
-    bizName: '사업자명',
-    bizCeoName: '대표자',
-    bizEmpCount: '사원수',
-    bizRevenue: '매출액',
-    bizContact: '연락처',
-    bizAddr: '사업자 주소',
-    bizWebUrl: '홈페이지 주소',
-    bizFoundDate: '설립일',
-    bizIntro: '회사소개',
-  }
+  const [, setModal] = useRecoilState<boolean>(modalState)
+  const [userData, setUserData] = useState<IBizData>(defaultBizData);
+  const dataFieldName = datafieldnameBizData;
 
-  // 페이지 로드시 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
+  // userInfo가 세팅/변경될때, 로그인정보(RecoilState의 userInfo.loginId)를 기반으로 이름 등의 회원정보를 읽어온다.
   useEffect(() => {
+    if (!userId) // 새로고침/페이지앞뒤이동 시엔 List로부터 받아온 userId가 사라져있기 때문에 그에대한 예외처리가 필요
+      return setModal(false); // 예외처리: 모달이 페이지이동간에 닫혀야하는게 맞기도하고, userId가 없어 에러를 일으키므로 닫기(false)되도록 예외처리
+    
     axios.get(ManageUser.getBizDetail+"?bizIdx=" + userId)
       .then((res) => {
-        let prevData = res.data.detail;
+        const prevData = res.data.detail;
         setUserData({
           bizIdx: userId,
           bizName: prevData.bizName,
@@ -89,49 +56,45 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({refreshUserListHandle
       });
   }, [userId]);
 
-  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
-  const closeModalHandler = () => {
-    if (updateUserModal !== false)
-      setUpdateUserModal(false);
-  };
-
-  // Enter키를 누를시 완료버튼 효과를 작동
-  const completeEnterHandler = (event) => {
-    if (event.key === "Enter")
-      completeUpdateHandler();
-  }
-
   // 회원수정 완료버튼 누를시 작동
   // 1. 빈값검사 -> 2. 양식검사(날짜 등) -> 3. 데이터전송
   const completeUpdateHandler = () => {
     let isProblem:boolean = false;
     
-    // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
-    // return문 내 HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
     Object.entries(userData).some(([key, value]) => { // 입력창이 12개나 되어서 반복문처리, signupInput이 배열은 아니어서 forEach()/map()대신 Object.entries()
-      if (!value || value.length <= 0) {
+
+      // 1. 빈값검사: 모든 입력창에 대하여 빈값 검사
+      // HTML코드에서 onInvalid()방식으로 유효성검사를 할 수도 있지만 일괄로 하는 것이 유지보수가 좋다고 판단
+      if (isProblem === false && (!value || value.length <= 0)) {
         if (true) { // 빈칸이어도 되는 속성들
           toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
           document.getElementById(key)?.focus();
           isProblem = true;
-          return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐
+          return true; // 이 return값(true)는 'Object.values.some'반복문을 종료시킨다는 문법일뿐, 즉 문제발생하여 if문 입장시 검사 조기종료한다는 뜻
         }
       }
-      return false;
-    });
     
-    // 2. 양식검사: pwd/email 입력창에 대하여 지켜야할 정규식패턴 검사
-    const phoneRules = /^[0-9]([-]?[0-9])*$/;
+      // 2. 양식검사: pwd/email 입력창에 대하여 지켜야할 정규식패턴 검사
+      if (isProblem === false) {
+        const phoneRegex = /^[0-9]([-]?[0-9])*$/;
 
-    if (isProblem === false) {
-      if (new Date(userData.bizFoundDate) > new Date()) {
-        toast.info("설립일이 오늘 이후일 수 없습니다.");
-        isProblem = true;
-      } else if (!phoneRules.test(userData.bizContact)) {
-        toast.info("전화번호는 숫자로 시작해야하며 중간에만 '-'를 쓰실수는 있습니다.");
-        isProblem = true;
+        const validationRules = {
+          bizFoundDate: { check: () => new Date(userData.bizFoundDate) > new Date(),
+                          message: "설립일이 오늘 이후일 수 없습니다." },
+          bizContact:   { check: () => !phoneRegex.test(userData.bizContact), // .test()는 정규식패턴에 맞으면 true를 반환
+                          message: "전화번호는 숫자로 시작해야하며 중간에만 '-'를 쓰실수는 있습니다." },
+        }
+        
+        // 위 중복검사/양식검사와 적발시에 대한 안내메시지와 포커싱 설정
+        if (validationRules[key]?.check()) {
+          toast.info(validationRules[key].message);
+          document.getElementById(key)?.focus();
+          isProblem = true;
+        }
       }
-    }
+
+      return false; // 이 return값(false)는 continue같은 역할로 Object.entires()반복문을 다음 key아이템으로 순회시킴
+    });
 
     // 3. 데이터전송: 회원수정 입력정보 문제없음! 서버로 Update요청!
     if (isProblem === false) {
@@ -160,11 +123,22 @@ export const UpdateBizModal: FC<IUpdateUserModalProps> = ({refreshUserListHandle
     }
   };
 
+  // Enter키를 누를시 완료버튼 효과를 작동
+  const completeEnterHandler = (event) => {
+    if (event.key === "Enter")
+      completeUpdateHandler();
+  }
+
+  // 모달창 닫기: 닫기/취소/외부클릭 등에 의해 작동
+  const closeModalHandler = () => {
+    setModal(false);
+  };
+
   return (
     <>
-      <ModalOverlay onMouseDown={closeModalHandler}>              {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
-        <ModalStyled onMouseDown={(e) => e.stopPropagation()}>    {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
-          <Table onKeyDown={completeEnterHandler} tabIndex={-1}> {/* 'tabIndex={-1}' 의미: 모달의 포커싱을 없애서 부모페이지의 ESC닫기Handler 작동을 가능하게 하는 용도 */}
+      <ModalOverlay onMouseDown={closeModalHandler}>           {/* <----- 모달 외부 클릭시 모달창닫기 수행 */}
+        <ModalStyled onMouseDown={(e) => e.stopPropagation()}> {/* <----- 모달 내부 클릭엔 모달창닫기 방지 */}
+          <Table onKeyDown={completeEnterHandler} tabIndex={-1}>     {/* 'tabIndex={-1}' 의미: 모달의 포커싱을 없애서 부모페이지의 ESC닫기Handler 작동을 가능하게 하는 용도 */}
             <TableCaption>기업회원정보</TableCaption>
             <tbody>
               <tr>

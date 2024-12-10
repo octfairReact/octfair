@@ -7,6 +7,11 @@ export interface IManageApplicant {
     regdate: string; // date나 number 아님
 }
 
+export interface IManageApplicantListResponse {
+    applicantCnt: number;
+    applicant: IManageApplicant[];
+}
+
 // 각 타입은 JSP(bizList)와 DB(tb_biz)를 확인함
 export interface IManageBiz {
     bizIdx: number;
@@ -14,11 +19,6 @@ export interface IManageBiz {
     bizCeoName: string;
     bizContact: string;
     bizWebUrl: string;
-}
-
-export interface IManageApplicantListResponse {
-    applicantCnt: number;
-    applicant: IManageApplicant[];
 }
 
 export interface IManageBizListResponse {

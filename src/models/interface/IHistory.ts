@@ -35,8 +35,18 @@ export interface IHistoryModal {
     skillInfo: ISkillInfo[];
     certInfo: ICertInfo[];
 }
+// 모달 출력 시 초기 값을 -1로 줘서 값이 안나오게해서 값이 없음을 출력하지 않게하기
+export const defaultHistoryModal:IHistoryModal = {
+    index: -1,
+    resIdx: undefined,
+    resumeInfo: undefined,
+    careerInfo: undefined,
+    educationInfo: undefined,
+    skillInfo: undefined,
+    certInfo: undefined,
+}
 export interface IResumeInfo {
-    title: string;
+    resTitle: string;
     userNm: string;
     email: string;
     phone: string;

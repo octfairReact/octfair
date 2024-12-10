@@ -1,7 +1,9 @@
 import React, { FC, useState } from "react";
-import { qnaPasswordModalState } from "../../../../stores/modalState";
+
 import { useRecoilState } from "recoil";
 import { QnaModalStyled } from "./styled";
+import { qnaPasswordModalState } from "../../../../stores/qnaModalState";
+import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
 
 interface QnaPasswordProps {
   onPasswordSubmit: (qnaPassword: string, qnaIdx: number) => void; // 비밀번호 제출 함수 프롭스
@@ -11,11 +13,9 @@ interface QnaPasswordProps {
 export const QnaPassword: FC<QnaPasswordProps> = ({ onPasswordSubmit, qnaIdx }) => {
   const [passwordmodal, setPasswordModal] = useRecoilState<boolean>(qnaPasswordModalState);
   const [password, setPassword] = useState<string>(""); // 비밀번호 입력 상태
-  const [index, setIndex] = useState<number>();
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value); // 비밀번호 상태 업데이트
-    console.log("현재 비밀번호 입력값:", password); // 실시간으로 입력값 콘솔 출력
   };
 
   const submitPassword = () => {
@@ -26,6 +26,8 @@ export const QnaPassword: FC<QnaPasswordProps> = ({ onPasswordSubmit, qnaIdx }) 
   const handlerModal = () => {
     setPasswordModal(!passwordmodal);
   };
+
+  useEscapeClose(() => setPasswordModal(false));
 
   return (
     <QnaModalStyled>

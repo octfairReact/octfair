@@ -32,6 +32,8 @@ export const Posts = {
   applyBizPostDetail: "/jobs/applyBizPostDetailBody.do",
   getScrapSave: "/jobs/saveScrapBody.do",
   saveApplyBody: "/jobs/saveApplyBody.do",
+  statusApplyBody: "/jobs/statusApplyBody.do",
+  scrapId: "/jobs/scrapId.do",
 };
 
 export const ManagePost = {
@@ -77,8 +79,7 @@ export const Hire = {
   fileDownload: "manage-hire/managehireDownload.do",
   postSave: "/manage-hire/managehireSaveFileForm.do",
   getUpdate: "/manage-hire/managehireUpdateBody.do",
-  getDelete: "/manage-hire/managehireDeleteBody.do"
-
+  getDelete: "/manage-hire/managehireDeleteBody.do",
 };
 
 //지원자관리 - 신효
@@ -112,6 +113,7 @@ export const Qna = {
   postUpdate: "/board/qnaFileUpdateRe.do",
   postDelete: "/board/qnaFileDeleteRe.do",
   checkPassword: "/board/checkPassword.do",
+  passwordReset: "/board/passwordReset.do",
 };
 
 export const ManageUser = {

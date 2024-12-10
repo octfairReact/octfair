@@ -1,19 +1,4 @@
-import { StyledTable } from "../../../common/styled/StyledTable";
-import {
-  ResumeDetailBody,
-  ResumeDetailBodyBasicInfo,
-  ResumeDetailBodyHeader,
-  ResumeDetailBodyGuide,
-  ResumeInput,
-  ResumeTextarea,
-  ResumeButton,
-  ResumeTable,
-  InputBtnGroup,
-  BtnGroup,
-  AttachContainer,
-  AttachFileName,
-  AttachDeleteButton,
-} from "../styled";
+import { ResumeInput, ResumeButton, ResumeTable, InputBtnGroup } from "../styled";
 import { Button } from "../../../common/Button/Button";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { Education, IPostResponse } from "../../../../models/interface/IResume";
@@ -52,9 +37,7 @@ export const EduList = () => {
 
   const [formData, setFormData] = useState<Education>(initialFormData);
 
-  const handlerChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  const handlerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value })); // 업데이트 해주깅
 
@@ -110,7 +93,6 @@ export const EduList = () => {
         admDate: `${formData.admDate}-01`, // YYYY-MM -> YYYY-MM-DD (1일로 기본 설정 why? DB랑 맞추느라;;)
         grdDate: `${formData.grdDate}-01`,
       };
-      console.log("전달할 데이터:", param);
       const response = await postResumeApi<IPostResponse>(Resume.eduInsert, param);
 
       if (response.data.result === "success") {
@@ -130,17 +112,11 @@ export const EduList = () => {
       {showTable && (
         <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
           <li style={{ marginBottom: "24px" }}>
-            <ResumeTable
-              style={{ width: "100%", border: "1px solid gray", borderCollapse: "collapse" }}
-            >
+            <ResumeTable style={{ width: "100%", border: "1px solid gray", borderCollapse: "collapse" }}>
               <tbody>
                 <tr>
                   <td style={{ border: "1px solid gray" }}>
-                    <select
-                      style={{ width: "90%", padding: "5px" }}
-                      id="eduLevel"
-                      onChange={handlerChange}
-                    >
+                    <select style={{ width: "90%", padding: "5px" }} id="eduLevel" onChange={handlerChange}>
                       <option value="none" disabled selected>
                         학력구분
                       </option>
@@ -195,11 +171,7 @@ export const EduList = () => {
                     />
                   </td>
                   <td style={{ border: "1px solid gray" }}>
-                    <select
-                      style={{ width: "100%", padding: "5px" }}
-                      id="grdStatus"
-                      onChange={handlerChange}
-                    >
+                    <select style={{ width: "100%", padding: "5px" }} id="grdStatus" onChange={handlerChange}>
                       <option value="none" disabled selected>
                         졸업여부
                       </option>
@@ -238,12 +210,7 @@ export const EduList = () => {
   );
 };
 
-export const EduListDisplay: FC<EduListDisplayProps> = ({
-  educations,
-  setEducations,
-  showTable,
-  setShowTable,
-}) => {
+export const EduListDisplay: FC<EduListDisplayProps> = ({ educations, setEducations, showTable, setShowTable }) => {
   const location = useLocation();
   const context = useContext(ResumeContext);
 
@@ -272,9 +239,7 @@ export const EduListDisplay: FC<EduListDisplayProps> = ({
 
         if (response.data.result === "success") {
           alert("삭제되었습니다.");
-          setEducations((prevEducations) =>
-            prevEducations.filter((education) => education.eduIdx !== eduIdx)
-          );
+          setEducations((prevEducations) => prevEducations.filter((education) => education.eduIdx !== eduIdx));
         }
       } catch (error) {
         console.error("삭제 중 오류:", error);

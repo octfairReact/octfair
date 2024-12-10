@@ -5,7 +5,7 @@ export const Login = () => {
     return (
         <div>
             <LoginMain />
-            <ToastContainer/>
+            <ToastContainer />
         </div>
     );
 };

@@ -4,7 +4,7 @@ export interface ICompany {
   bizCeoName: string; // 회사명
   bizContact: string; // 전화번호
   bizAddr: string; // 주소
-  bizEmpCount: number; //
+  bizEmpCount: string; //
   bizWebUrl: string; // 회사 url
   bizFoundDate: string; // 설립잉
   bizRevenue: string; // 매출액
