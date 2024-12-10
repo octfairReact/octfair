@@ -1,19 +1,4 @@
-import { StyledTable, StyledTd, StyledTh } from "../../../common/styled/StyledTable";
-import {
-  ResumeDetailBody,
-  ResumeDetailBodyBasicInfo,
-  ResumeDetailBodyHeader,
-  ResumeDetailBodyGuide,
-  ResumeInput,
-  ResumeTextarea,
-  ResumeButton,
-  ResumeTable,
-  InputBtnGroup,
-  BtnGroup,
-  AttachContainer,
-  AttachFileName,
-  AttachDeleteButton,
-} from "../styled";
+import { ResumeInput, ResumeTextarea, ResumeButton, ResumeTable } from "../styled";
 import { Button } from "../../../common/Button/Button";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { postResumeApi } from "../../../../api/postResumeApi";
@@ -251,22 +236,12 @@ export const CareerList = () => {
           </li>
         </ul>
       )}
-      <CareerListDisplay
-        careers={careers}
-        setCareers={setCareers}
-        showTable={showTable}
-        setShowTable={setShowTable}
-      />
+      <CareerListDisplay careers={careers} setCareers={setCareers} showTable={showTable} setShowTable={setShowTable} />
     </>
   );
 };
 
-export const CareerListDisplay: FC<CareerListDisplayProps> = ({
-  careers,
-  setCareers,
-  showTable,
-  setShowTable,
-}) => {
+export const CareerListDisplay: FC<CareerListDisplayProps> = ({ careers, setCareers, showTable, setShowTable }) => {
   const location = useLocation();
   const context = useContext(ResumeContext);
 

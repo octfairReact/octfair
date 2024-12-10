@@ -36,7 +36,7 @@ export interface IPostDetail extends IPost {
   fileSize: number;
   fileExt: string;
 }
-export interface companyDetail {
+export interface ICompanyDetail {
   bizName: string;
   bizAddr: string;
   bizContact: string;
@@ -49,24 +49,24 @@ export interface companyDetail {
   fileExt: string;
   loginId: string;
 }
-export interface AllDetail {
-  bizDetail: companyDetail;
+export interface IAllDetail {
+  bizDetail: ICompanyDetail;
   postDetail: IPostDetail;
 }
-export interface ApplybizDetail {
+export interface IApplybizDetail {
   bizName: string;
   postTitle: string;
 }
-export interface ApplyUserDetail {
+export interface IApplyUserDetail {
   userIdx: number;
   userPhone: string;
   userEmail: string;
   resumeIdx: number;
   resumeTitle: string;
 }
-export interface ApplyDetailAll {
-  userResumeList: ApplyUserDetail[];
-  bizPostDetail: ApplybizDetail;
+export interface IApplyDetailAll {
+  userResumeList: IApplyUserDetail[];
+  bizPostDetail: IApplybizDetail;
 }
 
 export interface IPostListResponse {
@@ -74,4 +74,9 @@ export interface IPostListResponse {
   approvalList: IPost[];
   pendingList: IPost[];
   pendingPostCnt: number;
+}
+
+export interface IApplyStatus {
+  applyIdx: number;
+  applyDeleteStatus: number;
 }

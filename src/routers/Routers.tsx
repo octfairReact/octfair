@@ -6,7 +6,7 @@ import { Notice } from "../pages/Notice";
 import { History } from "../pages/History";
 import { Hire } from "../pages/HireMain";
 import { HireAdd } from "../pages/HireWrite";
-import { Post } from "../pages/Post";
+import { PostPage } from "../pages/PostPage";
 import { ManagePostPage } from "../pages/ManagePostPage";
 import { MyPageUpdate } from "../pages/MyPageUpdate";
 import { MyPageWithdraw } from "../pages/MyPageWithdraw";
@@ -70,7 +70,7 @@ const routers: RouteObject[] = [
       {
         path: "jobs",
         children: [
-          { path: "posts.do", element: <Post /> },
+          { path: "posts.do", element: <PostPage /> },
           { path: "scrap.do", element: <Scrap /> },
         ],
       },
@@ -87,8 +87,8 @@ const routers: RouteObject[] = [
         path: "manage-post",
         children: [
           { path: "managePostDetailBody.do", element: <ManagePostPage /> },
-          { path: "approval.do", element: <Post /> },
-          { path: "post.do", element: <Post /> },
+          { path: "approval.do", element: <PostPage /> },
+          { path: "post.do", element: <PostPage /> },
         ],
       },
       {
