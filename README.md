@@ -12,9 +12,14 @@
 
 <div align="center">
 
+
 | 이민서 | 손신효 |
 |--------|--------|
-| [<img src="https://avatars.githubusercontent.com/u/106502312?v=4" height=150 width=150> <br/> @yeon1615](https://github.com/yeon1615) | [<img src="https://avatars.githubusercontent.com/u/112460466?v=4" height=150 width=150> <br/> @Cheorizzang](https://github.com/Cheorizzang) |
+| [<img src="https://avatars.githubusercontent.com/u/106502312?v=4" height=250 width=250> <br/> @Dev-miiing](https://github.com/Dev-miiing) | [<img src="https://avatars.githubusercontent.com/u/71862647?v=4" height=250 width=250> <br/> @shinyorrr](https://github.com/shinyorrr) |
+
+| 이민서 | 손신효 |
+|--------|--------|
+| [<img src="https://avatars.githubusercontent.com/u/74334443?v=4" height=250 width=250> <br/> @yeon1615](https://github.com/yeon1615) | [<img src="https://avatars.githubusercontent.com/u/112460466?v=4" height=250 width=250> <br/> @Cheorizzang](https://github.com/Cheorizzang) |
 
 </div>
 
