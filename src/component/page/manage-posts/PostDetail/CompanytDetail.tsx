@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ManagePost } from "../../../../api/api";
-import { AllDetail, companyDetail, IPostDetail } from "../../../../models/interface/IPost";
+import { IAllDetail, ICompanyDetail, IPostDetail } from "../../../../models/interface/IPost";
 import { postPostApi } from "../../../../api/postPostApi";
 import { PostDetailStyled } from "./ManagePostPage";
-import { useRecoilState } from "recoil";
-import { ILoginInfo } from "../../../../models/interface/store/userInfo";
-import { loginInfoState } from "../../../../stores/userInfo";
 
-export const CompanytDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: companyDetail }) => {
+export const CompanytDetail = ({
+  data,
+  Cdata,
+}: {
+  data: IPostDetail;
+  Cdata: ICompanyDetail;
+  postIdx: number;
+  bizIdx: number;
+}) => {
   const location = useLocation();
-  const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const { postIdx, bizIdx } = location.state || {};
   const [param, setParam] = useState<{ postIdx: string | number; bizIdx: string | number } | null>(null);
-  const [CDetail, setCDetail] = useState<companyDetail>();
+  const [CDetail, setCDetail] = useState<ICompanyDetail>();
   const [MDetail, setMDetail] = useState<IPostDetail>();
 
   useEffect(() => {
@@ -28,9 +32,7 @@ export const CompanytDetail = ({ data, Cdata }: { data: IPostDetail; Cdata: comp
 
   const fetchPostDetail = async () => {
     const param = { postIdx, bizIdx };
-    const response = await postPostApi<AllDetail>(apiUrl, param);
-    console.log(response.data);
-    console.log("userInfo : " + userInfo.userType);
+    const response = await postPostApi<IAllDetail>(apiUrl, param);
     setCDetail(response.data.bizDetail);
     setMDetail(response.data.postDetail);
   };

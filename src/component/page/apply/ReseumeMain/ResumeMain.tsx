@@ -20,14 +20,12 @@ import axios, { AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
 
 export const ResumeMain = () => {
-  const { resIdx, resumeDetail, setResumeDetail, setResIdx } = useContext(ResumeContext);
+  const { setResumeDetail, setResIdx } = useContext(ResumeContext);
   const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [resumeList, setResumeList] = useState<IResume[]>();
   const navigate = useNavigate();
-  const [index, setIndex] = useState<number>();
   const [isLoaded, setIsLoaded] = useState(false); //로딩 상태 관리. 조회 결과 나오기전까지 랜더링 안되게
 
-  console.log("test:::::::::::::", userInfo.loginId, userInfo.userNm, userInfo.userType);
 
   useEffect(() => {
     if (sessionStorage.getItem("userInfo")) {
@@ -84,8 +82,6 @@ export const ResumeMain = () => {
 
       setResumeDetail(resumeDetail);
       setResIdx(newResIdx);
-      console.log("새 이력서 작성 시 최종 데이터 보내기 전", resumeDetail);
-      console.log(createNewResume);
 
       navigate("/react/apply/resume-new.do", {
         state: {
@@ -98,10 +94,6 @@ export const ResumeMain = () => {
   };
 
   const handlerDelete = async (resIdx: number) => {
-    //if (!confirm("이력서를 삭제하시겠습니까?")) {
-    //  return;
-    //}
-    console.log("삭제할 이력서 resIdx:", resIdx);
     const param = {
       resIdx,
     };
@@ -151,7 +143,6 @@ export const ResumeMain = () => {
 
     if (postCopy && postCopy.data.result === "success") {
       onSuccess();
-      console.log("이력서 복사 성공");
       // 복사 성공 메시지에 이력서 이름을 포함하여 표시
       toast.success(`이력서 "${resumeTitle}"이 성공적으로 복사되었습니다.`);
     } else {

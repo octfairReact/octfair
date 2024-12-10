@@ -4,7 +4,7 @@ import { PostMain } from "../component/page/manage-posts/PostMain/PostMain";
 import { PostSearch } from "../component/page/manage-posts/PostSearch/PostSearch";
 import { useLocation } from "react-router-dom";
 
-export const Post = () => {
+export const PostPage = () => {
   const PageTitle = () => {
     const location = useLocation();
 

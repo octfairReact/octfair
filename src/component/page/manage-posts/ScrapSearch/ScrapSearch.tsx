@@ -1,9 +1,8 @@
 import { NoticeSearchStyled } from "./styled";
 import { Button } from "../../../common/Button/Button";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { modalState } from "../../../../stores/modalState";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { postNoticeApi } from "../../../../api/postNoticeApi";
@@ -11,13 +10,11 @@ import { IScrapResponse } from "../../../../models/interface/IScrap";
 import { ScrapURL } from "../../../../api/api";
 import { ScrapContext } from "../../../../api/provider/ScrapProvider";
 
-export const NoticeSearch = () => {
-  const title = useRef<HTMLInputElement>();
+export const ScrapSearch = () => {
   //React에서 제공하는 훅으로, 컴포넌트에서 값을 참조(reference)할 수 있게
   // const [startDate, setStartDate] = useState<string>();
   // //[startDate = 값, setStartDate = 함수]
   // const [endDate, setEndDate] = useState<string>();
-  const [modal, setModal] = useRecoilState<boolean>(modalState);
 
   const [searchValue, setSearchValue] = useState<{ searchTitle: string; searchStDate: string; searchEdDate: string }>({
     searchTitle: "",
@@ -63,14 +60,8 @@ export const NoticeSearch = () => {
     setSearchKeyWord(searchValue);
   };
 
-  const handlerModal = () => {
-    setModal(!modal);
-  };
-
   // NoticeSearch 컴포넌트
   const deleteScrap = async () => {
-    console.log("딜리트 눌럿다." + postIndexes);
-    console.log("딜리트 눌럿다." + scrapIndexes);
     const postParam = {
       postIndexes,
     };
@@ -118,7 +109,7 @@ export const NoticeSearch = () => {
         <Button onClick={handlerSearch}>검색</Button>
 
         {/* 유저 타입 m일때만 보이게 하기  */}
-        <Button onClick={handlerModal}>등록</Button>
+        <Button onClick={deleteScrap}>삭제</Button>
       </div>
     </NoticeSearchStyled>
   );

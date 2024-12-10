@@ -7,7 +7,7 @@ import { History } from "../pages/History";
 import { NoticeRouter } from "../component/page/Notice/NoticeRouter/NoticeRouter";
 import { Hire } from "../pages/HireMain";
 import { HireAdd } from "../pages/HireWrite";
-import { Post } from "../pages/Post";
+import { PostPage } from "../pages/PostPage";
 import { ManagePostPage } from "../pages/ManagePostPage";
 import { CompanyDetail } from "../pages/Company/CompanyDetail";
 import { CompanyWrite } from "../pages/Company/CompanyWrite";
@@ -63,7 +63,7 @@ const routers: RouteObject[] = [
       {
         path: "jobs",
         children: [
-          { path: "posts.do", element: <Post /> },
+          { path: "posts.do", element: <PostPage /> },
           { path: "scrap.do", element: <Scrap /> },
         ],
       },
@@ -79,8 +79,8 @@ const routers: RouteObject[] = [
         path: "manage-post",
         children: [
           { path: "managePostDetailBody.do", element: <ManagePostPage /> },
-          { path: "approval.do", element: <Post /> },
-          { path: "post.do", element: <Post /> },
+          { path: "approval.do", element: <PostPage /> },
+          { path: "post.do", element: <PostPage /> },
         ],
       },
       {

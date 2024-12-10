@@ -7,12 +7,7 @@ import {
   ResumeInput,
   ResumeTextarea,
   ResumeButton,
-  ResumeTable,
   InputBtnGroup,
-  BtnGroup,
-  AttachContainer,
-  AttachFileName,
-  AttachDeleteButton,
   FileLabel,
 } from "../styled";
 import { Button } from "../../../common/Button/Button";
@@ -21,14 +16,7 @@ import { loginInfoState } from "../../../../stores/userInfo";
 import { useRecoilState } from "recoil";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { ResumeContext } from "../../../../api/provider/ResumeProvider";
-import { FC } from "react";
-import {
-  IResumeDetail,
-  IDetailResponse,
-  Career,
-  IPostResponse,
-  defaultResumeDetail,
-} from "../../../../models/interface/IResume";
+import { IResumeDetail, IPostResponse, defaultResumeDetail } from "../../../../models/interface/IResume";
 import { EduList } from "./EduList";
 import { SkillList } from "./SkillList";
 import { CertificationList } from "./CertificationList";
@@ -59,31 +47,16 @@ export const ResumeBasic = () => {
     }
   }, [stateResumeDetail, context.resumeDetail, setResumeDetail]);
 
-  console.log("resumeDetail in ResumeBasic:", resumeDetail);
-  //const resIdx = location.state?.resIdx || context.resIdx || 0;
-  //const { resumeDetail, setResumeDetail } = useContext(ResumeContext);
-  console.log("resumeDetail in ResumeBasic:", resumeDetail); // 값 확인
   const [userInfo, setUserInfo] = useRecoilState<ILoginInfo>(loginInfoState);
-  // const [resTitle, setResTitle] = useState("");
-  // const [shortIntro, setShortIntro] = useState("");
-  // const [proLink, setProLink] = useState("");
-  // const [perStatement, setPerStatement] = useState("");
-  // const [imageUrl, setImageUrl] = useState<string>();
   const [fileData, setFileData] = useState<File>();
   const [fileName, setFileName] = useState<string | undefined>(resumeDetail?.fileName);
   const [formData, setFormData] = useState<IResumeDetail>(defaultResumeDetail);
   const [modal, setModal] = useRecoilState<boolean>(modalState);
 
-  console.log(userInfo);
-  console.log("123123resumeDetail::::::", resumeDetail);
-
-  console.log(userInfo);
-
   useEffect(() => {
     if (resumeDetail) {
       setFormData(resumeDetail);
       setFileName(resumeDetail.fileName || "");
-      console.log("fileName 상태:", fileName);
     }
   }, [resumeDetail]);
 
@@ -107,7 +80,6 @@ export const ResumeBasic = () => {
     };
     await axios(postAction)
       .then((res) => {
-        console.log("다운로드 데이터 blob", res);
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -126,7 +98,6 @@ export const ResumeBasic = () => {
 
   const handlerSave = async () => {
     const fileForm = new FormData();
-    console.log("fileForm:::::", fileForm);
     const textData = {
       resIdx: resumeDetail.resIdx,
       res_title: formData.resTitle || "",
@@ -137,14 +108,11 @@ export const ResumeBasic = () => {
       userNm: userInfo.userNm,
       userType: userInfo.userType,
     };
-    console.log("textData::::::::", textData);
 
     fileData && fileForm.append("file", fileData);
     fileForm.append("text", new Blob([JSON.stringify(textData)], { type: "application/json" }));
-    console.log("fileForm2:::::::::", fileForm);
     const response = await postResumeApi<IPostResponse>(Resume.resumeSave, fileForm);
     // const response = await axios.post(Resume.resumeSave, fileForm);
-    console.log("이력서 폼 제출::::::::::::::", fileForm);
 
     if (response && response.data.result === "success") {
       alert("이력서가 저장되었습니다.");

@@ -47,24 +47,6 @@ export const updateBizModalState = atom<boolean>({
   default: false,
 });
 
-export const scrapState = atom<boolean>({
-  key: "scrapState",
-  default: false,
-});
-export const noticeState = atom<boolean>({
-  key: "noticeState",
-  default: false,
-});
-
-export const scrapIndexGrop = atom<number[]>({
-  key: "scrapIndexGrop",
-  default: [],
-});
-export const postIndexGrop = atom<number[]>({
-  key: "postIndexGrop",
-  default: [],
-});
-
 export const qnaMyListState = atom<string>({
   key: "qnaMyListState",
   default: "all",
