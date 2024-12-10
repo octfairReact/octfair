@@ -7,38 +7,14 @@
 ## 2️⃣ 팀원 구성
 
 <div align="center">
-  <table>
-    <tr>
-      <th>황윤기</th>
-      <th>이민서</th>
-      <th>손신효</th>
-    </tr>
-    <tr>
-      <td style="text-align: center; vertical-align: middle;">
-        <a href="https://github.com/hykworld" style="display: block; text-align: center;">
-          <img src="https://avatars.githubusercontent.com/u/151594104?v=4" height="250" width="250">
-          <br/> @hykworld
-        </a>
-      </td>
-      <td style="text-align: center; vertical-align: middle;">
-        <a href="https://github.com/Dev-miiing" style="display: block; text-align: center;">
-          <img src="https://avatars.githubusercontent.com/u/139543251?v=4" height="250" width="250">
-          <br/> @Dev-miiing
-        </a>
-      </td>
-      <td style="text-align: center; vertical-align: middle;">
-        <a href="https://github.com/shinyorrr" style="display: block; text-align: center;">
-          <img src="https://avatars.githubusercontent.com/u/113576529?v=4" height="250" width="250">
-          <br/> @shinyorrr
-        </a>
-      </td>
-    </tr>
-  </table>
-</div>
-
+  
 | **황윤기** | **이민서** | **손신효** |
 | :------: |  :------: | :------: |
 | [<img src="https://avatars.githubusercontent.com/u/151594104?v=4" height=250 width=250> <br/> @hykworld](https://github.com/hykworld) | [<img src="https://avatars.githubusercontent.com/u/139543251?v=4" height=250 width=250> <br/> @Dev-miiing](https://github.com/Dev-miiing) | [<img src="https://avatars.githubusercontent.com/u/113576529?v=4" height=250 width=250> <br/> @shinyorrr](https://github.com/shinyorrr) |
+
+  
+</div>
+
 
 
 
