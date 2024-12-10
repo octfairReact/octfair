@@ -100,10 +100,10 @@ export const QnaMain = () => {
     };
 
     // 비밀번호 확인 시작 전 로딩 상태 설정
-    setIsLoaded(false);
+
     try {
       const passwordCheckRe = await postQnaApi<IPasswordCheck>(Qna.checkPassword, param); // 서버로 비밀번호 확인 요청
-
+      setIsLoaded(false);
       if (passwordCheckRe?.data?.result === "success") {
         setPassword(passwordCheckRe.data.password);
         setIndex(passwordCheckRe.data.qnaSeq); // 글 번호 저장

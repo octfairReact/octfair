@@ -9,6 +9,7 @@ import { postQnaApi } from "../../../../api/postQnaApi";
 import { Qna } from "../../../../api/api";
 import axios, { AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
+import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
 
 export interface IQnaModalProps {
   onSuccess: () => void;
@@ -280,6 +281,8 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
       //console.error("Failed to save notice:", postDelete?.data);
     }
   };
+
+  useEscapeClose(() => setModal(false));
 
   return (
     <QnaModalStyled>

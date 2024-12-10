@@ -8,6 +8,7 @@ import { postFaqApi } from "../../../../api/postFaqApi";
 import { IDetailResponse, IFaq, IPostResponse } from "../../../../models/interface/IFaq";
 import { Faq } from "../../../../api/api";
 import { toast } from "react-toastify";
+import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
 
 export interface IFaqModalProps {
   onSuccess: (faqType: string) => void;
@@ -116,6 +117,8 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
   const handlerModal = () => {
     setModal(!modal);
   };
+
+  useEscapeClose(() => setModal(false));
 
   return (
     <FaqModalStyled>

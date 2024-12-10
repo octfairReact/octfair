@@ -13,7 +13,7 @@ export const Notice = () => {
         <ContentBox>공지사항</ContentBox>
         <NoticeSearch />
         <NoticeMain />
-        <ImageCardList />
+        {/* <ImageCardList /> */}
       </NoticeProvider>
     </>
   );

@@ -9,6 +9,7 @@ import { postNoticeApi } from "../../../../api/postNoticeApi";
 import { Notice } from "../../../../api/api";
 import axios, { AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
+import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
 
 export interface INoitceModalProps {
   onSuccess: () => void;
@@ -181,6 +182,8 @@ export const NoticeModal: FC<INoitceModalProps> = ({ onSuccess, noticeSeq, setNo
         console.error("파일 다운로드 중 오류 발생", error);
       });
   };
+
+  useEscapeClose(() => setModal(false));
 
   return (
     <NoticeModalStyled>
