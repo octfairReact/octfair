@@ -32,6 +32,8 @@ export const Posts = {
   applyBizPostDetail: "/jobs/applyBizPostDetailBody.do",
   getScrapSave: "/jobs/saveScrapBody.do",
   saveApplyBody: "/jobs/saveApplyBody.do",
+  statusApplyBody: "/jobs/statusApplyBody.do",
+  scrapId: "/jobs/scrapId.do",
 };
 
 export const ManagePost = {
