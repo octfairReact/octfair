@@ -6,16 +6,13 @@
 
 ## 2️⃣ 팀원 구성
 
-| 황윤기     | 이민서     | 손신효 |
-|----------|----------|----------------|
+| 황윤기 | 이민서 | 손신효 |
+|--------|--------|--------|
 | <div align="center"><a href="https://github.com/hykworld"><img src="https://avatars.githubusercontent.com/u/70290522" width="250" height="250" /></a><br><a href="https://github.com/hykworld">hykworld</a></div> | <div align="center"><a href="https://github.com/Dev-miiing"><img src="https://avatars.githubusercontent.com/u/74334443" width="250" height="250" /></a><br><a href="https://github.com/Dev-miiing">Dev-miiing</a></div> | <div align="center"><a href="https://github.com/shinyorrr"><img src="https://avatars.githubusercontent.com/u/71862647" width="250" height="250" /></a><br><a href="https://github.com/shinyorrr">shinyorrr</a></div> |
 
 | 유성찬 | 우황희 | 김호관 |
 |--------|--------|--------|
-| <div align="center"><a href="https://github.com/it-is-wanthefull"><img src="https://avatars.githubusercontent.com/u/it-is-wanthefull" width="250" height="250" /></a><br><a href="https://github.com/it-is-wanthefull">it-is-wanthefull</a></div> | <div align="center"><a href="https://github.com/skh9301"><img src="https://avatars.githubusercontent.com/u/skh9301" width="250" height="250" /></a><br><a href="https://github.com/skh9301">skh9301</a></div> | <div align="center"><a href="https://github.com/KimHoKwan"><img src="https://avatars.githubusercontent.com/u/KimHoKwan" width="250" height="250" /></a><br><a href="https://github.com/KimHoKwan">KimHoKwan</a></div> |
-| 유성찬 | 우황희 | 김호관 |
-|--------|--------|--------|
-| <div align="center"><a href="https://github.com/it-is-wanthefull"><img src="https://avatars.githubusercontent.com/u/it-is-wanthefull" width="250" height="250" /></a><br><a href="https://github.com/it-is-wanthefull">it-is-wanthefull</a></div> | <div align="center"><a href="https://github.com/skh9301"><img src="https://avatars.githubusercontent.com/u/skh9301" width="250" height="250" /></a><br><a href="https://github.com/skh9301">skh9301</a></div> | <div align="center"><a href="https://github.com/KimHoKwan"><img src="https://avatars.githubusercontent.com/u/KimHoKwan" width="250" height="250" /></a><br><a href="https://github.com/KimHoKwan">KimHoKwan</a></div> |
+| <div align="center"><a href="https://github.com/hykworld"><img src="https://avatars.githubusercontent.com/u/70290522" width="250" height="250" /></a><br><a href="https://github.com/hykworld">hykworld</a></div> | <div align="center"><a href="https://github.com/Dev-miiing"><img src="https://avatars.githubusercontent.com/u/74334443" width="250" height="250" /></a><br><a href="https://github.com/Dev-miiing">Dev-miiing</a></div> | <div align="center"><a href="https://github.com/shinyorrr"><img src="https://avatars.githubusercontent.com/u/71862647" width="250" height="250" /></a><br><a href="https://github.com/shinyorrr">shinyorrr</a></div> |
 
 
 ## 3️⃣ 개발 환경
