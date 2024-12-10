@@ -100,6 +100,7 @@
      │     └── privateRoutesRev.jsx  
      └── styles
            └── Globalstyled.jsx
+```
 
 ## 6️⃣ 역할분담
 
