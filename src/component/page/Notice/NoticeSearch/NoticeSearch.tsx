@@ -86,7 +86,7 @@ export const NoticeSearch = () => {
 
   return (
     <NoticeSearchStyled>
-      <text>제목</text>
+      <label>제목</label>
       <div className="input-box">
         <input
           onChange={(e) => setSearchValue({ ...searchValue, searchTitle: e.target.value })}
