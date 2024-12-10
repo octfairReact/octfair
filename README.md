@@ -10,9 +10,33 @@
 |--------|--------|--------|
 | 데이터 1 | 데이터 2 | 데이터 3 |
 
-| 유성찬 | 우황희 | 김호관 |
-|--------|--------|--------|
-| 데이터 1 | 데이터 2 | 데이터 3 |
+<table>
+  <thead>
+    <tr style="background-color: orange;">
+      <th>이름</th>
+      <th>역할</th>
+      <th>프로필 이미지</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>유성찬</td>
+      <td>프론트엔드</td>
+      <td><img src="https://avatars.githubusercontent.com/u/사용자아이디" alt="유성찬 프로필 이미지" width="50" height="50" /></td>
+    </tr>
+    <tr>
+      <td>우황희</td>
+      <td>백엔드</td>
+      <td><img src="https://avatars.githubusercontent.com/u/사용자아이디" alt="우황희 프로필 이미지" width="50" height="50" /></td>
+    </tr>
+    <tr>
+      <td>김호관</td>
+      <td>디자이너</td>
+      <td><img src="https://avatars.githubusercontent.com/u/사용자아이디" alt="김호관 프로필 이미지" width="50" height="50" /></td>
+    </tr>
+  </tbody>
+</table>
+
 
 ## 3️⃣ 개발 환경
 
