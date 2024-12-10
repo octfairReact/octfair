@@ -14,27 +14,8 @@
 
 | 이민서 | 손신효 |
 |--------|--------|
-| [<img src="https://avatars.githubusercontent.com/u/74334443?v=4" height=250 width=250> <br/> @Dev-miiing](https://github.com/Dev-miiing) | [<img src="https://avatars.githubusercontent.com/u/71862647?v=4" height=250 width=250> <br/> @shinyorrr](https://github.com/shinyorrr) |
+| [<img src="https://avatars.githubusercontent.com/u/139543251?v=4" height=250 width=250> <br/> @Dev-miiing](https://github.com/Dev-miiing) | [<img src="https://avatars.githubusercontent.com/u/71862647?v=4" height=250 width=250> <br/> @shinyorrr](https://github.com/shinyorrr) |
 
-</div>
-
-<div align="center">
-  <table>
-    <tr>
-      <td>
-        <a href="https://github.com/Dev-miiing">
-          <img src="https://avatars.githubusercontent.com/u/74334443?v=4" height="250" width="250">
-        </a>
-        <br/> @Dev-miiing
-      </td>
-      <td>
-        <a href="https://github.com/shinyorrr">
-          <img src="https://avatars.githubusercontent.com/u/71862647?v=4" height="250" width="250">
-        </a>
-        <br/> @shinyorrr
-      </td>
-    </tr>
-  </table>
 </div>
 
 
