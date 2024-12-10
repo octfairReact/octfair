@@ -18,6 +18,27 @@
 
 </div>
 
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <a href="https://github.com/Dev-miiing">
+          <img src="https://avatars.githubusercontent.com/u/74334443?v=4" height="250" width="250">
+        </a>
+        <br/> @Dev-miiing
+      </td>
+      <td>
+        <a href="https://github.com/shinyorrr">
+          <img src="https://avatars.githubusercontent.com/u/71862647?v=4" height="250" width="250">
+        </a>
+        <br/> @shinyorrr
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+
 | 유성찬 | 우황희 | 김호관 |
 |--------|--------|--------|
 | <div align="center"><a href="https://github.com/hykworld"><img src="https://avatars.githubusercontent.com/u/70290522" width="250" height="250" /></a><br><a href="https://github.com/hykworld">hykworld</a></div> | <div align="center"><a href="https://github.com/Dev-miiing"><img src="https://avatars.githubusercontent.com/u/74334443" width="250" height="250" /></a><br><a href="https://github.com/Dev-miiing">Dev-miiing</a></div> | <div align="center"><a href="https://github.com/shinyorrr"><img src="https://avatars.githubusercontent.com/u/71862647" width="250" height="250" /></a><br><a href="https://github.com/shinyorrr">shinyorrr</a></div> |
