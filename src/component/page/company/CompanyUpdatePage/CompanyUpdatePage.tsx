@@ -199,7 +199,7 @@ export const CompanyUpdatePage = () => {
       //console.error("Failed to save notice:", CompanyDelete?.data);
     }
   };
-  console.log("asd", companyInfo);
+
   return (
     <div>
       <ContentBoxPost>기업 수정 및 삭제</ContentBoxPost>

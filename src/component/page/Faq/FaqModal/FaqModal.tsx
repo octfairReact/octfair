@@ -36,8 +36,6 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
 
       if (detail) {
         setFaqDetail(detail.data.detail);
-        console.log("데이터 확인", detail.data.detail);
-
         setFaqType(detail.data.detail.faq_type); // faqType 설정
         setTitle(detail.data.detail.title); // 제목 설정
         setContext(detail.data.detail.content); // 내용 설정
@@ -56,7 +54,6 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
       document.getElementById("title")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
-
     if (!context) {
       toast.warning("내용을을 입력해주세요.");
       document.getElementById("context")?.focus();
@@ -83,20 +80,17 @@ export const FaqModal: FC<IFaqModalProps> = ({ onSuccess, faqSeq, setFaqIndex })
       document.getElementById("title")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
-
     if (!context) {
       toast.warning("내용을을 입력해주세요.");
       document.getElementById("context")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
-
     const param = {
       title: title,
       context: context,
       faq_type: faqType,
       faqSeq,
     };
-    console.log("폼제출", param);
 
     const update = await postFaqApi<IPostResponse>(Faq.postUpdate, param);
     if (update && update.data.result === "success") {
