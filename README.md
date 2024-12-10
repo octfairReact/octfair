@@ -14,27 +14,28 @@
       <th>손신효</th>
     </tr>
     <tr>
-      <td style="text-align: center;">
-        <a href="https://github.com/hykworld">
+      <td>
+        <a href="https://github.com/hykworld" style="display: block; text-align: center;">
           <img src="https://avatars.githubusercontent.com/u/151594104?v=4" height="250" width="250">
+          <br/> @hykworld
         </a>
-        <br/> @hykworld
       </td>
-      <td style="text-align: center;">
-        <a href="https://github.com/Dev-miiing">
+      <td>
+        <a href="https://github.com/Dev-miiing" style="display: block; text-align: center;">
           <img src="https://avatars.githubusercontent.com/u/139543251?v=4" height="250" width="250">
+          <br/> @Dev-miiing
         </a>
-        <br/> @Dev-miiing
       </td>
-      <td style="text-align: center;">
-        <a href="https://github.com/shinyorrr">
+      <td>
+        <a href="https://github.com/shinyorrr" style="display: block; text-align: center;">
           <img src="https://avatars.githubusercontent.com/u/113576529?v=4" height="250" width="250">
+          <br/> @shinyorrr
         </a>
-        <br/> @shinyorrr
       </td>
     </tr>
   </table>
 </div>
+
 
 
 ## 3️⃣ 개발 환경
