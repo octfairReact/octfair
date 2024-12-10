@@ -107,9 +107,7 @@
 <br>
 
 ## 5️⃣ 역할분담
-<div align="center">
-  ![역할분담 이미지](./src/assets/gitReadMe/역할분담.png)
-</div>
+![역할분담 이미지](./src/assets/gitReadMe/역할분담.png)
 
 <br>
 
