@@ -8,6 +8,7 @@ import { QnaModalStyled } from "./styled";
 import { postQnaApi } from "../../../../api/postQnaApi";
 import { Qna } from "../../../../api/api";
 import axios, { AxiosRequestConfig } from "axios";
+import { toast } from "react-toastify";
 
 export interface IQnaModalProps {
   onSuccess: () => void;
@@ -19,28 +20,39 @@ export interface IQnaModalProps {
 export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qnaPassword }) => {
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const [modal, setModal] = useRecoilState<boolean>(modalState);
-  //save
-  const title = useRef<HTMLInputElement>();
-  const context = useRef<HTMLTextAreaElement>();
   const password = useRef<HTMLInputElement>();
-  const ansContent = useRef<HTMLTextAreaElement>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [fileData, setFileData] = useState<File>();
-  const [qnaDetail, setQnaDetail] = useState<IQnaDetail>();
+  const [qnaDetail, setQnaDetail] = useState<IQnaDetail>({
+    fileName: "",
+    fileExt: "",
+    fileSize: 0,
+    logicalPath: "",
+    phsycalPath: "",
+    updatedDate: "",
+    ans_content: "",
+    qna_type: "",
+    qnaIdx: 0,
+    title: "",
+    content: "",
+    author: "",
+    createdDate: "",
+    password: "",
+  });
+
+  const dataFieldName = {
+    title: "제목",
+    content: "내용",
+  };
 
   useEffect(() => {
-    //컴포넌트가 열렸을 때 조건 확인 후 함수
     if (qnaSeq && modal) {
       searchDetail();
     }
 
-    //컴포넌트가 사라지기 직전에 발동
     return () => {
       qnaSeq && setQnaSeq(undefined);
     };
-    // 클립업 함수
-    // 컴포넌트가 언마운티드 되기 전에 실행되는 콜백함수
-    // 추가 공부
   }, [qnaSeq, modal]);
 
   const searchDetail = async () => {
@@ -56,16 +68,14 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
       if (detail?.data.result === "fail") {
         setModal(!modal); // 모달 닫기
         setQnaSeq(undefined); // qnaSeq 초기화
-        alert("비밀번호가 일치하지 않습니다.");
+        toast.warning("비밀번호가 일치하지 않습니다.");
         return;
       }
       setQnaDetail(detail.data.detail);
       const { fileExt, logicalPath } = detail?.data?.detail;
-      console.log("데이터", detail?.data?.detail);
+
       if (fileExt === "jpg" || fileExt === "gif" || fileExt === "png") {
         setImageUrl(logicalPath);
-
-        console.log("미리보기", logicalPath);
       } else {
         setImageUrl("");
       }
@@ -74,30 +84,33 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    let isProblem: boolean = false;
 
-    // 제목을 입력해주세요
-    if (!title.current.value) {
-      alert("제목을 입력해주세요.");
-      document.getElementById("qnaTit")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
+    Object.entries(dataFieldName).some(([key]) => {
+      if (!qnaDetail[key] || qnaDetail[key].length <= 0) {
+        toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
+        document.getElementById(key)?.focus();
+        isProblem = true;
+        return true; // 비정상입니다, 반복을 종료합니다
+      }
+      return false; // 정상입니다, 다음순회를 반복합니다
+    });
+
+    if (isProblem) {
+      return; // 함수 종료
     }
-    // 내용을 입력해주세요
-    if (!context.current.value) {
-      alert("내용을 입력해주세요.");
-      document.getElementById("qnaCon")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
-    }
+
     // 비밀번호를 입력해주세요
     if (!password.current.value) {
-      alert("비밀번호를 입력해주세요.");
+      toast.info("비밀번호를 입력해주세요.");
       document.getElementById("password")?.focus();
       return; // 유효성 검사 실패 시 함수 종료
     }
 
     const fileForm = new FormData();
     const textData = {
-      qnaTit: title.current.value,
-      qnaCon: context.current.value,
+      qnaTit: qnaDetail.title,
+      qnaCon: qnaDetail.content,
       loginId: userInfo.loginId,
       password: password.current.value,
       qna_type: userInfo.userType,
@@ -108,33 +121,36 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
     const save = await postQnaApi<IPostResponse>(Qna.postSave, fileForm);
 
     if (save && save.data.result === "success") {
-      console.log("성공");
       onSuccess();
     } else {
-      console.error("Failed to save notice:", save?.data);
+      //console.error("Failed to save notice:", save?.data);
     }
   };
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 제목을 입력해주세요
-    if (!title.current.value) {
-      alert("제목을 입력해주세요.");
-      document.getElementById("qnaTit")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
+    let isProblem: boolean = false;
+    if (userInfo.userType !== "M") {
+      Object.entries(dataFieldName).some(([key]) => {
+        if (!qnaDetail[key] || qnaDetail[key].length <= 0) {
+          toast.info(`'${dataFieldName[key]}'에 빈칸을 채워주세요!`);
+          document.getElementById(key)?.focus();
+          isProblem = true;
+          return true; // 문제가 있으므로 반복 종료
+        }
+        return false; // 정상, 다음 순회 반복
+      });
     }
-    // 내용을 입력해주세요
-    if (!context.current.value) {
-      alert("내용을 입력해주세요.");
-      document.getElementById("qnaCon")?.focus();
-      return; // 유효성 검사 실패 시 함수 종료
+
+    if (isProblem) {
+      return;
     }
 
     // 비밀번호를 입력해주세요
     if (userInfo.userType !== "M") {
       if (!password.current.value) {
-        alert("비밀번호를 입력해주세요.");
+        toast.info("비밀번호를 입력해주세요.");
         document.getElementById("password")?.focus();
         return; // 유효성 검사 실패 시 함수 종료
       }
@@ -142,19 +158,18 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
 
     const fileForm = new FormData();
     const textData = {
-      qnaTit: title.current.value,
-      qnaCon: context.current.value,
+      qnaTit: qnaDetail.title,
+      qnaCon: qnaDetail.content,
       loginId: userInfo.loginId,
       qna_type: userInfo.userType,
       qnaSeq: qnaDetail.qnaIdx,
     };
 
-    if (userInfo.userType !== "M" && password.current.value) {
-      // textData["키 값"] = 밸류값
+    if (userInfo.userType !== "M" && qnaDetail.password) {
       textData["password"] = password.current.value;
     }
-    if (userInfo.userType === "M" && ansContent.current?.value) {
-      textData["ans_content"] = ansContent.current.value;
+    if (userInfo.userType === "M" && qnaDetail.ans_content) {
+      textData["ans_content"] = qnaDetail.ans_content;
     }
 
     fileData && fileForm.append("file", fileData);
@@ -163,10 +178,9 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
     const update = await postQnaApi<IPostResponse>(Qna.postUpdate, fileForm);
 
     if (update && update.data.result === "success") {
-      console.log("성공");
       onSuccess();
     } else {
-      console.error("Failed to save notice:", update?.data);
+      //console.error("Failed to save notice:", update?.data);
     }
   };
 
@@ -180,7 +194,7 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
     if (postDelete && postDelete.data.result === "success") {
       onSuccess();
     } else {
-      console.error("Failed to save notice:", postDelete?.data);
+      //console.error("Failed to save notice:", postDelete?.data);
     }
   };
 
@@ -191,31 +205,22 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
   const handlerFile = (e: ChangeEvent<HTMLInputElement>) => {
     const fileInfo = e.target.files; // input에서 선택한 파일 정보 가져오기
 
-    console.log("파일 인포", fileInfo);
     if (fileInfo?.length > 0) {
       // 파일이 선택되었으면
       const fileInfoSplit = fileInfo[0].name.split("."); // 파일 이름을 점(.)으로 분리하여 확장자 추출
       const fileExtension = fileInfoSplit[1].toLowerCase(); // 확장자 소문자로 변환
-
       const file = fileInfo[0]; // 첫 번째 파일
-
-      console.log(file.name); // 파일 이름 (예: "example.jpg")
-      console.log(file.size); // 파일 크기 (바이트 단위)
-      console.log(file.type); // MIME 타입 (예: "image/jpeg" 또는 "image/png")
 
       if (fileExtension === "jpg" || fileExtension === "gif" || fileExtension === "png") {
         if (file.size <= 10 * 1024 * 1024) {
-          // 10MB 이하로 제한
           setImageUrl(URL.createObjectURL(fileInfo[0])); // 이미지 미리보기 URL 생성
-          console.log("미리보기", URL.createObjectURL(fileInfo[0]));
         } else {
-          // 파일이 너무 크면 처리
-          alert("파일이 너무 큽니다. 10MB 이하로 업로드해 주세요.");
+          toast.warning("파일이 너무 큽니다. 10MB 이하로 업로드해 주세요.");
           setImageUrl(""); // 이미지 미리보기 URL 초기화
         }
       } else {
         setImageUrl(""); // 다른 확장자일 경우 미리보기 URL 초기화
-        alert("이미지 파일만 업로드 가능합니다.");
+        toast.warning("이미지 파일만 업로드 가능합니다.");
       }
 
       setFileData(fileInfo[0]); // 선택된 파일을 상태에 저장
@@ -227,7 +232,6 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
 
     param.append("qnaSeq", qnaSeq.toString());
 
-    // Axios 요청 설정 객체
     const postAction: AxiosRequestConfig = {
       url: "/board/qnaDownload.do", // 백엔드의 파일 다운로드 API 엔드포인트
       method: "post", // HTTP 메서드: POST
@@ -236,11 +240,9 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
       // 참고: blob은 파일, 이미지, 영상 등과 같은 대용량 바이너리 데이터를 다룰 때 사용
     };
 
-    // Axios 요청 실행
     await axios(postAction)
       .then((res) => {
         // 응답 데이터 확인: blob 형태로 반환되는 파일 데이터
-        console.log("다운로드 데이터 blob", res);
 
         // Blob 데이터를 URL로 변환
         const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -260,8 +262,23 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
       })
       .catch((error) => {
         // 에러 처리: 다운로드 실패 시 로그 출력
-        console.error("파일 다운로드 중 오류 발생", error);
+        //console.error("파일 다운로드 중 오류 발생", error);
       });
+  };
+
+  const passwordReset = async () => {
+    const param = {
+      qnaSeq: qnaDetail.qnaIdx,
+      author: qnaDetail.author,
+    };
+
+    const resetPassword = await postQnaApi<IPostResponse>(Qna.passwordReset, param);
+
+    if (resetPassword && resetPassword.data.result === "success") {
+      onSuccess();
+    } else {
+      //console.error("Failed to save notice:", postDelete?.data);
+    }
   };
 
   return (
@@ -285,9 +302,11 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                     type="text"
                     className="inputTxt p100"
                     name="qnaTit"
-                    id="qnaTit"
-                    ref={title}
-                    defaultValue={qnaDetail?.title}
+                    id="title"
+                    value={qnaDetail?.title}
+                    onChange={(e) => {
+                      setQnaDetail((prev) => ({ ...prev, title: e.target.value }));
+                    }}
                     readOnly={!!qnaDetail?.ans_content}
                   />
                 </td>
@@ -299,12 +318,14 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                 <td colSpan={3}>
                   <textarea
                     name="qnaCon"
-                    id="qnaCon"
+                    id="content"
                     cols={40}
                     rows={5}
-                    ref={context}
-                    defaultValue={qnaDetail?.content}
+                    value={qnaDetail?.content}
                     readOnly={!!qnaDetail?.ans_content}
+                    onChange={(e) => {
+                      setQnaDetail((prev) => ({ ...prev, content: e.target.value }));
+                    }}
                   ></textarea>
                 </td>
               </tr>
@@ -330,7 +351,7 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                   </div>
                 </td>
               </tr>
-              {userInfo.userType !== "M" && (
+              {userInfo.userType !== "M" && !qnaDetail?.ans_content && (
                 <tr>
                   <th scope="row">
                     비밀번호<span className="font_red">*</span>
@@ -341,16 +362,15 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                       className="inputTxt p100"
                       name="password"
                       id="password"
-                      ref={password}
-                      // defaultValue={qnaDetail?.password}
                       onFocus={(e) => (e.target.type = "text")} // 포커스 시 비밀번호로 전환
                       onBlur={(e) => (e.target.type = "password")} // 포커스 해제 시 일반 텍스트로 변경
                       readOnly={!!qnaDetail?.ans_content}
+                      ref={password}
                     />
                   </td>
                 </tr>
               )}
-              {qnaDetail ? (
+              {(qnaDetail?.ans_content || userInfo.userType === "M") && (
                 <tr id="ansContent">
                   <th scope="row">답변</th>
                   <td colSpan={3}>
@@ -359,29 +379,14 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                       id="ans_content"
                       cols={40}
                       rows={5}
-                      ref={ansContent}
-                      defaultValue={qnaDetail?.ans_content}
+                      value={qnaDetail?.ans_content}
                       readOnly={userInfo.userType !== "M"} // 관리자만 수정 가능
+                      onChange={(e) => {
+                        setQnaDetail((prev) => ({ ...prev, ans_content: e.target.value }));
+                      }}
                     ></textarea>
                   </td>
                 </tr>
-              ) : (
-                userInfo.userType === "M" && (
-                  <tr id="ansContent">
-                    <th scope="row">답변</th>
-                    <td colSpan={3}>
-                      <textarea
-                        name="ans_content"
-                        id="ans_content"
-                        cols={40}
-                        rows={5}
-                        ref={ansContent}
-                        defaultValue={qnaDetail?.ans_content}
-                        readOnly={false} // 관리자만 입력 가능
-                      ></textarea>
-                    </td>
-                  </tr>
-                )
               )}
             </tbody>
           </table>
@@ -404,6 +409,7 @@ export const QnaModal: FC<IQnaModalProps> = ({ onSuccess, qnaSeq, setQnaSeq, qna
                 답변등록
               </button>
             )}
+            {qnaDetail && userInfo.userType === "M" && <button onClick={passwordReset}>비밀번호 초기화</button>}
             {/* 삭제는 작성자 또는 관리자만 삭제 가능하게 */}
             {qnaDetail && (userInfo.userType === "M" || userInfo.loginId === qnaDetail.author) && (
               <button className="btn blue" id="qnaFileDelete" onClick={handleDelete}>

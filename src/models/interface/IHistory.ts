@@ -28,29 +28,47 @@ export interface IHistoryResponse {
 
 export interface IHistoryModal {
     index: number | null;
-    setModal: React.Dispatch<React.SetStateAction<boolean>>;
-    resumeInfo: { userNm: string; email: string; phone: string; resTitle: string; shortIntro: string; perStatement: string;};
+    resIdx: number;
+    resumeInfo: IResumeInfo;
     careerInfo: ICareerInfo[];
-    eduInfo: IEduInfo[];
+    educationInfo: IEduInfo[];
     skillInfo: ISkillInfo[];
     certInfo: ICertInfo[];
-    resIdx: number;
+}
+// 모달 출력 시 초기 값을 -1로 줘서 값이 안나오게해서 값이 없음을 출력하지 않게하기
+export const defaultHistoryModal:IHistoryModal = {
+    index: -1,
+    resIdx: undefined,
+    resumeInfo: undefined,
+    careerInfo: undefined,
+    educationInfo: undefined,
+    skillInfo: undefined,
+    certInfo: undefined,
 }
 export interface IResumeInfo {
+    resTitle: string;
     userNm: string;
     email: string;
     phone: string;
-    resTitle: string;
     shortIntro: string;
-    perStatement?: string;
+    proLink: string;
+    fileName: string;
+    perStatement: string;
 }
 export interface ICareerInfo {
     company: string;
+    dept: string;
     position: string;
+    startDate: string;
+    endDate: string;
+    crrDesc: string;
 }
 export interface IEduInfo {
     schoolName: string;
     major: string;
+    grdStatus: String;
+    admDate: String;
+    grdDate: String;
 }
 export interface ISkillInfo {
     skillName: string;

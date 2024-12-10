@@ -29,6 +29,7 @@ export interface IPostDetail extends IPost {
   endDate: string;
   hiringProc: string;
   fileName: string;
+  hirProcess : string;
   appStatus: string;
   phsycalPath: string;
   logicalPath: string;

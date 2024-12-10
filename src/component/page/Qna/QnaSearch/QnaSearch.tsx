@@ -4,8 +4,9 @@ import { useRecoilState } from "recoil";
 import { useContext, useState } from "react";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
-import { modalState, qnaMyListState } from "../../../../stores/modalState";
+import { modalState } from "../../../../stores/modalState";
 import { QnaContext } from "../../../../api/provider/QnaProvider";
+import { qnaMyListState } from "../../../../stores/qnaModalState";
 
 export const QnaSearch = () => {
   const [modal, setModal] = useRecoilState<boolean>(modalState);
@@ -23,7 +24,6 @@ export const QnaSearch = () => {
   };
 
   const handlerModal = () => {
-    console.log("쇼모달 서치");
     setModal(!modal);
   };
 
@@ -37,7 +37,6 @@ export const QnaSearch = () => {
       handlerSearch(); // Enter 키가 눌리면 검색 실행
     }
   };
-
   return (
     <>
       <QnaSearchStyled>
@@ -68,12 +67,12 @@ export const QnaSearch = () => {
             </>
           )}
           {/* 유저 타입 m일때만 보이게 하기  */}
-          {userInfo.userType === "B" || userInfo.userType === "A" ? (
-            <Button onClick={() => handlerMylist("my")}>내가 쓴 글</Button>
-          ) : null}
-          {userInfo.userType === "B" || userInfo.userType === "A" ? (
-            <Button onClick={handlerModal}>질문등록</Button>
-          ) : null}
+          {(userInfo?.userType === "B" || userInfo?.userType === "A") && (
+            <>
+              <Button onClick={() => handlerMylist("my")}>내가 쓴 글</Button>
+              <Button onClick={handlerModal}>질문등록</Button>
+            </>
+          )}
         </div>
       </QnaSearchStyled>
     </>

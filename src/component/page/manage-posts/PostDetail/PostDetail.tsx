@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ManagePost } from "../../../../api/api";
+import { Hire, ManagePost } from "../../../../api/api";
 import { IAllDetail, ICompanyDetail, IPostDetail } from "../../../../models/interface/IPost";
 import { postPostApi } from "../../../../api/postPostApi";
 import { PostDetailStyled } from "./ManagePostPage";
@@ -63,6 +63,24 @@ export const PostDetail = () => {
       handleBack();
     }
   };
+  const hireUpdate = (postIdx: number, bizIdx: number) => {
+    navigate("/react/manage-hire/managehireWritePageUpdate.do", {
+      state: { postIdx, bizIdx },
+    });
+  };
+
+  const hireDelete = async () => {
+    // data-status 값을 가져오기
+    const param = { postIdx, bizIdx };
+
+    // status 값을 이용하여 처리
+    const response = await postPostApi<IPostResponse>(Hire.getDelete, param);
+    console.log(response);
+    if (response.data.result === "success") {
+      alert("삭제 되었습니다.");
+      handleBack();
+    }
+  };
 
   return (
     <PostDetailStyled>
@@ -70,8 +88,10 @@ export const PostDetail = () => {
         채용 상세정보
         {userInfo.loginId && userInfo.loginId === CDetail?.loginId && (
           <div className="action-buttons">
-            <button className="btn btn-outline-primary">수정</button>
-            <button className="btn btn-outline-danger">삭제</button>
+            {/* <button className="btn btn-outline-primary" onClick={()=>hireUpdate(postIdx,bizIdx)}>수정</button> */}
+            <button className="btn btn-outline-danger" onClick={hireDelete}>
+              삭제
+            </button>
           </div>
         )}
       </ContentBoxPost>
@@ -108,95 +128,3 @@ export const PostDetail = () => {
     </PostDetailStyled>
   );
 };
-
-// 회사 정보 및 파일 다운로드 처리 컴포넌트
-// const CompanyInfo = ({
-//   data,
-//   Cdata,
-//   bizIdx,
-//   postIdx,
-// }: {
-//   data: IPostDetail;
-//   Cdata: ICompanyDetail;
-//   bizIdx: string | number;
-//   postIdx: string | number;
-// }) => {
-//   const navigate = useNavigate();
-
-//   // 회사 상세 페이지로 이동
-//   const companyDetail = () => {
-//     navigate(`/react/company/companyDetailPage.do/${postIdx}/${bizIdx}`);
-//   };
-
-//   // 파일 다운로드 처리
-//   const downloadFile = async () => {
-//     const param = {
-//       bizIdx,
-//       postIdx,
-//     };
-
-//     const postAction: AxiosRequestConfig = {
-//       url: "/manage-hire/managehireDownloadBody.do",
-//       method: "post",
-//       data: param,
-//       responseType: "blob",
-//     };
-
-//     try {
-//       const response = await axios(postAction);
-//       const url = window.URL.createObjectURL(new Blob([response.data]));
-//       const link = document.createElement("a");
-//       link.href = url;
-//       link.setAttribute("download", data.fileName || "downloadedFile");
-//       document.body.appendChild(link);
-//       link.click();
-//       link.remove();
-//     } catch (error) {
-//       console.error("파일 다운로드 중 오류 발생:", error);
-//     }
-//   };
-
-//   return (
-//     <PostDetailStyled>
-//       <div className="company-info-content">
-//         <img src={Cdata.logicalPath} alt="Company Logo" width="150" height="150" />
-//         <h4>기업 정보</h4>
-//         <p>
-//           <strong>기업명:</strong> {Cdata.bizName}
-//         </p>
-//         <p>
-//           <strong>연락처:</strong> {Cdata.bizContact}
-//         </p>
-//         <p>
-//           <strong>사원수:</strong> {Cdata.bizEmpCount}
-//         </p>
-//         <p>
-//           <strong>주소:</strong> {Cdata.bizAddr}
-//         </p>
-//         <p>
-//           <strong>대표명:</strong> {Cdata.bizCeoName}
-//         </p>
-//         <button onClick={companyDetail}>기업정보→</button>
-//       </div>
-//       <p>
-//         <strong>첨부파일:</strong>
-//         <span className="download-link" onClick={downloadFile}>
-//           {data.fileName}
-//         </span>
-//       </p>
-//       <div className="date">
-//         <span className="remaining">남은 기간</span>
-//         <div className="date-details">
-//           <div className="date-item">
-//             <span>시작일</span>
-//             <span>마감일</span>
-//           </div>
-//           <div className="date-item">
-//             <span>{data.startDate}</span>
-//             <span>{data.endDate}</span>
-//           </div>
-//         </div>
-//       </div>
-//     </PostDetailStyled>
-//   );
-// };

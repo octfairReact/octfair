@@ -3,13 +3,9 @@ import { ManageUserContext } from "../../../../api/provider/ManageUserProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../../common/Button/Button";
 import { ManageUserSearchStyled } from "./styled";
-import { useRecoilState } from "recoil";
-import { updateApplicantModalState, updateBizModalState } from "../../../../stores/modalState";
 
 export const ManageUserSearch = () => {
   const { setSearchKeyWord } = useContext(ManageUserContext); // 이 Provider가 선언된 pages.해당페이지 내의 컴포넌트에 공유되는 광역변수
-  const [updateApplicationModal, setUpdateApplicationModal] = useRecoilState<boolean>(updateApplicantModalState);
-  const [updateBizModal, setUpdateBizModal] = useRecoilState<boolean>(updateBizModalState);
   const [searchValue, setSearchValue] = useState<{ searchName: string; }>({
     searchName: "", // searchName은 검색키워드이고, 보통 이외에 날짜 등이 있을 수 있음
   });
@@ -25,16 +21,13 @@ export const ManageUserSearch = () => {
   const pressEnterEscHandler = (event) => {
     if (event.key === "Enter")
       setSearchKeyWord(searchValue);
-    else if (event.key == "Escape") {
-      setUpdateApplicationModal(false);
-      setUpdateBizModal(false);
-    }
   };
 
   return (
     <>
       <ManageUserSearchStyled onKeyDown={pressEnterEscHandler}>
         <div className="input-box">
+          <label>이름/사업자명: </label>
           <input onChange={(e) => setSearchValue({ ...searchValue, searchName: e.target.value })}></input>
           <Button onClick={() => setSearchKeyWord(searchValue)}>검색</Button>
         </div>

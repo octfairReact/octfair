@@ -25,7 +25,6 @@ export const FaqSearch = () => {
     setModal(!modal);
   };
 
-  // 엔터 키 입력 처리 함수
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handlerSearch(); // Enter 키가 눌리면 검색 실행
@@ -51,7 +50,6 @@ export const FaqSearch = () => {
             ></input>
             <Button onClick={handlerSearch}>검색</Button>
           </label>
-          {/* 유저 타입 m일때만 보이게 하기  */}
           {userInfo.userType === "M" ? <Button onClick={handlerModal}>신규등록</Button> : null}
         </div>
       </FaqSearchStyled>

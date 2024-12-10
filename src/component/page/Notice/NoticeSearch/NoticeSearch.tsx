@@ -10,13 +10,9 @@ import { postNoticeApi } from "../../../../api/postNoticeApi";
 import { IScrapResponse } from "../../../../models/interface/IScrap";
 import { ScrapURL } from "../../../../api/api";
 import { ScrapContext } from "../../../../api/provider/ScrapProvider";
+import { toast } from "react-toastify";
 
 export const NoticeSearch = () => {
-  const title = useRef<HTMLInputElement>();
-  //React에서 제공하는 훅으로, 컴포넌트에서 값을 참조(reference)할 수 있게
-  // const [startDate, setStartDate] = useState<string>();
-  // //[startDate = 값, setStartDate = 함수]
-  // const [endDate, setEndDate] = useState<string>();
   const [modal, setModal] = useRecoilState<boolean>(modalState);
 
   const [searchValue, setSearchValue] = useState<{ searchTitle: string; searchStDate: string; searchEdDate: string }>({
@@ -27,13 +23,6 @@ export const NoticeSearch = () => {
   const { scrapIndexes, setScrapIndexes, postIndexes, setPostIndexes, setSearchKeyWord } = useContext(ScrapContext);
 
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
-  console.log("유저 타입정보", userInfo.userType);
-  // useEffect(() => {
-  //   console.log(title, startDate, endDate);
-  // }, [title, startDate, endDate]);
-  //() => {}, [title, startDate, endDate (변화를 감지)]
-  //의존성 배열
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,7 +56,6 @@ export const NoticeSearch = () => {
     setModal(!modal);
   };
 
-  // NoticeSearch 컴포넌트
   const deleteScrap = async () => {
     console.log("딜리트 눌럿다." + postIndexes);
     console.log("딜리트 눌럿다." + scrapIndexes);
@@ -79,12 +67,10 @@ export const NoticeSearch = () => {
     };
 
     if (postIndexes.length > 0) {
-      console.log("업데이트 작업 시작");
       const updateScrap = await postNoticeApi<IScrapResponse>(ScrapURL.getScarpUpdate, postParam);
       if (updateScrap && updateScrap.data.result === "success") {
-        console.log("수정되었습니다.");
       } else {
-        alert("수정실패 했습니다.");
+        toast.warning("수정실패 했습니다.");
         return;
       }
 
@@ -92,27 +78,32 @@ export const NoticeSearch = () => {
     }
 
     if (scrapIndexes.length > 0) {
-      console.log("삭제 작업 시작");
       const deleteScrap = await postNoticeApi<IScrapResponse>(ScrapURL.getScarpDelete, scrapParam);
       if (deleteScrap && deleteScrap.data.result === "success") {
-        alert("삭제되었습니다.");
-        // 검색 결과 다시 로드
+        toast.success("삭제되었습니다.");
         setScrapIndexes([]); // 새로 고침을 위한 상태 초기화
         setPostIndexes([]);
       } else {
-        alert("삭제실패 했습니다.");
+        toast.warning("삭제실패 했습니다.");
       }
-      console.log("삭제 완료");
     }
   };
+
+  // 엔터 키 입력 처리 함수
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handlerSearch(); // Enter 키가 눌리면 검색 실행
+    }
+  };
+
   return (
     <NoticeSearchStyled>
-      {/*NoticeSearchStyled = 라이브러리(Styled 컴포넌드/ 패키지json에 있음) */}
+      <label>제목</label>
       <div className="input-box">
-        {/* <input ref={title}></input>
-        <input type="date" onChange={(e) => setStartDate(e.target.value)}></input>
-        <input type="date" onChange={(e) => setEndDate(e.target.value)}></input> */}
-        <input onChange={(e) => setSearchValue({ ...searchValue, searchTitle: e.target.value })}></input>
+        <input
+          onChange={(e) => setSearchValue({ ...searchValue, searchTitle: e.target.value })}
+          onKeyDown={handleKeyDown} // 엔터 키 이벤트 추가
+        ></input>
         <input type="date" onChange={(e) => setSearchValue({ ...searchValue, searchStDate: e.target.value })}></input>
         <input type="date" onChange={(e) => setSearchValue({ ...searchValue, searchEdDate: e.target.value })}></input>
         <Button onClick={handlerSearch}>검색</Button>

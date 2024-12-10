@@ -101,7 +101,7 @@ export const ResumeMain = () => {
     const resumeDelete = await postResumeApi<IPostResponse>(Resume.resumeDelete, param);
 
     if (resumeDelete && resumeDelete.data.result === "success") {
-      alert("삭제되었습니다.");
+      toast.error(`이력서가 성공적으로 삭제되었습니다.`);
       onSuccess();
     } else {
       console.error("삭제 실패:", resumeDelete?.data);

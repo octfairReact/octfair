@@ -328,19 +328,6 @@ export const ResumeBasic = () => {
         <HistoryModal
           resIdx={resIdx}
           index={0}
-          setModal={setModal}
-          resumeInfo={{
-            userNm: "",
-            email: "",
-            phone: "",
-            resTitle: "",
-            shortIntro: "",
-            perStatement: "",
-          }}
-          careerInfo={[]}
-          eduInfo={[]}
-          skillInfo={[]}
-          certInfo={[]}
         />
       )}
     </>
