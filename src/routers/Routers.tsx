@@ -21,6 +21,8 @@ import { ManageBiz } from "../pages/ManageBiz";
 import { CompanyWritePage } from "../component/page/company/CompanyWritePage/CompanyWritePage";
 import { CompanyUpdatePage } from "../component/page/company/CompanyUpdatePage/CompanyUpdatePage";
 import { CompanyDetailPage } from "../component/page/company/CompanyDetail/CompanyDetailPage";
+import { MenuMain } from "../component/page/Login/LoginMain/MenuMain";
+import { ImageCardList } from "../component/page/Login/LoginMain/ImageCardList";
 
 const routers: RouteObject[] = [
   { path: "*", element: <NotFound /> },
@@ -30,6 +32,13 @@ const routers: RouteObject[] = [
     element: <DashBoard />,
 
     children: [
+      {
+        path: "",
+        element:  <>
+                    <MenuMain />, 
+                    {/* <ImageCardList /> */}
+                  </>
+      },
       {
         path: "apply",
         children: [
