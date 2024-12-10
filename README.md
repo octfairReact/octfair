@@ -14,49 +14,19 @@
       <th>손신효</th>
     </tr>
     <tr>
-      <td>
+      <td style="text-align: center;">
         <a href="https://github.com/hykworld">
           <img src="https://avatars.githubusercontent.com/u/151594104?v=4" height="250" width="250">
         </a>
         <br/> @hykworld
       </td>
-      <td>
+      <td style="text-align: center;">
         <a href="https://github.com/Dev-miiing">
           <img src="https://avatars.githubusercontent.com/u/139543251?v=4" height="250" width="250">
         </a>
         <br/> @Dev-miiing
       </td>
-      <td>
-        <a href="https://github.com/shinyorrr">
-          <img src="https://avatars.githubusercontent.com/u/113576529?v=4" height="250" width="250">
-        </a>
-        <br/> @shinyorrr
-      </td>
-    </tr>
-  </table>
-</div>
-
-<div align="center">
-  <table>
-    <tr>
-      <th>유성찬</th>
-      <th>우황희</th>
-      <th>김호관</th>
-    </tr>
-    <tr>
-      <td>
-        <a href="https://github.com/hykworld">
-          <img src="https://avatars.githubusercontent.com/u/151594104?v=4" height="250" width="250">
-        </a>
-        <br/> @hykworld
-      </td>
-      <td>
-        <a href="https://github.com/Dev-miiing">
-          <img src="https://avatars.githubusercontent.com/u/139543251?v=4" height="250" width="250">
-        </a>
-        <br/> @Dev-miiing
-      </td>
-      <td>
+      <td style="text-align: center;">
         <a href="https://github.com/shinyorrr">
           <img src="https://avatars.githubusercontent.com/u/113576529?v=4" height="250" width="250">
         </a>
