@@ -111,6 +111,9 @@
   ![역할분담 이미지](./src/assets/gitReadMe/역할분담.png)
 </div>
 
+<br>
+
+
 ## 6️⃣ 페이지별 기능
 
 ### 홈 페이지 (`Home.js`)
