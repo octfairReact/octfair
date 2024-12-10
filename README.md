@@ -34,6 +34,7 @@
 
 ## 프로젝트 구조
 
+```jsx
 ├── README.md
 ├── .eslintrc.js
 ├── .gitignore
