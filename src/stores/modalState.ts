@@ -11,23 +11,3 @@ export const ApplyModalState = atom<boolean>({
   key: "ApplyModalState",
   default: false,
 });
-
-export const scrapState = atom<boolean>({
-  key: "scrapState",
-  default: false,
-});
-
-export const noticeState = atom<boolean>({
-  key: "noticeState",
-  default: false,
-});
-
-export const scrapIndexGrop = atom<number[]>({
-  key: "scrapIndexGrop",
-  default: [],
-});
-
-export const postIndexGrop = atom<number[]>({
-  key: "postIndexGrop",
-  default: [],
-});

@@ -24,7 +24,6 @@ export const QnaSearch = () => {
   };
 
   const handlerModal = () => {
-    console.log("쇼모달 서치");
     setModal(!modal);
   };
 
@@ -38,9 +37,6 @@ export const QnaSearch = () => {
       handlerSearch(); // Enter 키가 눌리면 검색 실행
     }
   };
-
-  console.log("userInfo.userType", userInfo.userType);
-
   return (
     <>
       <QnaSearchStyled>

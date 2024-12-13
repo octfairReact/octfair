@@ -1,19 +1,4 @@
-import { StyledTable } from "../../../common/styled/StyledTable";
-import {
-  ResumeDetailBody,
-  ResumeDetailBodyBasicInfo,
-  ResumeDetailBodyHeader,
-  ResumeDetailBodyGuide,
-  ResumeInput,
-  ResumeTextarea,
-  ResumeButton,
-  ResumeTable,
-  InputBtnGroup,
-  BtnGroup,
-  AttachContainer,
-  AttachFileName,
-  AttachDeleteButton,
-} from "../styled";
+import { ResumeInput, ResumeTextarea, ResumeButton, ResumeTable, InputBtnGroup } from "../styled";
 import { Button } from "../../../common/Button/Button";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { Skill, IPostResponse } from "../../../../models/interface/IResume";
@@ -74,8 +59,7 @@ export const SkillList = () => {
         ...formData,
         resIdx,
       };
-      console.log("전송할 데이터:", param);
-
+      console.log(resIdx + " : resIdx값");
       const response = await postResumeApi<IPostResponse>(Resume.skillInsert, param);
 
       if (response.data.result === "success") {
@@ -96,9 +80,7 @@ export const SkillList = () => {
       {showTable && (
         <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
           <li style={{ marginBottom: "24px" }}>
-            <ResumeTable
-              style={{ width: "100%", border: "1px solid gray", borderCollapse: "collapse" }}
-            >
+            <ResumeTable style={{ width: "100%", border: "1px solid gray", borderCollapse: "collapse" }}>
               <tbody>
                 <tr>
                   <td style={{ border: "1px solid gray", width: "30%" }}>
@@ -144,22 +126,12 @@ export const SkillList = () => {
           </li>
         </ul>
       )}
-      <SkillListDisplay
-        skills={skills}
-        setSkills={setSkills}
-        showTable={showTable}
-        setShowTable={setShowTable}
-      />
+      <SkillListDisplay skills={skills} setSkills={setSkills} showTable={showTable} setShowTable={setShowTable} />
     </>
   );
 };
 
-export const SkillListDisplay: FC<SkillListDisplayProps> = ({
-  skills,
-  setSkills,
-  showTable,
-  setShowTable,
-}) => {
+export const SkillListDisplay: FC<SkillListDisplayProps> = ({ skills, setSkills, showTable, setShowTable }) => {
   const location = useLocation();
   const context = useContext(ResumeContext);
 

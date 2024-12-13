@@ -4,8 +4,7 @@ import { postHireApi } from "../../../api/postHireApi";
 import { IHire, IHireListResponse } from "../../../models/interface/IHire";
 import { StyledTable, StyledTd, StyledTh } from "../../common/styled/StyledTable";
 import { PageNavigate } from "../../common/pageNavigation/PageNavigate";
-// import { HireContext } from "../../../api/provider/HireProvider";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PageNavigateStyled } from "../../common/pageNavigation/styled";
 import { StyledButton } from "../../common/styled/StyledButton";
 import { useRecoilState } from "recoil";
@@ -13,8 +12,6 @@ import { ILoginInfo } from "../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../stores/userInfo";
 import axios from "axios";
 import { toast } from "react-toastify";
-
-
 
 
 export const HireMain = () => {
@@ -25,7 +22,8 @@ export const HireMain = () => {
     const navigate = useNavigate();
     const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
 
-    const buttonClick = () => {axios.get("/mypage/userDetail.do?loginId=" + userInfo.loginId)
+    const buttonClick = () => {
+      axios.get("/mypage/userDetail.do?loginId=" + userInfo.loginId)
       .then((res) => {
         if (res.data.chkRegBiz.bizIdx === 0) {
           toast.info("사장님~ 기업등록부터 하셔야합니다~!")
@@ -40,22 +38,17 @@ export const HireMain = () => {
       getHireList();
     },[]);
 
-
     const getHireList = async (currentPage?: number) => {
       currentPage = currentPage || 1;
       const searchParam = { currentPage: currentPage.toString(), pageSize: "5" };
-      //const searchList = await postHireApi<IHireListResponse>(Hire.getListBody, searchParam);
       const getList = await postHireApi<IHireListResponse>(Hire.getListBody, searchParam);
       console.log(getList);
   
-      
        if (getList) {
          setHireList(getList.data.MList);
          setHireCnt(getList.data.MCount);  
          setCPage(currentPage);
-       }
-       
-       
+       } 
     };
 
     const handlerDetail = (postIdx: number,bizIdx:number) => {
@@ -64,7 +57,6 @@ export const HireMain = () => {
         state: { postIdx,bizIdx },
       });
     };
-
 
     return (
         <>
@@ -112,15 +104,6 @@ export const HireMain = () => {
         ></PageNavigate>
       </PageNavigateStyled>
           
-          {/* {modal && (
-            <Portal>
-              <NoticeModal onSuccess={onPostSuccess} noticeSeq={index} setNoticeSeq={setIndex} />
-            </Portal>
-          )} */}
         </>
-      );
-
-
-
-    
+      ); 
 };

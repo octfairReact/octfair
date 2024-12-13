@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PageNavigate } from "../../../common/pageNavigation/PageNavigate";
 import { PageNavigateStyled } from "../../../common/pageNavigation/styled";
 import { StyledTable, StyledTh } from "../../../common/styled/StyledTable";
@@ -106,13 +106,13 @@ export const FaqMain = () => {
       <FaqMainStyled>
         <div>
           <StyledButton
-            isActive={faqType === "1"} // faqType이 "1"이면 해당 버튼이 활성화됨
+            $isActive={faqType === "1"} // faqType이 "1"이면 해당 버튼이 활성화됨
             onClick={() => handleFaqTypeChange("1")}
           >
             개인회원
           </StyledButton>
           <StyledButton
-            isActive={faqType === "2"} // faqType이 "2"이면 해당 버튼이 활성화됨
+            $isActive={faqType === "2"} // faqType이 "2"이면 해당 버튼이 활성화됨
             onClick={() => handleFaqTypeChange("2")}
           >
             기업회원
@@ -132,8 +132,8 @@ export const FaqMain = () => {
         <tbody>
           {faqList?.length > 0 ? (
             faqList.map((faq) => (
-              <>
-                <tr key={faq.faq_idx}>
+              <React.Fragment key={faq.faq_idx}>
+                <tr>
                   <td>{faq.faq_idx}</td>
                   <td
                     onClick={() => toggleFaqContent(faq.faq_idx)}
@@ -161,7 +161,7 @@ export const FaqMain = () => {
                     </td>
                   </tr>
                 )}
-              </>
+              </React.Fragment>
             ))
           ) : (
             <tr>

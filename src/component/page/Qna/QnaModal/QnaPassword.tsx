@@ -3,6 +3,7 @@ import React, { FC, useState } from "react";
 import { useRecoilState } from "recoil";
 import { QnaModalStyled } from "./styled";
 import { qnaPasswordModalState } from "../../../../stores/qnaModalState";
+import { useEscapeClose } from "../../../common/CustomHook/CustomHook";
 
 interface QnaPasswordProps {
   onPasswordSubmit: (qnaPassword: string, qnaIdx: number) => void; // 비밀번호 제출 함수 프롭스
@@ -25,6 +26,8 @@ export const QnaPassword: FC<QnaPasswordProps> = ({ onPasswordSubmit, qnaIdx }) 
   const handlerModal = () => {
     setPasswordModal(!passwordmodal);
   };
+
+  useEscapeClose(() => setPasswordModal(false));
 
   return (
     <QnaModalStyled>

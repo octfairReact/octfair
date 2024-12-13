@@ -1,38 +1,52 @@
 import { NoticeSearchStyled } from "./styled";
 import { Button } from "../../../common/Button/Button";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { modalState, noticeState, postIndexGrop, scrapIndexGrop, scrapState } from "../../../../stores/modalState";
-import { NoticeContext } from "../../../../api/provider/NoticeProvider";
+import { useRecoilState } from "recoil";
+import { modalState } from "../../../../stores/modalState";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { loginInfoState } from "../../../../stores/userInfo";
 import { postNoticeApi } from "../../../../api/postNoticeApi";
 import { IScrapResponse } from "../../../../models/interface/IScrap";
 import { ScrapURL } from "../../../../api/api";
+import { ScrapContext } from "../../../../api/provider/ScrapProvider";
 import { toast } from "react-toastify";
 
 export const NoticeSearch = () => {
   const [modal, setModal] = useRecoilState<boolean>(modalState);
-  const [scrap] = useRecoilState<boolean>(scrapState);
-  const [notice] = useRecoilState<boolean>(noticeState);
-  const scrapIndexes = useRecoilValue(scrapIndexGrop);
-  const setScrapIndexes = useSetRecoilState(scrapIndexGrop);
-  const postIndexes = useRecoilValue(postIndexGrop);
 
   const [searchValue, setSearchValue] = useState<{ searchTitle: string; searchStDate: string; searchEdDate: string }>({
     searchTitle: "",
     searchStDate: "",
     searchEdDate: "",
   });
+  const { scrapIndexes, setScrapIndexes, postIndexes, setPostIndexes, setSearchKeyWord } = useContext(ScrapContext);
 
-  const { setSearchKeyWord } = useContext(NoticeContext);
   const [userInfo] = useRecoilState<ILoginInfo>(loginInfoState);
   const navigate = useNavigate();
 
   useEffect(() => {
     window.location.search && navigate(window.location.pathname, { replace: true });
   }, [navigate]);
+
+  // 검색 후 리로딩하면 공지사항으로 다시 감
+
+  // const handlerSearch = () => {
+  //   const query: string[] = [];
+
+  //   // 데이터 받기
+  //   !title.current.value || query.push(`searchTitle=${title.current.value}`);
+  //   !startDate || query.push(`searchStDate=${startDate}`);
+  //   !endDate || query.push(`searchEdDate=${endDate}`);
+  //   console.log("query", query);
+
+  //   //데이터 주소로 만들기
+  //   const queryString = query.length > 0 ? `?${query.join(`&`)}` : "";
+  //   console.log("queryString", queryString);
+
+  //   //url에 만든 데이터 넣기
+  //   navigate(`/react/board/notice.do${queryString}`);
+  // };
 
   const handlerSearch = () => {
     setSearchKeyWord(searchValue);
@@ -43,8 +57,8 @@ export const NoticeSearch = () => {
   };
 
   const deleteScrap = async () => {
-    console.log("scrapIndex: ", scrapIndexes);
-    console.log("postIndex: ", postIndexes);
+    console.log("딜리트 눌럿다." + postIndexes);
+    console.log("딜리트 눌럿다." + scrapIndexes);
     const postParam = {
       postIndexes,
     };
@@ -59,6 +73,8 @@ export const NoticeSearch = () => {
         toast.warning("수정실패 했습니다.");
         return;
       }
+
+      console.log("업데이트 완료");
     }
 
     if (scrapIndexes.length > 0) {
@@ -66,11 +82,7 @@ export const NoticeSearch = () => {
       if (deleteScrap && deleteScrap.data.result === "success") {
         toast.success("삭제되었습니다.");
         setScrapIndexes([]); // 새로 고침을 위한 상태 초기화
-        setSearchKeyWord({
-          searchTitle: "",
-          searchStDate: "",
-          searchEdDate: "",
-        }); // 상태 초기화
+        setPostIndexes([]);
       } else {
         toast.warning("삭제실패 했습니다.");
       }
@@ -97,8 +109,7 @@ export const NoticeSearch = () => {
         <Button onClick={handlerSearch}>검색</Button>
 
         {/* 유저 타입 m일때만 보이게 하기  */}
-        {userInfo.userType === "M" && <Button onClick={handlerModal}>등록</Button>}
-        {userInfo.userType === "A" && scrap == true && <Button onClick={deleteScrap}>삭제</Button>}
+        <Button onClick={handlerModal}>등록</Button>
       </div>
     </NoticeSearchStyled>
   );

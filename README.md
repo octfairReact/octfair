@@ -1,46 +1,275 @@
-# Getting Started with Create React App
+# 📚 채용박람회
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 1️⃣ 프로젝트 소개
 
-## Available Scripts
+🔹 이 프로젝트는 **리액트**로 구현된 **채용박람회 웹 애플리케이션**입니다.
+<br><br>
+🔹 사용자들은 다양한 채용 정보를 확인하고, 관심 있는 직무에 지원할 수 있습니다.
+<br><br>
+🔹 기존 Spring 기반 백엔드와 연동하여, 채용 공고 리스트와 상세 정보를 제공하며, 사용자 경험을 개선하기 위한 다양한 기능을 제공합니다.
 
-In the project directory, you can run:
+<br>
 
-### `npm start`
+## 2️⃣ 팀원 구성
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<div align="center">
+  
+| **황윤기** | **이민서** | **손신효** |
+| :------: |  :------: | :------: |
+| [<img src="https://avatars.githubusercontent.com/u/151594104?v=4" height=250 width=250> <br/> @hykworld](https://github.com/hykworld) | [<img src="https://avatars.githubusercontent.com/u/139543251?v=4" height=250 width=250> <br/> @Dev-miiing](https://github.com/Dev-miiing) | [<img src="https://avatars.githubusercontent.com/u/113576529?v=4" height=250 width=250> <br/> @shinyorrr](https://github.com/shinyorrr) |
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<br>
 
-### `npm test`
+| **유성찬** | **우황희** | **김호관** |
+| :------: |  :------: | :------: |
+| [<img src="https://avatars.githubusercontent.com/u/153047019?v=4" height=250 width=250> <br/> @it-is-wanthefull](https://github.com/it-is-wanthefull) | [<img src="https://avatars.githubusercontent.com/u/157680899?v=4" height=250 width=250> <br/> @skh9301](https://github.com/skh9301) | [<img src="https://avatars.githubusercontent.com/u/153481438?v=4" height=250 width=250> <br/> @KimHoKwan](https://github.com/KimHoKwan) |
+  
+</div>
+<br>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 3️⃣ 개발환경 및 기술 스택
 
-### `npm run build`
+🔸 **Front** : ![React badge](https://img.shields.io/badge/React-18.x-61DAFB?style=flat&logo=react) ![TypeScript badge](https://img.shields.io/badge/TypeScript-4.5-3178C6?style=flat&logo=typescript) ![Recoil](https://img.shields.io/badge/Recoil-000000?style=flat&logo=react&logoColor=white) ![Recoil-persist](https://img.shields.io/badge/Recoil--persist-000000?style=flat&logo=react&logoColor=white) ![React Router badge](https://img.shields.io/badge/React_Router-v6-CA4245?style=flat&logo=react-router) ![Axios badge](https://img.shields.io/badge/axios-0.27.2-5A29E8?style=flat&logo=axios) ![Styled-components badge](https://img.shields.io/badge/styled--components-5.3.0-DB7093?style=flat&logo=styled-components) 
+<br>
+🔸 **Back-end** : ![Node.js badge](https://img.shields.io/badge/Node.js-16.x-339933?style=flat&logo=node.js) ![Spring badge](https://img.shields.io/badge/Spring_Framework-5.x-brightgreen?style=flat&logo=spring) ![Java badge](https://img.shields.io/badge/Java-18-red?style=flat&logo=java)
+<br>
+🔸 **Database** : ![DBeaver](https://img.shields.io/badge/DBeaver-3A76F0?style=flat&logo=dbeaver&logoColor=white) ![MySQL badge](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql)
+<br>
+🔸 **Version Control** : ![GitHub badge](https://img.shields.io/badge/GitHub-black?style=flat&logo=github) ![GitHub badge](https://img.shields.io/badge/GitHub-2.x-lightgray?style=flat&logo=github) ![SVN](https://img.shields.io/badge/SVN-%23FF4500?style=flat&logo=subversion&logoColor=%23fff)
+<br>
+🔸 **Build Tools** : ![npm badge](https://img.shields.io/badge/npm-8.19.0-CB3837?style=flat&logo=npm) ![Maven](https://img.shields.io/badge/Maven-C71A36?style=flat&logo=apache-maven&logoColor=white)
+<br>
+🔸 **IDE/Editor** : ![VS Code badge](https://img.shields.io/badge/VS_Code-1.78-0078D4?style=flat&logo=visual-studio-code) ![Eclipse badge](https://img.shields.io/badge/Eclipse-2023-2C2255?style=flat&logo=eclipse)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<br>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 4️⃣ 채택한 개발 기술과 그 이유
+- **Front-end**  
+  - **React** : React는 구성 요소 기반의 UI 라이브러리로, 재사용 가능한 컴포넌트를 만들 수 있어 유지 보수가 용이하고, 강력한 생태계와 커뮤니티 지원을 제공합니다. 또한, 가상 DOM을 통해 빠른 렌더링 성능을 제공합니다.  
+  - **TypeScript** : JavaScript의 정적 타입 검사 기능을 제공하여, 코드 작성 시 발생할 수 있는 오류를 사전에 예방하고 코드의 가독성과 유지보수성을 향상시킵니다. 또한, IDE에서 더 나은 자동 완성과 리팩토링 지원을 받을 수 있습니다.  
+  - **Recoil** : React 상태 관리를 더 효율적으로 처리하기 위한 라이브러리입니다. Recoil은 React의 컴포넌트와 상태를 쉽게 관리할 수 있게 도와주며, 복잡한 애플리케이션에서도 관리가 용이합니다.  
+  - **Recoil-persist** : 애플리케이션의 상태를 로컬 스토리지에 저장하여, 페이지 새로고침 시에도 상태를 유지할 수 있습니다. 이는 사용자가 애플리케이션을 끄고 다시 켰을 때 이전 상태를 복구할 수 있도록 도와줍니다.  
+  - **React Router** : React 애플리케이션에서 페이지 간의 이동을 처리하기 위한 라이브러리입니다. SPA(Single Page Application) 개발 시 URL을 통해 페이지를 관리할 수 있어 사용자 경험을 향상시킬 수 있습니다.  
+  - **Axios** : API 요청을 위한 HTTP 클라이언트로, 프로미스를 사용해 비동기 처리를 쉽게 할 수 있고, JSON 데이터 처리가 용이하며, 오류 처리와 인터셉터 설정 등의 기능을 제공합니다.  
+  - **Styled-components** : CSS-in-JS 방식을 사용하여 컴포넌트와 스타일을 함께 정의할 수 있습니다. 이를 통해 CSS의 범위를 컴포넌트로 제한하여 스타일 충돌을 방지하고, 동적으로 스타일을 제어할 수 있습니다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Back-end**
+  - **Node.js** : 비동기 이벤트 기반의 JavaScript 런타임 환경으로, 고성능의 네트워크 애플리케이션을 개발할 수 있습니다.
+  - **Spring** : Java 기반의 엔터프라이즈급 애플리케이션을 구축하는 프레임워크로, 의존성 주입 및 다양한 기술을 지원합니다.
+  - **Java** : 객체 지향 언어로, 플랫폼에 독립적인 애플리케이션을 구축할 수 있습니다.
+ 
+- **Database**
+  - **MySQL** : 관계형 데이터베이스 관리 시스템(RDBMS)으로, 데이터를 테이블 형식으로 저장하고 SQL을 사용해 데이터를 처리합니다.
 
-### `npm run eject`
+- **Version Control**  
+  - **GitHub** : Git을 기반으로 한 웹 호스팅 서비스로, 버전 관리와 협업을 지원합니다. 코드의 버전을 추적하고, 여러 개발자가 동시에 작업할 수 있도록 효율적인 협업 환경을 제공합니다.  
+  - **SVN** : Subversion은 중앙 집중식 버전 관리 시스템으로, 소스 코드의 변경 사항을 추적하고 여러 버전을 관리하는 데 유용합니다. 대규모 프로젝트에서 팀 작업을 원활하게 지원합니다.
+ 
+- **Build Tools**
+  - **npm** : Node.js의 패키지 관리자이자 빌드 도구로, JavaScript 라이브러리 및 패키지의 관리와 스크립트 실행을 지원합니다.
+  - **Maven** : Java 프로젝트의 빌드, 의존성 관리 및 배포를 위한 빌드 도구입니다. XML 기반의 설정 파일을 통해 프로젝트의 구조와 의존성 관리를 간편하게 할 수 있습니다.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- **IDE/Editor**
+  - **VS Code** : 가볍고 확장 가능한 코드 편집기로, 다양한 언어 지원 및 플러그인을 제공합니다.
+  - **Eclipse** : Java 개발을 위한 강력한 IDE로, 대규모 프로젝트와 팀 작업에 적합합니다.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<br>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 5️⃣ 프로젝트 구조
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```jsx
+├── README.md
+├── .eslintrc.js
+├── .gitignore
+├── .prettierrc.json
+├── package-lock.json
+├── package.json
+│
+├─public
+│  └─images
+│      └─admin
+│          └─comm
+└─src
+    ├─api
+    │  └─provider
+    ├─assets
+    ├─common
+    │  └─css
+    ├─component
+    │  ├─common
+    │  │  ├─Button
+    │  │  ├─ContentBox
+    │  │  ├─CustomHook
+    │  │  ├─NotFound
+    │  │  ├─pageNavigation
+    │  │  ├─portal
+    │  │  └─styled
+    │  ├─layout
+    │  │  ├─DashBoard
+    │  │  └─LeftMenuBar
+    │  └─page
+    │      ├─Applicant
+    │      ├─apply
+    │      │  ├─ReseumeMain
+    │      │  └─ResumeDetail
+    │      ├─company
+    │      │  ├─CompanyDetail
+    │      │  ├─CompanyUpdatePage
+    │      │  └─CompanyWritePage
+    │      ├─Faq
+    │      │  ├─FaqMain
+    │      │  ├─FaqModal
+    │      │  └─FaqSearch
+    │      ├─Hire
+    │      ├─History
+    │      │  ├─CancelModal
+    │      │  ├─HistoryMain
+    │      │  ├─HistoryModal
+    │      │  └─HistorySearch
+    │      ├─Login
+    │      │  ├─LoginMain
+    │      │  └─LoginModal
+    │      ├─manage-posts
+    │      │  ├─applyModal
+    │      │  ├─PostDetail
+    │      │  ├─PostMain
+    │      │  ├─PostSearch
+    │      │  └─ScrapList
+    │      ├─manage-user
+    │      │  ├─ManageUserMain
+    │      │  ├─ManageUserModal
+    │      │  └─ManageUserSearch
+    │      ├─MyPage
+    │      │  ├─MyPageMain
+    │      │  └─MyPageModal
+    │      ├─Notice
+    │      │  ├─NoticeMain
+    │      │  ├─NoticeModal
+    │      │  └─NoticeSearch
+    │      └─Qna
+    │          ├─QnaMain
+    │          ├─QnaModal
+    │          └─QnaSearch
+    ├─css
+    ├─hook
+    ├─models
+    │  └─interface
+    │      └─store
+    ├─pages
+    ├─proxy
+    ├─routers
+    └─stores
+```
 
-## Learn More
+<br>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 6️⃣ 역할분담
+![역할분담 이미지](./src/assets/gitReadMe/역할분담.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<br>
+
+## 7️⃣ 페이지별 기능
+
+### 🔒 메인 페이지(사용자 공통)
+![메인 페이지](./src/assets/gitReadMe/메인페이지.JPG)
+![회원가입](./src/assets/gitReadMe/회원가입.JPG)
+![아이디찾기](./src/assets/gitReadMe/아이디찾기.JPG)
+- 첫 화면은 로그인 페이지입니다. 이 페이지에서는 사용자가 시스템에 로그인할 수 있습니다. 로그인 화면에서는 다음과 같은 기능을 제공합니다:
+
+  - 로그인: 이미 가입된 사용자들이 아이디와 비밀번호를 입력하여 로그인할 수 있습니다.
+  - 회원가입:
+    - 기업 사용자: 기업 사용자가 가입할 수 있는 별도의 회원가입 링크입니다.
+    - 일반 사용자: 일반 사용자가 가입할 수 있는 회원가입 링크입니다.
+  - 아이디/비밀번호 찾기: 아이디 또는 비밀번호를 잊어버린 사용자가 이를 재설정할 수 있는 링크입니다.
+
+<br>
+
+### ✳ 대시보드(사용자 공통)
+![대시보드](./src/assets/gitReadMe/대시보드.JPG)
+- 왼쪽 사이드바는 로그인한 사용자의 역할에 따라 다르게 표시됩니다. 각 사용자는 관리자, 기업 사용자, 일반 사용자로 구분되며, 이 역할에 맞는 메뉴와 권한을 부여받습니다.
+
+  - 관리자: 모든 기능에 접근할 수 있는 권한을 가지며, 사용자 관리, 시스템 설정 등 관리자가 수행해야 할 작업을 할 수 있는 메뉴가 표시됩니다.
+  - 기업 사용자: 기업 관련 정보나 관리 기능에 접근할 수 있습니다. 예를 들어, 기업 대시보드, 프로젝트 관리 등 기업에 맞는 메뉴가 표시됩니다.
+  - 일반 사용자: 기본적인 기능만 사용 가능한 일반 사용자에게는 제한된 메뉴만 제공됩니다. 예를 들어, 개인 정보 확인, 설정 등이 가능합니다.
+    - 이 역할에 따른 메뉴는 [역할분담](#6️⃣-역할분담)에서 확인할 수 있습니다. 로그인 시 사용자 역할에 맞춰 사이드바가 동적으로 변경되어, 사용자 경험을 향상시키고, 각 역할에 맞는 기능만을 제공하게 됩니다.
+- 대시보드에서는 오늘의 급식 메뉴를 표시하는 기능이 있습니다. 이 기능은 사용자가 오늘 제공되는 급식 메뉴를 쉽게 확인할 수 있도록 돕습니다. 시스템은 매일마다 해당 날짜에 맞는 급식 메뉴를 자동으로 업데이트하여, 웹 페이지에서 실시간으로 제공됩니다.
+
+### 👥 회원관리(관리자)
+![관리자_회원관리_구직자회원관리 이미지](./src/assets/gitReadMe/관리자_회원관리_구직자회원관리.JPG)
+![관리자_회원관리_기업회원관리 이미지](./src/assets/gitReadMe/관리자_회원관리_기업회원관리.JPG)
+- 구직자 회원 관리: 구직자의 정보를 관리하고, 회원 상태를 확인합니다.
+- 기업 회원 관리: 기업 회원의 정보 관리 및 상태 확인을 할 수 있습니다.
+
+<br>
+
+### 📢 채용공고관리(관리자)
+![관리자_채용공고관리_공고심사1 이미지](./src/assets/gitReadMe/관리자_채용공고관리_공고심사1.JPG)
+![관리자_채용공고관리_공고심사2 이미지](./src/assets/gitReadMe/관리자_채용공고관리_공고심사1.JPG)
+![관리자_채용공고관리_공고보기1 이미지](./src/assets/gitReadMe/관리자_채용공고관리_공고보기1.JPG)
+![관리자_채용공고관리_공고보기2 이미지](./src/assets/gitReadMe/관리자_채용공고관리_공고보기2.JPG)
+- 공고심사: 기업이 올린 채용 공고의 내용과 정확성을 심사합니다.
+- 공고보기: 공개된 채용 공고를 확인하고 관리합니다.
+
+<br>
+
+### 💼 채용공고관리(기업 사용자)
+![기업사용자_채용관리_공고관리1 이미지](./src/assets/gitReadMe/기업사용자_채용관리_공고관리1.JPG)
+![기업사용자_채용관리_공고관리2 이미지](./src/assets/gitReadMe/기업사용자_채용관리_공고관리2.JPG)
+![기업사용자_채용관리_지원관리자1 이미지](./src/assets/gitReadMe/기업사용자_채용관리_지원관리자1.JPG)
+![기업사용자_채용관리_지원관리자2 이미지](./src/assets/gitReadMe/기업사용자_채용관리_지원관리자2.JPG)
+- 공고관리: 기업의 채용 공고를 작성하고 수정합니다.
+- 지원관리자: 지원자가 제출한 이력서를 관리하고, 진행 상황을 체크합니다.
+
+<br>
+
+### 📑 채용정보(일반 사용자)
+![일반사용자_채용정보_공고보기1 이미지](./src/assets/gitReadMe/일반사용자_채용정보_공고보기1.JPG)
+![일반사용자_채용정보_공고보기2 이미지](./src/assets/gitReadMe/일반사용자_채용정보_공고보기2.JPG)
+![일반사용자_채용정보_공고보기3 이미지](./src/assets/gitReadMe/일반사용자_채용정보_공고보기3.JPG)
+- 공고보기: 구직자는 자신에게 맞는 채용 공고를 열람할 수 있습니다.
+- 스크랩: 마음에 드는 공고를 스크랩하여 나중에 확인할 수 있습니다.
+
+### 📝 입사지원(일반 사용자)
+![일반사용자_입사지원_이력서1 이미지](./src/assets/gitReadMe/일반사용자_입사지원_이력서1.JPG)
+![일반사용자_입사지원_이력서2 이미지](./src/assets/gitReadMe/일반사용자_입사지원_이력서2.JPG)
+![일반사용자_입사지원_이력서3 이미지](./src/assets/gitReadMe/일반사용자_입사지원_이력서3.JPG)
+![일반사용자_입사지원_이력서4 이미지](./src/assets/gitReadMe/일반사용자_입사지원_이력서4.JPG)
+- 이력서: 자신의 이력서를 작성하고 관리합니다.
+- 지원내역: 이전에 지원한 채용 공고와 그 상태를 확인할 수 있습니다.
+
+<br>
+
+### 🖊 마이페이지(기업 사용자, 일반 사용자)
+![기업사용자_마이페이지_회원정보수정 이미지](./src/assets/gitReadMe/기업사용자_마이페이지_회원정보수정.JPG)
+![일반사용자_마이페이지_회원정보수정 이미지](./src/assets/gitReadMe/일반사용자_마이페이지_회원정보수정.JPG)
+![기업사용자_마이페이지_회원탈퇴 이미지](./src/assets/gitReadMe/기업사용자_마이페이지_회원탈퇴.JPG)
+![일반사용자_마이페이지_회원탈퇴 이미지](./src/assets/gitReadMe/일반사용자_마이페이지_회원탈퇴.JPG)
+- 회원정보 수정: 개인 정보를 수정하고 관리할 수 있습니다.
+- 회원 탈퇴: 서비스를 더 이상 사용하지 않기로 결정을 내릴 때 탈퇴 절차를 진행합니다.
+
+<br
+
+### 📞 고객센터관리(관리자)
+![관리자_고객센터관리_공지사항관리1 이미지](./src/assets/gitReadMe/관리자_고객센터관리_공지사항관리1.JPG)
+![관리자_고객센터관리_공지사항관리2 이미지](./src/assets/gitReadMe/관리자_고객센터관리_공지사항관리2.JPG)
+![관리자_고객센터관리_FAQ관리1 이미지](./src/assets/gitReadMe/관리자_고객센터관리_FAQ관리1.JPG)
+![관리자_고객센터관리_FAQ관리2 이미지](./src/assets/gitReadMe/관리자_고객센터관리_FAQ관리2.JPG)
+![관리자_고객센터관리_QNA1 이미지](./src/assets/gitReadMe/관리자_고객센터관리_QNA1.JPG)
+![관리자_고객센터관리_QNA2 이미지](./src/assets/gitReadMe/관리자_고객센터관리_QNA2.JPG)
+- 공지사항 관리: 사용자에게 전달할 공지사항을 작성하고 관리합니다.
+- FAQ 관리: 자주 묻는 질문과 그에 대한 답변을 관리합니다.
+- Q&A 관리: 사용자들의 문의를 관리하고, 답변을 제공합니다.
+
+<br>
+
+### 📬 고객센터관리(기업 사용자, 일반 사용자 공통)
+![기업사용자_고객센터_공지사항1 이미지](./src/assets/gitReadMe/기업사용자_고객센터_공지사항1.JPG)
+![기업사용자_고객센터_공지사항2 이미지](./src/assets/gitReadMe/기업사용자_고객센터_공지사항2.JPG)
+![기업사용자_고객센터_자주하는질문 이미지](./src/assets/gitReadMe/기업사용자_고객센터_자주하는질문.JPG)
+![기업사용자_고객센터_문의게시판1 이미지](./src/assets/gitReadMe/기업사용자_고객센터_문의게시판1.JPG)
+![기업사용자_고객센터_문의게시판2 이미지](./src/assets/gitReadMe/기업사용자_고객센터_문의게시판2.JPG)
+- 공지사항: 사이트에 등록된 공지사항을 확인합니다.
+- 자주하는 질문: 자주 묻는 질문에 대한 답변을 확인합니다.
+- 문의게시판: 사이트에 대한 질문과 피드백을 남길 수 있는 게시판입니다.
+
+<br>

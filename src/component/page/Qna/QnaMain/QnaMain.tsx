@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { QnaMainStyled, StyledButton } from "./styled";
 import { ILoginInfo } from "../../../../models/interface/store/userInfo";
 import { useRecoilState } from "recoil";
@@ -100,10 +100,10 @@ export const QnaMain = () => {
     };
 
     // 비밀번호 확인 시작 전 로딩 상태 설정
-    setIsLoaded(false);
+
     try {
       const passwordCheckRe = await postQnaApi<IPasswordCheck>(Qna.checkPassword, param); // 서버로 비밀번호 확인 요청
-
+      setIsLoaded(false);
       if (passwordCheckRe?.data?.result === "success") {
         setPassword(passwordCheckRe.data.password);
         setIndex(passwordCheckRe.data.qnaSeq); // 글 번호 저장
@@ -137,13 +137,13 @@ export const QnaMain = () => {
       <QnaMainStyled>
         <div>
           <StyledButton
-            isActive={qnaType === "A" || qnaType === "M"} // faqType이 "A"이면 해당 버튼이 활성화됨
+            $isActive={qnaType === "A" || qnaType === "M"} // faqType이 "A"이면 해당 버튼이 활성화됨
             onClick={() => handleFaqTypeChange("A")}
           >
             개인회원
           </StyledButton>
           <StyledButton
-            isActive={qnaType === "B"} // faqType이 "b"이면 해당 버튼이 활성화됨
+            $isActive={qnaType === "B"} // faqType이 "b"이면 해당 버튼이 활성화됨
             onClick={() => handleFaqTypeChange("B")}
           >
             기업회원
@@ -162,9 +162,8 @@ export const QnaMain = () => {
         <tbody>
           {qnaList?.length > 0 ? (
             qnaList.map((qna) => (
-              <>
-                {/* 클릭 가능한 FAQ 리스트 */}
-                <tr key={qna?.qnaIdx}>
+              <React.Fragment key={qna?.qnaIdx}>
+                <tr>
                   <td>{qna?.qnaIdx}</td>
                   <td
                     onClick={() => {
@@ -196,7 +195,7 @@ export const QnaMain = () => {
                   <td>{qna?.author}</td>
                   <td>{new Date(qna.createdDate).toISOString().substring(0, 10)}</td>
                 </tr>
-              </>
+              </React.Fragment>
             ))
           ) : (
             <tr>

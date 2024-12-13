@@ -1,18 +1,14 @@
-import { useState } from "react";
-import { PostProvider } from "../api/provider/PostProvider";
 import { ContentBox } from "../component/common/ContentBox/ContentBox";
-import { PostSearch } from "../component/page/manage-posts/PostSearch/PostSearch";
 import { ScrapMain } from "../component/page/manage-posts/ScrapList/ScrapMain";
-import { NoticeSearch } from "../component/page/Notice/NoticeSearch/NoticeSearch";
-import { ReloadButton } from "../component/common/ContentBox/ReloadButton";
+import { ScrapProvider } from "../api/provider/ScrapProvider";
+import { ScrapSearch } from "../component/page/manage-posts/ScrapSearch/ScrapSearch";
 
 export const Scrap = () => {
   return (
-    <PostProvider>
-      <ReloadButton></ReloadButton>
+    <ScrapProvider>
       <ContentBox>스크랩</ContentBox>
-      <NoticeSearch />
+      <ScrapSearch />
       <ScrapMain />
-    </PostProvider>
+    </ScrapProvider>
   );
 };
