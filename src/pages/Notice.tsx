@@ -12,7 +12,7 @@ export const Notice = () => {
         <ReloadButton></ReloadButton>
         <ContentBox>공지사항</ContentBox>
         <NoticeSearch />
-        <NoticeMain />
+        {/* <NoticeMain /> */}
         <ImageCardList />
       </NoticeProvider>
     </>

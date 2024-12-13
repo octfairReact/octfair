@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import loading_circle from '../../../../assets/loading_circle.gif';
 import logo_img from '../../../../assets/logo_img.png';
+import axios from "axios";
 
 const GalleryContainer = styled.div`
     display: grid;
@@ -31,7 +32,7 @@ const Card = styled.div`
     transition: transform 0.2s;
 
     &:hover {
-        transform: scale(1.05);
+        transform: scale(1.2);
     }
 `;
 
@@ -66,7 +67,7 @@ export const ImageCardList = () => {
     const [index, setIndex] = useState<number | undefined>();
     const [modal, setModal] = useRecoilState<boolean>(modalState);
     const { searchKeyWord } = useContext(NoticeContext);
-    const itemPerPage: number = 8;
+    const itemPerPage: number = 12;
 
     useEffect(() => {
         searchNoticeList(cPage);
@@ -74,7 +75,7 @@ export const ImageCardList = () => {
 
     const searchNoticeList = async (currentPage: number) => {
         const searchParam = { ...searchKeyWord, currentPage: currentPage.toString(), pageSize: itemPerPage.toString() };
-        const searchList = await postNoticeApi<INoitceListResponse>(Notice.getListBody, searchParam);
+        const searchList = await axios.post("/board/noticeListBodyThumb.do", searchParam);
         if (searchList) {
             setNoticeList(searchList.data.notice);
             setNoticeCnt(searchList.data.noticeCnt);

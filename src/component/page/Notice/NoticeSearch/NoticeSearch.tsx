@@ -97,7 +97,7 @@ export const NoticeSearch = () => {
         <Button onClick={handlerSearch}>검색</Button>
 
         {/* 유저 타입 m일때만 보이게 하기  */}
-        {userInfo.userType === "M" && notice == true && <Button onClick={handlerModal}>등록</Button>}
+        {userInfo.userType === "M" && <Button onClick={handlerModal}>등록</Button>}
         {userInfo.userType === "A" && scrap == true && <Button onClick={deleteScrap}>삭제</Button>}
       </div>
     </NoticeSearchStyled>
