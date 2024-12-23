@@ -10,11 +10,9 @@ import { StyledTable, StyledTd, StyledTh } from "../../common/styled/StyledTable
 import Calendar from "../../Calendar";
 import { StyledTableHire } from "../../common/styled/StyledTableHire";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AllDetail, companyDetail, IPostDetail } from "../../../models/interface/IPost";
+import { IAllDetail, ICompanyDetail, IPostDetail } from "../../../models/interface/IPost";
 import { postPostApi } from "../../../api/postPostApi";
 import { StyledButton } from "../../common/styled/StyledButton";
-
-
 
 export const HireWrite = () => {
   const title = useRef<HTMLInputElement>();
@@ -56,7 +54,6 @@ export const HireWrite = () => {
   const [recruitProcessList, setRecruitProcessList] = useState([]);
   const [recruitProcess, setRecruitProcess] = useState("");
 
-
   useEffect(() => {
     if (postIdx && bizIdx) {
       setParam({ postIdx, bizIdx });
@@ -94,25 +91,26 @@ export const HireWrite = () => {
 
   //급여 입력 필드에서 숫자만 허용
   const handleSalaryChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      if (/^\d*$/g.test(value)) { // 숫자만 허용
-        salary.current!.value = value; // 값 저장
-      } else {
-        alert("급여는 숫자만 입력 가능합니다.");
-        salary.current!.value = "";
-      }
+    const value = e.target.value;
+    if (/^\d*$/g.test(value)) {
+      // 숫자만 허용
+      salary.current!.value = value; // 값 저장
+    } else {
+      alert("급여는 숫자만 입력 가능합니다.");
+      salary.current!.value = "";
+    }
   };
   // 모집인원 입력 필드에서 숫자만 허용
   const handleOpeningsChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      if (/^\d*$/g.test(value)) { // 숫자만 허용
-        openings.current!.value = value; // 값 저장
-      } else {
-        alert("모집 인원은 숫자만 입력 가능합니다.");
-        openings.current!.value = "";
-      }
+    const value = e.target.value;
+    if (/^\d*$/g.test(value)) {
+      // 숫자만 허용
+      openings.current!.value = value; // 값 저장
+    } else {
+      alert("모집 인원은 숫자만 입력 가능합니다.");
+      openings.current!.value = "";
+    }
   };
-
 
   // 날짜 데이터를 "yyyy-MM-dd HH" 형식으로 포맷
   const formatDate = (date) => {
@@ -153,7 +151,6 @@ export const HireWrite = () => {
     const file = e.target.files?.[0] || null; //input에서 선택한 파일 정보
     setFileData(file); // 선택된 파일을 상태에 저장
   };
-
 
   const handlerSaveFile = async () => {
     // 입력 필드 검증
@@ -197,7 +194,6 @@ export const HireWrite = () => {
       alert("자격 조건을 입력해주세요.");
       return;
     }
-  
 
     const expRequiredString = expRequired.current.join(","); // 배열을 string으로 전환 예) "신입, 경력"
     handleProcessSubmit();
@@ -242,15 +238,13 @@ export const HireWrite = () => {
   };
   const fetchPostDetail = async () => {
     if (!postIdx || !bizIdx) return; // 유효하지 않으면 요청하지 않음
-    console.log("여기는 업데이트 클릭후 detail입니다" + postIdx +" " + bizIdx)
+    console.log("여기는 업데이트 클릭후 detail입니다" + postIdx + " " + bizIdx);
     setLoading(true); // 요청 전 로딩 시작
     const apiUrl = ManagePost.getpostDetail(postIdx, bizIdx);
     try {
-      const response = await postPostApi<AllDetail>(apiUrl, { postIdx, bizIdx });
-      console.log("데이터 확인ㅂㅈㄷ ", response.data.postDetail)
+      const response = await postPostApi<IAllDetail>(apiUrl, { postIdx, bizIdx });
+      console.log("데이터 확인ㅂㅈㄷ ", response.data.postDetail);
       setMDetail(response.data.postDetail);
-
-
     } catch (error) {
       console.error("데이터 로드 중 오류 발생:", error);
     } finally {
@@ -258,204 +252,210 @@ export const HireWrite = () => {
     }
   };
 
-  console.log("데이터 확인 ", MDetail)
+  console.log("데이터 확인 ", MDetail);
   return (
     <>
-  <br />
-  <StyledTableHire>
-    
-    <thead>
-      <tr>
-        <th>채용제목<span className="font_red">*</span></th>
-        <td colSpan={3}>
-          <input
-            type="text"
-            ref={title}
-            onChange={(e) => {
-              
-                setMDetail({ ...MDetail, title: e.target.value });
-              
-            }}
-            value={MDetail?.title ? `${MDetail.title}` :hireWrite?.title}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>경력 여부<span className="font_red">*</span></th>
-        <td>
-          <div className="checkbox-group" style={{ display: "flex", gap: "8px" }}>
-            {checkBox.map((checkbox) => (
-              <label key={checkbox.id} style={{ display: "inline-flex", alignItems: "center" }}>
-                <input
-                  type="checkbox"
-                  checked={checkbox.checked}
-                  onChange={() => handleCheckboxChange(checkbox.id)}
-                />
-                {checkbox.label}
-              </label>
-            ))}
-          </div>
-        </td>
-        <th>경력</th>
-        <td>
-          <select
-            value={year}
-            onChange={handleChange}
-            ref={expYears}
-            disabled={!checkBox.find((checkbox) => checkbox.id === 2 && checkbox.checked)}
-            style={{ width: "100%", padding: "8px" }}
-          >
-            {years.map((year, index) => (
-              <option key={index} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <th>급여<span className="font_red">*</span></th>
-        <td>
-          <input
-            type="text"
-            ref={salary}
-            onChange={handleSalaryChange}
-          //   onChange={(e) => {
-              
-          //     setMDetail({ ...MDetail, title: e.target.value });
-            
-          // }}
-            style={{ width: "100%", padding: "8px" }}
-            onClick={() => handlerChange}
-            value={MDetail?.salary ? `${MDetail.salary}` :hireWrite?.salary}
-          />
-        </td>
-        <th>모집인원<span className="font_red">*</span></th>
-        <td>
-          <input
-            type="text"
-            ref={openings}
-            value={MDetail?.openings ? `${MDetail.openings}` :hireWrite?.openings}
-            onChange={handleOpeningsChange}
-            style={{ width: "100%", padding: "8px" }}
+      <br />
+      <StyledTableHire>
+        <thead>
+          <tr>
+            <th>
+              채용제목<span className="font_red">*</span>
+            </th>
+            <td colSpan={3}>
+              <input
+                type="text"
+                ref={title}
+                onChange={(e) => {
+                  setMDetail({ ...MDetail, title: e.target.value });
+                }}
+                value={MDetail?.title ? `${MDetail.title}` : hireWrite?.title}
+                style={{ width: "100%", padding: "8px" }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              경력 여부<span className="font_red">*</span>
+            </th>
+            <td>
+              <div className="checkbox-group" style={{ display: "flex", gap: "8px" }}>
+                {checkBox.map((checkbox) => (
+                  <label key={checkbox.id} style={{ display: "inline-flex", alignItems: "center" }}>
+                    <input
+                      type="checkbox"
+                      checked={checkbox.checked}
+                      onChange={() => handleCheckboxChange(checkbox.id)}
+                    />
+                    {checkbox.label}
+                  </label>
+                ))}
+              </div>
+            </td>
+            <th>경력</th>
+            <td>
+              <select
+                value={year}
+                onChange={handleChange}
+                ref={expYears}
+                disabled={!checkBox.find((checkbox) => checkbox.id === 2 && checkbox.checked)}
+                style={{ width: "100%", padding: "8px" }}
+              >
+                {years.map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              급여<span className="font_red">*</span>
+            </th>
+            <td>
+              <input
+                type="text"
+                ref={salary}
+                onChange={handleSalaryChange}
+                //   onChange={(e) => {
 
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>근무지역<span className="font_red">*</span></th>
-        <td>
-          <input
-            type="text"
-            ref={workLocation}
-            value={MDetail?.workLocation ? `${MDetail.workLocation}` :hireWrite?.workLocation}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </td>
-        <th>포지션 설명<span className="font_red">*</span></th>
-        <td>
-          <input
-            type="text"
-            ref={posDescription}
-            value={MDetail?.posDescription ? `${MDetail.posDescription}` :hireWrite?.posDescription}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>채용기간<span className="font_red">*</span></th>
-        <td colSpan={3} className="date">
-            <Calendar
-              label="시작 날짜"
-              onDateChange={(date) => (startDate.current = date)} 
-             
-            />
-            <Calendar
-              label="종료 날짜"
-              onDateChange={(date) => (endDate.current = date)}
-             
-            />
-        </td>
-      </tr>
-      <tr>
-        <th>채용절차<span className="font_red">*</span></th>
-        <td colSpan={3}>
-          <div className="recruit-process-wrapper" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <input
-              type="text"
-              value={recruitProcess}
-              onChange={(e) => setRecruitProcess(e.target.value)}
-              placeholder="과정을 하나씩 적은 후 절차등록 버튼을 눌러주세요"
-              style={{ flex: 1, padding: "8px", width: "500px"}}
-            />
-            <button onClick={handleClick} style={{ padding: "8px 16px" }}>
-              절차등록
-            </button>
-            <button onClick={handleClickRefresh} style={{ padding: "8px 16px" }}>
-              초기화
-            </button>
-          </div>
-          <label className="recruit-process-list" style={{ marginTop: "8px", display: "block" }}>
-            {recruitProcessList.join(" - ")}
-          </label>
-        </td>
-      </tr>
-      <tr>
-        <th>자격조건<span className="font_red">*</span></th>
-        <td colSpan={3}>
-          <input
-            type="text"
-            ref={reqQualifications}
-            value={MDetail?.reqQualifications ? `${MDetail.reqQualifications}` :hireWrite?.reqQualifications}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>우대사항</th>
-        <td colSpan={3}>
-          <input
-            type="text"
-            ref={prefQualifications}
-            value={MDetail?.prefQualifications ? `${MDetail.prefQualifications}` :hireWrite?.prefQualifications}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>업무</th>
-        <td colSpan={3}>
-          <input
-            type="text"
-            ref={duties}
-            value={MDetail?.duties ? `${MDetail.duties}` :hireWrite?.duties}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>혜택&복지</th>
-        <td colSpan={3}>
-          <input
-            type="text"
-            ref={benefits}
-            value={MDetail?.benefits ? `${MDetail.benefits}` :hireWrite?.benefits}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </td>
-      </tr>
-      <tr>
-        <th>첨부파일</th>
-        <td colSpan={3}>
-          <input type="file" onChange={handleFilechange} style={{ padding: "8px" }} />
-        </td>
-      </tr>
-    </thead>
-  </StyledTableHire>
-  <StyledButton onClick={handlerSaveFile} style={{ marginTop: "16px", padding: "12px 24px" }}>
-    등록
-  </StyledButton>
-</>
+                //     setMDetail({ ...MDetail, title: e.target.value });
+
+                // }}
+                style={{ width: "100%", padding: "8px" }}
+                onClick={() => handlerChange}
+                value={MDetail?.salary ? `${MDetail.salary}` : hireWrite?.salary}
+              />
+            </td>
+            <th>
+              모집인원<span className="font_red">*</span>
+            </th>
+            <td>
+              <input
+                type="text"
+                ref={openings}
+                value={MDetail?.openings ? `${MDetail.openings}` : hireWrite?.openings}
+                onChange={handleOpeningsChange}
+                style={{ width: "100%", padding: "8px" }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              근무지역<span className="font_red">*</span>
+            </th>
+            <td>
+              <input
+                type="text"
+                ref={workLocation}
+                value={MDetail?.workLocation ? `${MDetail.workLocation}` : hireWrite?.workLocation}
+                style={{ width: "100%", padding: "8px" }}
+              />
+            </td>
+            <th>
+              포지션 설명<span className="font_red">*</span>
+            </th>
+            <td>
+              <input
+                type="text"
+                ref={posDescription}
+                value={MDetail?.posDescription ? `${MDetail.posDescription}` : hireWrite?.posDescription}
+                style={{ width: "100%", padding: "8px" }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              채용기간<span className="font_red">*</span>
+            </th>
+            <td colSpan={3} className="date">
+              <Calendar label="시작 날짜" onDateChange={(date) => (startDate.current = date)} />
+              <Calendar label="종료 날짜" onDateChange={(date) => (endDate.current = date)} />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              채용절차<span className="font_red">*</span>
+            </th>
+            <td colSpan={3}>
+              <div className="recruit-process-wrapper" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <input
+                  type="text"
+                  value={recruitProcess}
+                  onChange={(e) => setRecruitProcess(e.target.value)}
+                  placeholder="과정을 하나씩 적은 후 절차등록 버튼을 눌러주세요"
+                  style={{ flex: 1, padding: "8px", width: "500px" }}
+                />
+                <button onClick={handleClick} style={{ padding: "8px 16px" }}>
+                  절차등록
+                </button>
+                <button onClick={handleClickRefresh} style={{ padding: "8px 16px" }}>
+                  초기화
+                </button>
+              </div>
+              <label className="recruit-process-list" style={{ marginTop: "8px", display: "block" }}>
+                {recruitProcessList.join(" - ")}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              자격조건<span className="font_red">*</span>
+            </th>
+            <td colSpan={3}>
+              <input
+                type="text"
+                ref={reqQualifications}
+                value={MDetail?.reqQualifications ? `${MDetail.reqQualifications}` : hireWrite?.reqQualifications}
+                style={{ width: "100%", padding: "8px" }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>우대사항</th>
+            <td colSpan={3}>
+              <input
+                type="text"
+                ref={prefQualifications}
+                value={MDetail?.prefQualifications ? `${MDetail.prefQualifications}` : hireWrite?.prefQualifications}
+                style={{ width: "100%", padding: "8px" }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>업무</th>
+            <td colSpan={3}>
+              <input
+                type="text"
+                ref={duties}
+                value={MDetail?.duties ? `${MDetail.duties}` : hireWrite?.duties}
+                style={{ width: "100%", padding: "8px" }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>혜택&복지</th>
+            <td colSpan={3}>
+              <input
+                type="text"
+                ref={benefits}
+                value={MDetail?.benefits ? `${MDetail.benefits}` : hireWrite?.benefits}
+                style={{ width: "100%", padding: "8px" }}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>첨부파일</th>
+            <td colSpan={3}>
+              <input type="file" onChange={handleFilechange} style={{ padding: "8px" }} />
+            </td>
+          </tr>
+        </thead>
+      </StyledTableHire>
+      <StyledButton onClick={handlerSaveFile} style={{ marginTop: "16px", padding: "12px 24px" }}>
+        등록
+      </StyledButton>
+    </>
   );
 };
